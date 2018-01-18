@@ -79,20 +79,30 @@ if (Meteor.isServer) {
               "isLink": true,
               "image": "",
               "subMenu": [
+                // {
+                //   "link": "/admin/dashboard/clusters",
+                //   "name": "Backend User Details",
+                //   "uniqueId": "dashboard_backendUserDetails",
+                //   "subMenuMappingId": "dashboard_communities",
+                //   "subMenusId": "dashboard",
+                //   "isLink": true,
+                //   "isMenu": true,
+                //   "image": ""
+                // }
                 {
-                  "link": "/admin/dashboard/clusters",
-                  "name": "Backend User Details",
-                  "uniqueId": "dashboard_backendUserDetails",
-                  "subMenuMappingId": "dashboard_communities",
-                  "subMenusId": "dashboard",
-                  "isLink": true,
-                  "isMenu": true,
-                  "image": ""
-
+                  "link" : "/admin/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/portfolio/:portfolioId",
+                  "name" : "dashboard users",
+                  "uniqueId" : "dashboard_userDetails",
+                  "isLink" : true,
+                  "isMenu" : false,
+                  "image" : "",
+                  "dynamicLink" : true,
+                  "dynamicLinkHandler" : "",
+                  "subMenuMappingId" : "dashboard_userDetails",
+                  "subMenusId" : "dashboard_communities"
                 }
               ]
-            },
-
+            }
           ]
         },
         {

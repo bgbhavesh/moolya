@@ -47,7 +47,7 @@ export default class MlInstitutionSectors extends React.Component{
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.sectorsAndServices) {
-        const editorValue = createValueFromString(response.sectorsAndServices.sectorsAndServicesDescription);
+        const editorValue = createValueFromString(response && response.sectorsAndServices && response.sectorsAndServices.sectorsAndServicesDescription ? response.sectorsAndServices.sectorsAndServicesDescription : null);
         var object = response.sectorsAndServices;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
@@ -56,7 +56,7 @@ export default class MlInstitutionSectors extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.institutionPortfolio.sectorsAndServices.sectorsAndServicesDescription);
+      const editorValue = createValueFromString(that.context.institutionPortfolio.sectorsAndServices && that.context.institutionPortfolio.sectorsAndServices.sectorsAndServicesDescription ? that.context.institutionPortfolio.sectorsAndServices.sectorsAndServicesDescription : null);
       this.setState({loading: false, data: that.context.institutionPortfolio.sectorsAndServices,editorValue});
     }
     this.updatePrivateKeys()

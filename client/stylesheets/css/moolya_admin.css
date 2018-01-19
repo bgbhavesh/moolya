@@ -1699,7 +1699,8 @@ margin: 0px;
 
 .sub-head-border{ border-bottom: 1px solid #273545 !important;}
 .ml_inner_btn{width: 98%;position: absolute;text-align: center;}
-.ml_inner_btn .h_btn{display: inline-block; background: #ccc; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #000;text-shadow: none;text-align: center;cursor: pointer;padding:0px 5px;}
+.ml_inner_btn .h_btn{display: inline-block; background: #ccc; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 13px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #000;text-shadow: none;text-align: center;cursor: pointer;padding:0px 5px;}
+.fil_active{font-weight: bold;}
 .ml_inner_btn .h_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ccc;top: 0px;}
 .ml_inner_btn .h_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ccc transparent transparent;top: 0px;}
 /* .make-private-check{ position: relative; z-index: 9999 !important;} */

@@ -10,13 +10,10 @@ var _ = require('lodash');
 MlResolver.MlQueryResolver['getMySiteMapUrl'] = (obj, args, context, info) => {
   let siteMapObject = MlSitemap.findOne({userId: context.userId}) || {}
   let seoUrl = siteMapObject.seoUrl;
-  console.log('URLLLLL',process.env.ROOT_URL)
   if(process.env.ROOT_URL){
-    
-    seoUrl = process.env.ROOT_URL +'/view' +seoUrl;
+    seoUrl = (process.env.ROOT_URL).replace(/\/$/, "") +'/view' +seoUrl;
   }else{
-
-    seoUrl = Meteor.absoluteUrl() +'/view' +seoUrl;
+    seoUrl = (Meteor.absoluteUrl()).replace(/\/$/, "") +'/view' +seoUrl;
   }
   return {url:seoUrl}
 }

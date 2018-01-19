@@ -27,13 +27,13 @@ export default class MlInfinity extends Component {
   }
 
   render(){
-      let view;
-      if(this.props.viewModeParams == false){
-        view = this.props.viewModeParams;
-      } else{
-        view = this.props.viewMode;
-      }
-     let viewModeCSS=view?'view_switch map_view':'view_switch list_view';
+      // let view;
+      // if(this.props.viewModeParams == false){
+      //   view = this.props.viewModeParams;
+      // } else{
+      //   view = this.props.viewMode;
+      // }
+     let viewModeCSS=this.props.viewMode?'view_switch map_view':'view_switch list_view';
 
     return(
 

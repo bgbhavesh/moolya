@@ -26,9 +26,11 @@ import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
  */
 
 var options = [
-  {value: 'Weekly', label: 'Weekly'},
-  {value: 'Daily', label: 'Daily'},
-  {value: 'Monthly', label: 'Monthly'}
+  { value: 'Weekly', label: 'Weekly' },
+  { value: 'Daily', label: 'Daily' },
+  { value: 'Monthly', label: 'Monthly' },
+  { value: 'Quarterly', label: 'Quarterly' },
+  { value: 'Onetime', label: 'One Time' },
 ];
 
 export default class MlServiceCardStep1 extends React.Component{

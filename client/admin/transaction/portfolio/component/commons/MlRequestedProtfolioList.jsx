@@ -9,6 +9,7 @@ export default class MlRequestedPortfolioList extends Component {
     super(props);
     this.state={show:false,requestId:null};
     this.assignActionHandler.bind(this);
+    this.onPriorityChange = this.onPriorityChange.bind(this);
   }
 
   assignActionHandler(data){
@@ -22,6 +23,78 @@ export default class MlRequestedPortfolioList extends Component {
     }
   }
 
+  onPriorityChange(e,priority){
+    e.preventDefault();
+    let priorityFilter = [];
+    switch(priority){
+      case 'all':
+        break;
+      case 'priority-1':
+        priorityFilter = [
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"PORT_GO_LIVE_PEND"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"INV_PRC_PEND"
+          }
+        ]
+        break;
+      case 'priority-2':
+        priorityFilter = [
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_PORT_PEND"
+          }
+        ]
+        break;
+      case 'others':
+        priorityFilter =[
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_PORT_KICKOFF"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_PORT_APR"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"PORT_LIVE_NOW"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"PORT_INACT"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"PORT_REVIEW_INPRO"
+          },
+        ]
+        break;
+    }
+    //
+
+    this.setState({priorityFilter});
+  }
+
   render() {
     let actions= mlRequestedPortfolioTableConfig.actionConfiguration;
     let action = _.find(actions, {"actionName": "assign"});
@@ -30,9 +103,15 @@ export default class MlRequestedPortfolioList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
+          <div className="ml_inner_btn">
+            <a className="h_btn" onClick={e=>{this.onPriorityChange(e,'all')}}>All </a>
+            <a className="h_btn ml_red" onClick={e=>this.onPriorityChange(e,'priority-1')}>1<sup>st</sup> Priority </a>
+            <a className="h_btn ml_orange" onClick={e=>this.onPriorityChange(e,'priority-2')}>2<sup>nd</sup> Priority </a>
+            <a className="h_btn" onClick={e=>this.onPriorityChange(e,'others')}>Others</a>
+          </div>
           <h2>Requested List</h2>
 
-          <MlTableViewContainer {...mlRequestedPortfolioTableConfig} forceFetch={false}/>
+          <MlTableViewContainer {...mlRequestedPortfolioTableConfig} priorityFilter={this.state.priorityFilter} forceFetch={false}/>
 
         </div>
 

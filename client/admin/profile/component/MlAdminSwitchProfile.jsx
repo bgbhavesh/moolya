@@ -58,6 +58,17 @@ export default class MlAdminSwitchProfile extends React.Component{
     $(function () {
       $('.float-label').jvFloat();
     });
+
+    if(localStorage.getItem('switchProfile')){
+      toastr.success("Profile switched successfully");
+      localStorage.removeItem('switchProfile');
+    }
+
+    if(localStorage.getItem('defaultProfile')){
+      toastr.success("'Default Profile' set successfully");
+      localStorage.removeItem('defaultProfile');
+    }
+
     this.onChange.bind(this);
     // this.initializeSwiper();
     initalizeFloatLabel();
@@ -83,6 +94,7 @@ export default class MlAdminSwitchProfile extends React.Component{
        response = await setAdminDefaultProfileActionHandler(profileDetails.clusterId);
     if(response){
       toastr.success("'Default Profile set successfully");
+      localStorage.setItem('defaultProfile','1');
       reloadPage();
     }else{
       //throw error
@@ -97,6 +109,7 @@ export default class MlAdminSwitchProfile extends React.Component{
       response = await switchProfileActionHandler(profileDetails.clusterId);
     if(response){
       toastr.success("Profile switch successful");
+      localStorage.setItem('switchProfile','1');
       reloadPage();
     }else{
       //throw error

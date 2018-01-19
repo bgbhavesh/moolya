@@ -70,12 +70,22 @@ export default class MlAppFunderCalendarSlots extends Component {
 
   async getSessionDetails(currentDate){
     let dates =new Date(currentDate);
+    let errorHandler = false;
     let orderId= this.props.orderId;
     let sessionId= this.props.sessionId[0];
     let date = dates.getDate();
     let month= dates.getMonth();
     let year=  dates.getFullYear();
-    const response = await fetchSessionDayActionHandler(orderId,sessionId, date, month, year)
+    var response = await fetchSessionDayActionHandler(orderId,sessionId, date, month, year)
+    if(response.length === 1) {
+      response.map(function(data){
+        if(data.status === 400) errorHandler = true;
+      })
+    }
+    if(errorHandler) {
+      toastr.error(response[0]['shift']);
+      response = [];
+    }
     if(response){
       this.setState({
         slotDetails: response

@@ -164,35 +164,49 @@ MlResolver.MlQueryResolver['getSessionDayAvailable'] = (obj, args, context, info
   }
 
   let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
-
-  if (!serviceInfo) {
-    let code = 400;
-    let response = new MlRespPayload().errorPayload("Service id is not attached in service card definition", code);
-    return response;
+  date.setDate(args.day);
+  date.setMonth(args.month);
+  date.setYear(args.year);
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  let serviceValidation =  new Date();
+  serviceValidation.setDate(serviceValidation.getDate() + serviceInfo.serviceExpiry);
+  if(serviceValidation < date){
+    var arr = [];
+    arr.push({status:400,shift:"Service isn't valid for the selected date"});
+    return arr;
   }
+  else {
+    if (!serviceInfo) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Service id is not attached in service card definition", code);
+      return response;
+    }
 
-  let tasks = serviceInfo.tasks ? serviceInfo.tasks : [];
+    let tasks = serviceInfo.tasks ? serviceInfo.tasks : [];
 
-  let task = tasks.find(function (task) {
-    return task.sessions.some(function (session) {
-      return session.id == sessionId;
-    })
-  });
-  if (!task) {
-    let code = 400;
-    let response = new MlRespPayload().errorPayload("Session id is not attached in service card definition", code);
-    return response;
+    let task = tasks.find(function (task) {
+      return task.sessions.some(function (session) {
+        return session.id == sessionId;
+      })
+    });
+    if (!task) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Session id is not attached in service card definition", code);
+      return response;
+    }
+
+    let taskId = task.id;
+
+    if (!task.id) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Task id is not attached in service card definition", code);
+      return response;
+    }
+
+    return MlAppointment.getSessionTimeSlots(null, taskId, sessionId, day, month, year);
   }
-
-  let taskId = task.id;
-
-  if (!task.id) {
-    let code = 400;
-    let response = new MlRespPayload().errorPayload("Task id is not attached in service card definition", code);
-    return response;
-  }
-
-  return MlAppointment.getSessionTimeSlots(null, taskId, sessionId, day, month, year);
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {

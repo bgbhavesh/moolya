@@ -49,7 +49,7 @@ export default class MlCompanyStartupIncubators extends React.Component{
     if(empty){
       const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.startupIncubators) {
-        const editorValue = createValueFromString(response.startupIncubators.startupIncubatorsDescription);
+        const editorValue = createValueFromString(response && response.startupIncubators && response.startupIncubators.startupIncubatorsDescription ? response.startupIncubators.startupIncubatorsDescription : null);
         var object = response.startupIncubators;
         object = _.omit(object, '__typename')
         // this.setState({data: object});

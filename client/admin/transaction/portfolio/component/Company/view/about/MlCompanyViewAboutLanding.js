@@ -9,7 +9,7 @@ var Rating = require('react-rating');
 import MlCompanyViewAboutusTabs from './MlCompanyViewAboutusTabs'
 import {fetchDetailsCompanyActionHandler} from '../../../../../portfolio/actions/findCompanyPortfolioDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import MlTextEditor, { createValueFromString } from "../../../../../../../commons/components/textEditor/MlTextEditor";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlCompanyViewAboutLanding extends Component {
@@ -51,10 +51,16 @@ export default class MlCompanyViewAboutLanding extends Component {
 
   async fetchPortfolioDetails() {
     let that = this;
+    let companyDescription;
+    let spDescription;
+    let informationDescription;
     let portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchDetailsCompanyActionHandler(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, aboutUs: response, aboutUsList: response});
+      companyDescription = createValueFromString(response.aboutUs ? response.aboutUs.companyDescription : null);
+      spDescription = createValueFromString(response.serviceProducts ? response.serviceProducts.spDescription : null);
+      informationDescription = createValueFromString(response.information ? response.information.informationDescription : null);
+      this.setState({loading: false, aboutUs: response, aboutUsList: response,companyDescription, spDescription, informationDescription});
     }
   }
 
@@ -70,6 +76,7 @@ export default class MlCompanyViewAboutLanding extends Component {
 
   render() {
     let aboutUsImages = null;
+    const { companyDescription, spDescription, informationDescription } = this.state;
     let aboutUs = this.state.aboutUs;
     if (aboutUs) {
       let clients = aboutUs.clients;
@@ -105,7 +112,12 @@ export default class MlCompanyViewAboutLanding extends Component {
                       smoothScrolling={true}
                       default={true}
                     >
-                  {this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?<p>{this.state.aboutUs.aboutUs.companyDescription}</p>:(<NoData tabName="aboutUs"/>)}
+                    {(<div>{this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription ?
+                        <MlTextEditor
+                          value={companyDescription}
+                          isReadOnly={true}
+                        /> : (<NoData tabName="aboutUs"/>)}</div>)}
+                  {/* {this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?<p>{this.state.aboutUs.aboutUs.companyDescription}</p>:(<NoData tabName="aboutUs"/>)} */}
                     </ScrollArea>
                   </div>
                 </div>
@@ -160,7 +172,15 @@ export default class MlCompanyViewAboutLanding extends Component {
                           smoothScrolling={true}
                           default={true}
                         >
-                          {this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?<p>{this.state.aboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
+                        {this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription ?
+                          <MlTextEditor
+                            value={spDescription}
+                            isReadOnly={true}
+                          /> :
+                          <div className="portfolio-main-wrap">
+                          <NoData tabName="serviceProducts"/>
+                          </div>}
+                          {/* {this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?<p>{this.state.aboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)} */}
                         </ScrollArea>
                       </div>
                     </div>
@@ -180,11 +200,19 @@ export default class MlCompanyViewAboutLanding extends Component {
                         smoothScrolling={true}
                         default={true}
                       >
-                        {this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?
+                        {this.state.aboutUs.information && this.state.aboutUs.information.informationDescription ?
+                          <MlTextEditor
+                            value={informationDescription}
+                            isReadOnly={true}
+                          /> :
+                          <div className="portfolio-main-wrap">
+                          <NoData tabName="information"/>
+                          </div>}
+                        {/* {this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?
                           (<ul className="list-info">
                             <li>{this.state.aboutUs.information.informationDescription}</li>
                           </ul>)
-                          :(<NoData tabName="information"/>)}
+                          :(<NoData tabName="information"/>)} */}
                     <ul className="list-info">
                       <li></li>
                     </ul>

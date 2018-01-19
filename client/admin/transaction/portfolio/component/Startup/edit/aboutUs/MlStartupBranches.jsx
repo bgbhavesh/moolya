@@ -4,17 +4,18 @@ import ScrollArea from 'react-scrollbar'
 import gql from 'graphql-tag';
 import _ from 'lodash';
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-const KEY = "branches"
 import Confirm from '../../../../../../../commons/utils/confirm';
+
+const KEY = "branches"
 
 class MlStartupBranches extends Component{
   constructor(props, context){
@@ -33,10 +34,12 @@ class MlStartupBranches extends Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.startupBranchesServer = this.props.branchDetails || [];
     this.tabName = this.props.tabName || ""
     this.curSelectLogo = {};
     this.handleBlur.bind(this);
     this.libraryAction.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -64,6 +67,7 @@ class MlStartupBranches extends Component{
       this.setState({loading: false, startupBranches: this.context.startupPortfolio.branches, startupBranchesList:this.context.startupPortfolio.branches});
     }
   }
+
   onSaveAction(e){
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
@@ -79,6 +83,7 @@ class MlStartupBranches extends Component{
     this.setState({startupBranchesList:setObject,popoverOpen : false})
     this.curSelectLogo = {}
   }
+
   addBranch(){
     this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupBranches){
@@ -94,13 +99,31 @@ class MlStartupBranches extends Component{
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
-    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
-    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
-    setTimeout(function () {
-      _.each(privateFieldAry, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({
+      selectedIndex: index, data: details, selectedObject: uiIndex,
+      popoverOpen: !(this.state.popoverOpen), "selectedVal": details.addressTypeId,
+      "countryId": details.countryId, "cityId": details.cityId, "stateId": details.stateId
+    }, () => {
+      this.lockPrivateKeys(index)
+    });
+    // const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
+    // setTimeout(function () {
+    //   _.each(privateFieldAry, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  lockPrivateKeys(selIndex) {
+    const privateValues = this.startupBranchesServer && this.startupBranchesServer[selIndex]?this.startupBranchesServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e){
@@ -127,47 +150,34 @@ class MlStartupBranches extends Component{
     } else {
       updatedData=_.extend(updatedData,{[key]:false});
     }
-    this.setState({data:updatedData}, function () {
-      // this.sendDataToParent()
-    })
+    this.setState({data:updatedData})
   }
   onOptionSelected(selectedBranch){
     let details =this.state.data;
     details=_.omit(details,["addressTypeId"]);
     details=_.extend(details,{["addressTypeId"]: selectedBranch});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedBranch})
-      // this.sendDataToParent()
-    })
+    this.setState({ data: details, "selectedVal": selectedBranch })
   }
   onOptionSelectedCountry(val){
     let details =this.state.data;
     details=_.omit(details,["countryId"]);
     details=_.extend(details,{["countryId"]:val});
-    this.setState({data: details, "countryId": val}, function () {
-      // this.setState({"countryId":val})
-      // this.sendDataToParent()
-    })
+    this.setState({data: details, "countryId": val})
   }
+
   onOptionSelectedStates(value, callback, label){
     let details =this.state.data;
     details=_.omit(details,["stateId"]);
     details=_.omit(details,["branchState"]);
     details=_.extend(details,{["stateId"]: value, ["branchState"]:label.label});
-    this.setState({data: details, "stateId": value}, function () {
-      // this.setState({"stateId" : value})
-      // this.sendDataToParent()
-    })
+    this.setState({data: details, "stateId": value})
   }
   onOptionSelectedCities(val, callback, label){
     let details =this.state.data;
     details=_.omit(details,["cityId"]);
     details=_.omit(details,["branchCity"]);
     details=_.extend(details,{["cityId"]: val, ["branchCity"]:label.label});
-    this.setState({data: details, "cityId": val}, function () {
-      // this.setState({"cityId" : val})
-      // this.sendDataToParent()
-    })
+    this.setState({data: details, "cityId": val})
   }
   handleBlur(e){
     let details =this.state.data;
@@ -246,8 +256,6 @@ class MlStartupBranches extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         }
-        //this.setState({loading: true})
-        //this.fetchOnlyImages();
       }
     }
   }
@@ -260,24 +268,6 @@ class MlStartupBranches extends Component{
     } else {
       toastr.success(resp.result)
       return resp;
-    }
-  }
-
-
-  async fetchOnlyImages(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response) {
-      let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.startupBranches
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if(specificData){
-        let curUpload=response.branches[thisState]
-        specificData['logo']= curUpload['logo']
-        this.setState({loading: false, startupBranches:cloneBackUp });
-      }else {
-        this.setState({loading: false})
-      }
     }
   }
 
@@ -364,9 +354,11 @@ class MlStartupBranches extends Component{
                   return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
-                        <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                        <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
+                        <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that,details.index, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that,details.index, idx)}>
+                          <img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"} /></div>
                         <h3>{details.branchName?details.branchName:""}</h3>
                       </div>
                     </a>
@@ -473,7 +465,7 @@ class MlStartupBranches extends Component{
                           <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                            <a href="" className="save_btn" onClick={this.onSaveAction}>Save</a>
                         </div>
                       </div>
                     </div>
@@ -489,6 +481,7 @@ class MlStartupBranches extends Component{
 }
 MlStartupBranches.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 
 // const mapStateToProps = (state, ownProps) => {

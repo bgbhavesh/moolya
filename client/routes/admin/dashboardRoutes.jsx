@@ -141,7 +141,7 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities',
 });
 
 adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/portfolio/:portfolioId', {
-  name: 'dashboard_communities',
+  name: 'dashboard_userDetails',
   action(params, queryParams){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,

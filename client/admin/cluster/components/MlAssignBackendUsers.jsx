@@ -365,7 +365,7 @@ class MlAssignBackendUsers extends React.Component {
                     {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query}  queryOptions={queryOptions}  isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>*/}
                     <div className="form-group">
                       {/*<input type="text" id="AssignedAs" placeholder="Also Assigned As"*/}
-                      Also Assigned As
+                      <b>Also Assigned As</b>
                       <ul>
                         {alsoAssignList}
                       </ul>

@@ -6,7 +6,7 @@ var Rating = require('react-rating');
 import MlInstitutionTab from './MlPortfolioInstitutionAboutsUsTabs'
 import {fetchDetailsInstitutionActionHandler} from '../../../../actions/findPortfolioInstitutionDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-
+import MlTextEditor, { createValueFromString } from "../../../../../../../commons/components/textEditor/MlTextEditor";
 import underscore from "underscore";
 
 
@@ -25,6 +25,7 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
   getPortfolioInstitutionAboutUsDetails(details, tabName, privateKey, requiredFields) {
     this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
+  
   componentDidMount()
   {
     var className = this.props.isAdmin ? "admin_header" : "app_header";
@@ -38,7 +39,7 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
       if(WinWidth > 768){
         $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
       }
-    },100);
+    },500);
   }
 
   componentWillMount(){
@@ -49,22 +50,27 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
   }
   async fetchPortfolioDetails() {
     let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let institutionDescription;
+    let spDescription;
+    let informationDescription;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchDetailsInstitutionActionHandler(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, institutionAboutUs: response, institutionAboutUsList: response});
+      institutionDescription = createValueFromString(response.aboutUs ? response.aboutUs.institutionDescription : null);
+      spDescription = createValueFromString(response.serviceProducts ? response.serviceProducts.spDescription : null);
+      informationDescription = createValueFromString(response.information ? response.information.informationDescription : null);
+      this.setState({loading: false, institutionAboutUs: response, institutionAboutUsList: response, institutionDescription, spDescription, informationDescription });
     }
-
   }
 
   getInstitutionState() {
     this.setState({aboutInstitution: false})
     this.props.backClickHandler();
-
   }
 
   render(){
     let aboutUsImages=null;
+    const { institutionDescription, spDescription, informationDescription } = this.state;
     let institutionAboutUs=this.state.institutionAboutUs;
     if(institutionAboutUs){
       let clients=institutionAboutUs.clients;
@@ -99,7 +105,12 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
                   smoothScrolling={true}
                   default={true}
                 >
-              <p>{this.state.institutionAboutUs.aboutUs&&this.state.institutionAboutUs.aboutUs.institutionDescription}</p>
+                {(<div>{this.state.institutionAboutUs.aboutUs&& this.state.institutionAboutUs.aboutUs.institutionDescription ?
+                        <MlTextEditor
+                          value={institutionDescription}
+                          isReadOnly={true}
+                        /> : (<p></p>)}</div>)}
+              {/* <p>{this.state.institutionAboutUs.aboutUs&&this.state.institutionAboutUs.aboutUs.institutionDescription}</p> */}
                 </ScrollArea>
               </div>
             </div>
@@ -147,7 +158,12 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
                     smoothScrolling={true}
                     default={true}
                   >
-                <p>{this.state.institutionAboutUs.serviceProducts&&this.state.institutionAboutUs.serviceProducts.spDescription}</p>
+                  {(<div>{this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription ?
+                        <MlTextEditor
+                          value={spDescription}
+                          isReadOnly={true}
+                        /> : (<p></p>)}</div>)}
+                {/* <p>{this.state.institutionAboutUs.serviceProducts&&this.state.institutionAboutUs.serviceProducts.spDescription}</p> */}
                   </ScrollArea>
                 </div>
               </div>
@@ -164,7 +180,12 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
                   default={true}
                 >
               <ul className="list-info">
-                <li>{this.state.institutionAboutUs.information&&this.state.institutionAboutUs.information.informationDescription}</li>
+              {(<div>{this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription ?
+                        <MlTextEditor
+                          value={informationDescription}
+                          isReadOnly={true}
+                        /> : (<p></p>)}</div>)}
+                {/* <li>{this.state.institutionAboutUs.information&&this.state.institutionAboutUs.information.informationDescription}</li> */}
               </ul>
                 </ScrollArea>
               </div>

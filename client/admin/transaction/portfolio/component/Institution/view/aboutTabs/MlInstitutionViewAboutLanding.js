@@ -10,7 +10,7 @@ import MlInstitutionViewAboutusTabs from './MlInstitutionViewAboutusTabs'
 import {fetchDetailsInstitutionActionHandler} from '../../../../../portfolio/actions/findPortfolioInstitutionDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-
+import MlTextEditor, { createValueFromString } from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlInstitutionViewAboutLanding extends Component {
   constructor(props) {
     super(props)
@@ -52,10 +52,16 @@ export default class MlInstitutionViewAboutLanding extends Component {
 
   async fetchPortfolioDetails() {
     let that = this;
+    let institutionDescription;
+    let spDescription;
+    let informationDescription;
     let portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchDetailsInstitutionActionHandler(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, institutionAboutUs: response, institutionAboutUsList: response});
+      institutionDescription = createValueFromString(response.aboutUs ? response.aboutUs.institutionDescription : null);
+      spDescription = createValueFromString(response.serviceProducts ? response.serviceProducts.spDescription : null);
+      informationDescription = createValueFromString(response.information ? response.information.informationDescription : null);
+      this.setState({loading: false, institutionAboutUs: response, institutionAboutUsList: response,institutionDescription, spDescription, informationDescription});
     }
   }
 
@@ -70,6 +76,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
   }
 
   render() {
+    const { institutionDescription, spDescription, informationDescription } = this.state;
     let aboutUsImages = null;
     let institutionAboutUs = this.state.institutionAboutUs;
     if (institutionAboutUs) {
@@ -106,7 +113,12 @@ export default class MlInstitutionViewAboutLanding extends Component {
                       smoothScrolling={true}
                       default={true}
                     >
-                      {this.state.institutionAboutUs.aboutUs && this.state.institutionAboutUs.aboutUs.institutionDescription?<p>{this.state.institutionAboutUs.aboutUs.institutionDescription}</p>:(<NoData tabName="aboutUs"/>)}
+                     {(<div>{this.state.institutionAboutUs.aboutUs&& this.state.institutionAboutUs.aboutUs.institutionDescription ?
+                        <MlTextEditor
+                          value={institutionDescription}
+                          isReadOnly={true}
+                        /> : ((<NoData tabName="aboutUs"/>))}</div>)}
+                      {/* {this.state.institutionAboutUs.aboutUs && this.state.institutionAboutUs.aboutUs.institutionDescription?<p>{this.state.institutionAboutUs.aboutUs.institutionDescription}</p>:(<NoData tabName="aboutUs"/>)} */}
                     </ScrollArea>
                   </div>
                   </div>
@@ -161,7 +173,12 @@ export default class MlInstitutionViewAboutLanding extends Component {
                           smoothScrolling={true}
                           default={true}
                         >
-                          {this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription?<p>{this.state.institutionAboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
+                         {(<div>{this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription ?
+                        <MlTextEditor
+                          value={spDescription}
+                          isReadOnly={true}
+                        /> : (<p></p>)}</div>)}
+                          {/* {this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription?<p>{this.state.institutionAboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)} */}
                         </ScrollArea>
                       </div>
                     </div>
@@ -181,12 +198,17 @@ export default class MlInstitutionViewAboutLanding extends Component {
                         smoothScrolling={true}
                         default={true}
                       >
-                        {this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription?
+                        {(<div>{this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription ?
+                        <MlTextEditor
+                          value={informationDescription}
+                          isReadOnly={true}
+                        /> : (<NoData tabName="information"/>)}</div>)}
+                        {/* {this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription?
                           (<ul className="list-info">
                             <li>{this.state.institutionAboutUs.information.informationDescription}</li>
                           </ul>)
                           :
-                          (<NoData tabName="information"/>)}
+                          (<NoData tabName="information"/>)} */}
                       </ScrollArea>
                     </div>
                   </div>

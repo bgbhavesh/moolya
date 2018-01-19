@@ -5,6 +5,16 @@ import MlProcessSetupDetailsComponent from '../../processSetup/component/MlProce
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import {client} from '../../../core/apolloConnection';
 
+export function registrationRowClassNameFormat(row, rowIdx) {
+  let status=row.status;
+  var rowClassName='';
+  switch(status){
+    case 'Yet To Start':rowClassName='ml_orange'; break;
+  }
+  return rowClassName;
+}
+
+
 const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   name:"ProcessSetupTable",
   module:"processSetup",//Module name for filter.
@@ -30,6 +40,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
     {dataField: "status", title: "Status",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
+  trClassName:registrationRowClassNameFormat,
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlProcessSetupDetailsComponent,
   asyncExpand:true,

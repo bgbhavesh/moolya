@@ -46,6 +46,9 @@ export default class MlOfficeItem extends React.Component {
 
   componentDidMount() {
     initalizeFloatLabel();
+    $('.ml_tabs ul li a').click(function(){
+      $('input').blur();
+    });
     // $(function() {
     //   $('.float-label').jvFloat();
     // });

@@ -25,3 +25,21 @@ export async function fetchOfficeMemberById(officeId) {
   });
   return result.data.fetchOfficeSCById;
 }
+
+
+export async function fetchOfficeById(officeId) {
+  const result = await appClient.query({
+    query: gql`
+          query($officeId:String){
+              fetchOfficeById(officeId:$officeId){
+                 officeName
+              }
+          }
+      `,
+    variables: {
+      officeId: officeId
+    },
+    fetchPolicy: 'network-only'
+  });
+  return result.data.fetchOfficeById;
+}

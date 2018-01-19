@@ -48,7 +48,7 @@ export default class MlCompanyPolicy extends React.Component{
     if(empty){
       const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.policy) {
-        const editorValue = createValueFromString(response.policy.policyDescription);
+        const editorValue = createValueFromString(response && response.policy && response.policy.policyDescription ? response.policy.policyDescription : null);
         var object = response.policy;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
@@ -57,7 +57,7 @@ export default class MlCompanyPolicy extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.companyPortfolio.policy.policyDescription);
+      const editorValue = createValueFromString(that.context.companyPortfolio.policy && that.context.companyPortfolio.policy.policyDescription ? that.context.companyPortfolio.policy.policyDescription : null);
       this.setState({loading: false, data: that.context.companyPortfolio.policy,editorValue});
     }
   }

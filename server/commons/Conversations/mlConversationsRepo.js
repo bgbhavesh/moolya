@@ -28,12 +28,14 @@ class ConversationsRepo{
 
     var body = {appName:"moolya"}
     this.sendRequest('/createApplication', body, 'post', true, function (res) {
+      console.log('Response',res);
       if(res.success){
         that.setApiKey(res.result.apiKey)
       }
       if(cb){
         cb(res);
       }
+
     });
   }
 
@@ -81,6 +83,44 @@ class ConversationsRepo{
 
   sendRequest(endPoint, payload, method, isApplication, cb){
     var options = {
+      url: Meteor.settings.private.notificationEngineURL+'/sms/send',
+      body:payload,
+      method: method,
+      json: true
+    };
+
+    console.log('request end point', options.url);
+    if(!isApplication){
+      var apiKey = this.getApiKey();
+      if(!apiKey)
+        return {success:false}
+      options['headers'] = {
+        'x-api-key': apiKey
+      }
+    }
+    options['headers'].accesskey = Meteor.settings.private.notificationEngineAccessKey;
+    console.log('Options',options);
+
+    new Promise(function (resolve, reject) {
+      request(options, function (err, res, body) {
+        if(err){
+          console.log('Error',err);
+          reject(err)
+        }
+
+        else{
+          resolve(body)
+        }
+      })
+    }).then((body) => {
+      if(cb) {
+        cb(body);
+      }
+    });
+  }
+
+  sendRequestDeprecated(endPoint, payload, method, isApplication, cb){
+    var options = {
       url: Meteor.settings.private.conversationsBaseURL+endPoint,
       body:payload,
       method: method,
@@ -97,7 +137,7 @@ class ConversationsRepo{
       }
     }
 
-   new Promise(function (resolve, reject) {
+    new Promise(function (resolve, reject) {
       request(options, function (err, res, body) {
         if(err){
           reject(err)
@@ -114,23 +154,23 @@ class ConversationsRepo{
     });
   }
 
-/*  async testApi(){
-    var options = {
-      url: "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJKxSwWSZgAUgR0tWM0zAkZBc&key=AIzaSyC53qhhXAmPOsxc34WManoorp7SVN_Qezo"
-    }
+  /*  async testApi(){
+      var options = {
+        url: "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJKxSwWSZgAUgR0tWM0zAkZBc&key=AIzaSyC53qhhXAmPOsxc34WManoorp7SVN_Qezo"
+      }
 
-    const result = await new Promise(function (resolve, reject) {
-      request(options, function (err, res, body) {
-        if(err){
-          reject(err)
-        }
-        else{
-          resolve(body)
-        }
+      const result = await new Promise(function (resolve, reject) {
+        request(options, function (err, res, body) {
+          if(err){
+            reject(err)
+          }
+          else{
+            resolve(body)
+          }
+        })
       })
-    })
-    return result;
-  }*/
+      return result;
+    }*/
 }
 
 const mlConversationsRepo = new ConversationsRepo();

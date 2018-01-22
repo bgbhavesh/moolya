@@ -16,7 +16,7 @@ export async function fetchAllTaskActionHandler(profileId) {
     variables: {
       profileId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const tasks = result.data.fetchTasks;
   return tasks;
@@ -87,7 +87,7 @@ export async function fetchTaskActionHandler(taskId) {
     variables: {
       taskId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   var resp = result.data.fetchTaskForApointment;
   let data = _.omit(resp, '__typename')
@@ -135,7 +135,7 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
       taskId,
       sessionId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const resp = result.data.fetchActivitiesTeams;
   let data = _.omit(resp, '__typename')
@@ -176,7 +176,7 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       officeId:officeId
     }
@@ -198,7 +198,7 @@ export async function fetchOfficeActionHandler (Details) {
     variables: {
       Details
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const offices = result.data.fetchOffice;
   return offices
@@ -250,7 +250,7 @@ export async function fetchMyConnectionActionHandler() {
         name
       }
     }`,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const myConnections = result.data.fetchConnectionByUser;
   return myConnections;
@@ -268,7 +268,7 @@ export async function getMoolyaAdminsActionHandler(userId, profileId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       userId: userId,
       profileId: profileId

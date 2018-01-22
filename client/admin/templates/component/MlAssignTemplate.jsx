@@ -7,7 +7,8 @@ import {addTemplateAssignmentActionHandler} from '../actions/addTemplateAssignme
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import MlStepAvailability from './MlStepAvailabilityComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import MlLoader from '../../../commons/components/loader/loader'
@@ -65,7 +66,6 @@ class MlAssignTemplate extends React.Component{
 
 
   getStepAvailability(details){
-    console.log(details);
     this.setState({'stepAvailability':details})
   }
 
@@ -123,7 +123,6 @@ class MlAssignTemplate extends React.Component{
   async findSteps(subProcessId) {
     //let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
-    console.log(response)
     if(response){
       let steps = response.steps||[];
       return steps;
@@ -133,9 +132,7 @@ class MlAssignTemplate extends React.Component{
 
 
   async findTemplates(subProcessId,stepName) {
-    console.log(subProcessId+"--"+stepName)
     const response = await findTemplatesActionHandler(subProcessId,stepName);
-    console.log(response);
     let templates=[];
     if(response){
        templates = response.templates||[];
@@ -152,8 +149,7 @@ class MlAssignTemplate extends React.Component{
     this.setState({subProcess:value})
     this.setState({subProcessName:selObject.label})
     const steps=await this.findSteps(value);
-    this.setState({steps:steps||[]});
-    console.log(this.state.steps);
+    this.setState({steps:steps||[],selectedStep:(steps && steps.length>0)?steps[0].stepName:''});
     let stepDetails=[];
     stepDetails= steps;
     let stepName=''
@@ -162,7 +158,6 @@ class MlAssignTemplate extends React.Component{
     }
     const templates=await this.findTemplates(value,stepName);
     this.setState({templateInfo:templates||[]})
-    console.log(this.state.templateInfo);
   }
 
   optionsBySelectUserType(val){
@@ -200,17 +195,13 @@ class MlAssignTemplate extends React.Component{
     this.setState({communitiesName:selObject.label})
   }
   showTemplateImage(row){
-
-    console.log(row);
     window.open(row.templateImage)
   }
 
 
   async switchTabEvent(stepName){
-    console.log("switch tab step"+stepName)
     const templates=await this.findTemplates(this.state.subProcess,stepName);
-    this.setState({templateInfo:templates||[]})
-    console.log(this.state.templateInfo);
+    this.setState({templateInfo:templates||[],selectedStep:stepName})
   }
 
   render(){
@@ -285,7 +276,7 @@ class MlAssignTemplate extends React.Component{
                 <h2>Template Assignment</h2>
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg left_wrap">
-                    <ScrollArea
+                    <Scrollbars
                       speed={0.8}
                       className="left_wrap"
                       smoothScrolling={true}
@@ -325,12 +316,12 @@ class MlAssignTemplate extends React.Component{
                           <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                         </div>
                       </form>
-                    </ScrollArea>
+                    </Scrollbars>
                   </div>
                 </div>
                 <div className="col-md-6 nopadding-right">
                   <div className="form_bg left_wrap">
-                    <ScrollArea
+                    <Scrollbars
                       speed={0.8}
                       className="left_wrap"
                       smoothScrolling={true}
@@ -344,7 +335,7 @@ class MlAssignTemplate extends React.Component{
                             <ul  className="nav nav-pills">
                               {that.state.steps.map(function(options,key) {
                                 return(
-                                  <li className="active" key={key} onClick={that.switchTabEvent.bind(that,options.stepName)}>
+                                  <li className={(that.state.selectedStep==options.stepName)?'active':'inactive'} key={key} onClick={that.switchTabEvent.bind(that,options.stepName)}>
                                     <a  href={'#template'+key} data-toggle="tab"  >{options.stepName} </a>
                                   </li>
                                 )})}
@@ -365,7 +356,7 @@ class MlAssignTemplate extends React.Component{
                           </div>
                         </div>
                       </div>
-                    </ScrollArea>
+                    </Scrollbars>
                   </div>
                 </div>
                 {/*<span className="actions_switch show_act"></span>

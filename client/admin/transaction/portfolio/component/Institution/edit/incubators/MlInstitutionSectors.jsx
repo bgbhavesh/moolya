@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "sectorsAndServices"
 
 export default class MlInstitutionSectors extends React.Component{
@@ -19,8 +19,7 @@ export default class MlInstitutionSectors extends React.Component{
       privateKey:{},
       sectorsAndServices:{}
     }
-    this.handleBlur.bind(this);
-    return this;
+    this.handleBlur = this.handleBlur.bind(this);
   }
   componentDidUpdate(){
     OnLockSwitch();
@@ -48,25 +47,28 @@ export default class MlInstitutionSectors extends React.Component{
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.sectorsAndServices) {
+        const editorValue = createValueFromString(response.sectorsAndServices.sectorsAndServicesDescription);
         var object = response.sectorsAndServices;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields});
+        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
       }else{
         this.setState({loading:false})
       }
     }else{
-      this.setState({loading: false, data: that.context.institutionPortfolio.sectorsAndServices});
+      const editorValue = createValueFromString(that.context.institutionPortfolio.sectorsAndServices.sectorsAndServicesDescription);
+      this.setState({loading: false, data: that.context.institutionPortfolio.sectorsAndServices,editorValue});
     }
     this.updatePrivateKeys()
   }
 
-  handleBlur(e){
+  handleBlur(value,keyName){
     let details =this.state.data;
-    let name  = e.target.name;
+    // let name  = e.target.name;
     details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    // details=_.extend(details,{[name]:e.target.value});
+    details = _.extend(details, { [keyName]: value.toString('html') });
+    this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -110,6 +112,7 @@ export default class MlInstitutionSectors extends React.Component{
   render(){
     let that = this;
     const showLoader = that.state.loading;
+    const { editorValue } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -122,7 +125,11 @@ export default class MlInstitutionSectors extends React.Component{
                   <div className="panel-body">
 
                     <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="sectorsAndServicesDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.sectorsAndServicesDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                      {/* <textarea placeholder="Describe..." name="sectorsAndServicesDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.sectorsAndServicesDescription} onBlur={this.handleBlur.bind(this)}></textarea> */}
+                      <MlTextEditor
+                      value={editorValue}
+                      handleOnChange={(value) => this.handleBlur(value, "sectorsAndServicesDescription")}
+                    />
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSectorsAndServicesPrivate" defaultValue={this.state.data&&this.state.data.isSectorsAndServicesPrivate} onClick={this.onLockChange.bind(this,"sectorsAndServicesDescription","isSectorsAndServicesPrivate")}/>
                     </div>
 

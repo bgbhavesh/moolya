@@ -50,7 +50,7 @@ query ($sharedId: String) {
     variables: {
       sharedId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const shareDetails = result.data.fetchSharedLibraryDetails;
   return shareDetails

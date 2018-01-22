@@ -184,7 +184,6 @@ export default class MlTabView extends Component {
 
     if (menu != undefined) {
       let subMenuHide=menu.hideSubMenu;
-      console.log(menu.subMenu)
       //if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
       const subMenusId=menu.subMenusId;
       const subMenuMappingId=menu.subMenuMappingId;

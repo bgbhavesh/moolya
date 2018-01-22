@@ -22,7 +22,7 @@ export async function fetchAllProfileAppointmentCountsHandler (month, year) {
       }
     }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables:{
       month:month,
       year: year
@@ -58,7 +58,7 @@ export async function fetchProfileAppointmentCountsHandler (profileId, month, ye
       month:month,
       year: year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const profileAppointmentCounts = result.data.fetchProfileAppointmentCounts;
   return profileAppointmentCounts;
@@ -86,7 +86,7 @@ export async function fetchMyAppointmentBetweenTwoDates (profileId,userId,startD
       endMonth:endMonth,
       endYear:endYear,
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const fetchMyAppointmentBetweenTwoDates = result.data.fetchMyAppointmentBetweenTwoDates;
   return fetchMyAppointmentBetweenTwoDates;
@@ -111,7 +111,7 @@ export async function fetchServiceSeekerHandler (profileId, day, month) {
       day,
       month
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const serviceSeekers = result.data.fetchServiceSeekerList;
   return serviceSeekers;
@@ -144,7 +144,7 @@ export async function fetchSlotDetailsHandler (appointmentId) {
     variables:{
       appointmentId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const slotDetails = result.data.fetchSlotDetails;
   return slotDetails;

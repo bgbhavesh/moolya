@@ -23,7 +23,7 @@ export async function fetchCurrencyTypeActionHandler (connection, userId, portfo
       portfolioDetailsId,
       profileId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const activities = result.data.fetchCurrencyType;
   return activities

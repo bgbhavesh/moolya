@@ -28,7 +28,7 @@ export async function fetchAdminUserRoles(userId,connection) {
     variables: {
       userId: userId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const did = result.data.fetchUserRoles;
   return did

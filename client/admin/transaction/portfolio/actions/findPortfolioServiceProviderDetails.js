@@ -38,7 +38,7 @@ export async function fetchServiceProviderPortfolioAwards(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.awardsRecognition;
   return id
@@ -75,7 +75,7 @@ export async function fetchServiceProviderPortfolioClients(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.clients;
   return id
@@ -110,7 +110,7 @@ export async function fetchServiceProviderPortfolioAbout(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.about;
   return id
@@ -226,7 +226,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchStartupPortfolioAboutUs;
@@ -279,7 +279,7 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioInvestor;
   return id
@@ -304,7 +304,7 @@ export async function fetchServiceProviderMemberships(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.memberships;
   let data = _.omit(id, '__typename')
@@ -331,7 +331,7 @@ export async function fetchServiceProviderCompliances(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.compliances;
   let data = _.omit(id, '__typename')
@@ -357,7 +357,7 @@ export async function fetchServiceProviderLicenses(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.licenses;
   let data = _.omit(id, '__typename')
@@ -385,7 +385,7 @@ export async function findServiceProviderServicesActionHandler(portfoliodetailsI
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.services;
   let data = _.omit(id, '__typename')
@@ -422,7 +422,7 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.clients;
   return id
@@ -453,7 +453,7 @@ export async function findServiceProviderAboutActionHandler(portfoliodetailsId) 
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.about;
   let data = _.omit(id, '__typename')
@@ -485,7 +485,7 @@ export async function findServiceProviderLookingForActionHandler(portfoliodetail
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.lookingFor;
   // let data = _.omit(id, '__typename')
@@ -504,7 +504,7 @@ export async function validateUserForAnnotation(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data && result.data.validateUserForAnnotation;
   return id

@@ -6,7 +6,7 @@ import moment from "moment";
 import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (cell,data){
-  let createdDateTime=data&&data.createdAt?data.createdAt:null;
+  let createdDateTime=data&&data.transactionUpdatedDate?data.transactionUpdatedDate:null;
   let dateVal=createdDateTime?moment(createdDateTime).format(Meteor.settings.public.dateFormat):'';
   return dateVal;
 }
@@ -40,7 +40,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
     {dataField: "lastName", title: "Status",dataSort:true},
     {dataField: "lastName", title: "Assign",dataSort:true},*/
     {dataField: "portfolioId", title: "Portfolio Id",dataSort:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,useCustomComponent:true,customComponent:dateFormatter},
+    {dataField: "transactionUpdatedDate", title: "Last Updated Date",dataSort:true,useCustomComponent:true,customComponent:dateFormatter},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "Contact No",dataSort:true},
@@ -113,7 +113,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
                           accountType
                           source
                           createdBy
-                          createdAt
+                          transactionUpdatedDate
                           status
                           assignedTo
                           allocationStatus

@@ -5,7 +5,8 @@ import {upsertNumericalFormatActionHandler} from '../actions/upsertNumericalForm
 import {findNumericalFormatActionHandler} from '../actions/findNumericalFormatAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {OnToggleSwitch} from '../../../utils/formElemUtil';
@@ -38,7 +39,9 @@ class MlNumericalFormat extends React.Component{
   componentDidUpdate(){
     OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+
   }
 
   /*async addEventHandler() {
@@ -199,7 +202,7 @@ class MlNumericalFormat extends React.Component{
               </div>
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg left_wrap">
-                  <ScrollArea
+                  <Scrollbars
                     speed={0.8}
                     className="left_wrap"
                     smoothScrolling={true}
@@ -232,7 +235,7 @@ class MlNumericalFormat extends React.Component{
 
                       <br className="brclear"/>
                     </form>
-                  </ScrollArea>
+                  </Scrollbars>
                 </div>
               </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

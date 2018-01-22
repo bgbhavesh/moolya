@@ -29,7 +29,7 @@ export async function findCommunityActionHandler(clusterId,chapterId,subChapterI
       subChapterId : subChapterId,
       clusterId : clusterId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data;
   return id

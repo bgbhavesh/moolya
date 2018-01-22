@@ -8,12 +8,13 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlCompanyViewInformation extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      view:{}
+      editorValue: createValueFromString(this.props.informationDetails ? this.props.informationDetails.informationDescription : null)
+      // view:{}
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -113,13 +114,19 @@ export default class MlCompanyViewInformation extends React.Component {
 
   render() {
     console.log(this.props)
+    const { editorValue } = this.state;
     return (
       <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>Information</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+            <div>{this.props.informationDetails && this.props.informationDetails.informationDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true}
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
+              {/* <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
             </div>
           </div>
         </div>

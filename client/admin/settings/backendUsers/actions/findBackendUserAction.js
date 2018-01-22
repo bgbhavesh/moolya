@@ -82,7 +82,7 @@ export async function findBackendUserActionHandler(userTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchUser;
   return id

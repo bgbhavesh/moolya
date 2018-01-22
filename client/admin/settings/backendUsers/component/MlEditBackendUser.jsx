@@ -71,7 +71,7 @@ class MlEditBackendUser extends React.Component{
   componentDidUpdate(){
     OnToggleSwitch(true,true);
     passwordVisibilityHandler();
-    
+
     //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
@@ -115,7 +115,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async handleError(response) {
-    alert(response)
+    console.log("response error", response)
   };
 
   async handleSuccess(response) {
@@ -169,9 +169,9 @@ class MlEditBackendUser extends React.Component{
     const loggedInUser = getAdminUserContext();
     let userTypeId = this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
-    let userProfiles = (response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
+    let userProfiles = (response && response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
                     && response.profile.InternalUprofile.moolyaProfile.userProfiles)?
-      response.profile.InternalUprofile.moolyaProfile.userProfiles : '';
+      response.profile.InternalUprofile.moolyaProfile.userProfiles : [];
 
     let clusterId='';
     for(let i=0;i<userProfiles.length;i++){
@@ -510,7 +510,7 @@ class MlEditBackendUser extends React.Component{
 }
 `;
     let rolequery=gql` query{
-    data:fetchActiveRoles{label:roleName,value:_id}
+    data:fetchActiveRoles{label:displayName,value:_id}
     }
 `;
     let subChapterQuery=gql` query{

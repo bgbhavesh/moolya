@@ -19,7 +19,7 @@ export async function findProcessActionHandler(processId) {
     variables: {
       id:processId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findProcess;
   return id

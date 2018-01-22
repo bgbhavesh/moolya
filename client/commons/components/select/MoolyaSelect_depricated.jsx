@@ -71,7 +71,7 @@ export default class MoolyaSelect extends Component {
 
     const selectionOptionsPromise =  client.query({
       query: props.query,
-      forceFetch:true,
+      fetchPolicy: 'network-only',
       variables:queryOptions.options.variables
     })
     selectionOptionsPromise.then(data =>{
@@ -141,7 +141,7 @@ export default class MoolyaSelect extends Component {
     const valueKey=this.props.valueKey||'value';
     const mandatoryClass=this.props.mandatory?"mandatory":"";
 
-    // let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{},forceFetch:true}};
+    // let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{},fetchPolicy: 'network-only'}};
     //  queryOptions.options.variables.searchQuery=this.state.searchTerm;
     //  if(this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables){
     //    queryOptions.options.forceFetch=true;

@@ -24,7 +24,7 @@ export async function findChapterActionHandler(clusterid, chapterId) {
       clusterId:clusterId,
       chapterId: findChapterId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchChapter;
   return id

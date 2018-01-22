@@ -225,8 +225,8 @@ export default class MlAssignComponent extends React.Component {
       }  
     }`;
 
-    let subDepartmentQuery=gql`query($id:String){  
-      data:fetchSubDepartmentsForRegistration(id:$id) {
+    let subDepartmentQuery=gql`query($id:String, $isActive:Boolean){  
+      data:fetchSubDepartmentsForRegistration(id:$id, isActive: $isActive) {
         value:_id
         label:subDepartmentName
       }  
@@ -247,7 +247,7 @@ export default class MlAssignComponent extends React.Component {
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
     let departmentOption={options: { variables: {isMoolya:true,clusterId:this.state.selectedCluster, subChapterId:this.state.selectedSubChapter}}}
-    let subDepartmentOption={options: { variables: {id:this.state.selectedDepartment}}};
+    let subDepartmentOption={options: { variables: {id:this.state.selectedDepartment,isActive:true}}};
     let roleOption={
                     options: {
                       variables: {

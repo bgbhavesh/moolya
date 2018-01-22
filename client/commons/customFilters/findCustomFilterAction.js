@@ -32,7 +32,7 @@ export async function findModuleCustomFilterActionHandler(moduleName,connObj){
     variables: {
       moduleName:moduleName
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
 
   const data = result.data.fetchModuleFilters;

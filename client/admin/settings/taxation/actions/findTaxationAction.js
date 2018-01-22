@@ -35,7 +35,7 @@ export async function findTaxationActionHandler(TaxationId) {
       clusterId:clusterId,
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchTaxation;
   return id

@@ -21,7 +21,7 @@ export async function findAdminUserDetails(userId,connection) {
     variables: {
       id
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const did = result.data.data;
   return did

@@ -94,7 +94,7 @@ export async function findTaskActionHandler(taskId) {
     variables: {
       taskId: taskId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   var resp = result.data.fetchTask;
   let data = _.omit(resp, '__typename')

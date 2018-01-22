@@ -50,7 +50,7 @@ export async function findAddressBookActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findAddressBook;
   return id
@@ -84,6 +84,9 @@ export async function fetchUserDetails() {
               firstName
               middleName
               lastName
+              firebaseInfo{
+                frequency
+              }
               externalUserProfiles{
                   profileId 
                   registrationId
@@ -138,7 +141,7 @@ export async function fetchUserDetails() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchExternalUserDetails;
   return id

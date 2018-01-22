@@ -18,7 +18,7 @@ export async function findAccountTypeActionHandler(AccountTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FindAccount;
   return id

@@ -8,12 +8,13 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlCompanyViewAbout extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      view:{}
+      view:{},
+      editorValue: createValueFromString(this.props.aboutUsDetails ? this.props.aboutUsDetails.companyDescription : null)
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -112,13 +113,19 @@ export default class MlCompanyViewAbout extends React.Component {
   }
 
   render() {
+    const { editorValue } = this.state;
     return (
       <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription :(<NoData tabName={this.props.tabName}/>)}</p>
+            <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true}
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
+              {/* <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription :(<NoData tabName={this.props.tabName}/>)}</p> */}
             </div>
           </div>
         </div>

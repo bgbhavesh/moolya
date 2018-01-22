@@ -24,7 +24,7 @@ export async function fetchFilterCatalogActionHandler(moduleName) {
     variables: {
       moduleName: moduleName,
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const response = result.data.findFilterCatalog;
 

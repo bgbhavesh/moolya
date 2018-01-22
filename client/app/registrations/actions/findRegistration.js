@@ -178,7 +178,7 @@ export async function findRegistrationActionHandler(registrationId) {
     variables: {
       registrationId: regId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findRegistrationInfo;
   return id
@@ -223,7 +223,7 @@ export async function findCountryCode(clusterId) {
     variables: {
       clusterId: clusterId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.fetchCountryCode;
   return id
@@ -262,7 +262,7 @@ export async function fetchPendingRegistration() {
         }
       }
      `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.findUserPendingRegistration;
   return id
@@ -300,7 +300,7 @@ export async function fetchSubChapterDetails(id) {
     variables: {
       id: subChapterId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.isSubChapterMoolyaNonMoolya;
   return data

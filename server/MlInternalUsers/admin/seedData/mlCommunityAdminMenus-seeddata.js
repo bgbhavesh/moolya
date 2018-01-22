@@ -135,19 +135,19 @@ if(Meteor.isServer){
                 "subMenusId":"communities_chapters",
                 "hideSubMenu":true,
                 "subMenuMappingId":"communities_subChapters",
-                // "subMenu":[
-                //   {
-                //     "link" : "/admin/community/chapter/subChapter/community",
-                //     "name" : "Community",
-                //     "uniqueId" : "communities_communities",
-                //     "isLink" : true,
-                //     "isMenu" : true,
-                //     "image" : "",
-                //     "dynamicLink" : true,
-                //     "dynamicLinkHandler" : "",
-                //     "hideSubMenu":true,
-                //     "subMenusId":"communities_subChapters",
-                //     "subMenuMappingId":"communities_communities",
+                "subMenu":[
+                  {
+                    "link" : "/admin/community/chapter/subChapter/community",
+                    "name" : "Community",
+                    "uniqueId" : "communities_communities",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "hideSubMenu":true,
+                    "subMenusId":"communities_subChapters",
+                    "subMenuMappingId":"communities_communities",
                     "subMenu" : [
                       {
                         "link" : "/admin/community/subChapter/community/communityDetails",
@@ -158,7 +158,7 @@ if(Meteor.isServer){
                         "image" : "",
                         "dynamicLink" : true,
                         "dynamicLinkHandler" : "",
-                        "subMenusId":"communities_subChapters",
+                        "subMenusId":"communities_communities",
                         "subMenuMappingId":"communities_subChapters_communityDetails",
                       },
                       {
@@ -170,7 +170,7 @@ if(Meteor.isServer){
                         "image" : "",
                         "dynamicLink" : true,
                         "dynamicLinkHandler" : "",
-                        "subMenusId":"communities_subChapters",
+                        "subMenusId":"communities_communities",
                         "subMenuMappingId":"communities_subChapters_assignUsers",
                       },
                       {
@@ -182,12 +182,12 @@ if(Meteor.isServer){
                         "image": "",
                         "dynamicLink": true,
                         "dynamicLinkHandler": "",
-                        "subMenusId": "communities_subChapters",
+                        "subMenusId": "communities_communities",
                         "subMenuMappingId": "community_subChapter_History_Details"
                       },
                     ]
-                //   }
-                // ]
+                  }
+                ]
               }
             ]
           }

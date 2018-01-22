@@ -75,7 +75,6 @@ export default class MlAdminLeftNav extends Component {
 
     $(document).ready(()=>{
       $('.menu_item a').click(function(event) {
-        console.log('called');
         // Do the async thing
         let margin = $(".admin_menu .scrollarea-content").css("margin-top");
         localStorage.setItem('top',margin);
@@ -166,5 +165,3 @@ MlAdminLeftNav.contextTypes = {
   menu: React.PropTypes.object,
   scrollArea: React.PropTypes.object
 };
-
-

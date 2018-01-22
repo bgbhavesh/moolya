@@ -31,7 +31,7 @@ export async function fetchTasksActionHandler (profileId) {
     variables: {
       profileId:profileId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const activities = result.data.fetchTasks;
   return activities

@@ -54,7 +54,7 @@ export async function updateProcessTransaction(transId, data) {
       processTransactionId: transId,
       processTransactions:data
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   console.log(result);
   const id = result.data.updateProcessTransaction;

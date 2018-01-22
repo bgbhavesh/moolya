@@ -30,7 +30,7 @@ export async function fetchOfficeMemberCalendarActionHandler (userId, profileId,
       month: month,
       year: year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const officeMemberCalendar = result.data.fetchOfficeMemberAppointmentCounts;
   return officeMemberCalendar;

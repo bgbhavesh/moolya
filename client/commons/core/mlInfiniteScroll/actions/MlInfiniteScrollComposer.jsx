@@ -36,10 +36,9 @@ export default class MlInfiniteScrollComposer extends Component {
     if(DataComposerType==='graphQl') {
       let config=this.props;
       config.perPageLimit = config.perPageLimit || 10;
-      console.log('config',config);
       //note: params are mandatory,if not data will not be fetched
       let queryOptions={
-        forceFetch: true,
+        fetchPolicy: 'network-only',
         variables: {
           module:config.moduleName,
           queryProperty: {
@@ -74,11 +73,27 @@ export default class MlInfiniteScrollComposer extends Component {
               if (!fetchMoreResult.data) {
                 return prev;
               }
-              let response = {
-                count: fetchMoreResult.data.data.count,
-                data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
-              };
-              // console.log(response);
+
+              let response={};
+
+              if(pagination){
+                response = {
+                  count: fetchMoreResult.data.data.count,
+                  data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
+                };
+              }else{
+                response = Object.assign({},{count:fetchMoreResult.data.count,data:[...fetchMoreResult.data.data]});
+              }
+
+
+              // let response = {
+              //   count: fetchMoreResult.data.count,
+              //   data : pagination ? fetchMoreResult.data.data :
+              //     Object.assign({},{data:[...fetchMoreResult.data.data]})
+              //   // prev.data.data.concat(fetchMoreResult.data.data.data)
+              //     // Object.assign({},{data:{count:fetchMoreResult.data.count,data:[...prev.data.data, ...fetchMoreResult.data.data]}})
+              // };
+
               return {
                 data: response
               }

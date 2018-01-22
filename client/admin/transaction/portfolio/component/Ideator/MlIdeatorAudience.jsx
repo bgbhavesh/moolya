@@ -31,6 +31,7 @@ export default class MlIdeatorAudience extends Component{
     const resp = this.fetchPortfolioInfo();
     return resp
   }
+  
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
@@ -52,8 +53,8 @@ export default class MlIdeatorAudience extends Component{
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
-
   }
+
   handleBlur(value){
     let details = this.state.data;
     // let name  = e.target.name;

@@ -283,7 +283,7 @@ table{background: #fff;}
 .scrollarea{width: 100%;}
 .scrollarea .scrollbar-container.vertical .scrollbar{width: 4px !important;margin-left: 6px !important;background: #ef4647 !important;}
 .scrollarea .scrollbar-container.active, .scrollarea .scrollbar-container:hover{background: transparent !important;}
-.vTimeline{border-left: 2px solid #67cbe5;position: absolute;top: 9px;left: 51px;}
+.vTimeline{border-left: 2px solid #67cbe5;position: absolute;top: 9px;left: 51px; z-index:999; }
 .vTimeline ul{margin: -7px 0px 0px -6px;}
 /*.moolya_app .vTimeline ul{height: 62px;overflow: auto;}*/
 .vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 11px; line-height: 17px;}
@@ -304,8 +304,8 @@ table{background: #fff;}
 .mlUpload_btn span{cursor: pointer;}
 a.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
 a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
-.mlUpload_btn:before{position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
-.mlUpload_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #273545;top: 0px;}
+.mlUpload_btn:before{z-index:9999; position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
+.mlUpload_btn:after{z-index:9999; position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #273545;top: 0px;}
 .previewImg{width: 100px;height: 50px;border:0px solid #ddd;float: left;margin-left: 0px;margin-top: -13px;margin-bottom: 33px;}
 .previewImg.ProfileImg{margin-left: 50px;}
 .ProfileImg img{width: 100%;border:1px solid #273545;width: 80px;height: 80px;border-radius: 4px;}
@@ -334,6 +334,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .password_icon{position: absolute;float: right;right: 0;margin-top: -25px; margin-right: 20px;cursor: pointer;color: #273545;}
 .input_icon{position: absolute;float: right;right: 0;margin-top: -25px; margin-right: 20px;cursor: pointer;color: #273545;}
 .input_icon.fa-lock{color: #ef4647;}
+.input_icon.fa-unlock{color: #3c763d;}
 .delete_icon{position: absolute; float: right; right: 0; margin-top: -24px; margin-right: 7px; cursor: pointer; background: #ef4647; width: 30px; height: 30px; text-align: center; border-radius: 50%; color: #fff; /* padding: 9px; */ line-height: 29px;}
 .calendar_icon{position: absolute;float: right;right: 0;margin-top: -30px; margin-right: 20px;cursor: pointer;}
 .input_types{float: left;margin-right: 20px;}
@@ -539,10 +540,17 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 #information_div{display: block;}
 .hide_div{display: none;}
 .email_notify{position: absolute; right: 0; top: 3px;}
-.custome_pagination .pageForm {display: block; margin-top: 14px; }
+.custome_pagination .pageForm {display: inline; margin-top: 14px; }
 .custome_pagination .pageInput, .pageButton {padding: 0px 10px; height: 30px; line-height: 30px; border-radius: 3px; border: 1px solid #bbb; display: inline-block; vertical-align: middle; }
 .custome_pagination .pageInput {width: 40px; height: 28px; box-shadow: inset 1px 2px 1px rgba(0, 0, 0, 0.1); text-align: center; }
-.custome_pagination .perpage{text-align: center; float: left; margin-top: -4px;margin-left: -10px;position: relative; }
+/*.custome_pagination .perpage{text-align: center; float: left; margin-top: -4px;margin-left: -10px;position: relative; }*/
+.custome_pagination .perpage {
+  text-align: center;
+  float: left;
+  margin-top: 20px;
+  margin-left: -10px;
+  position: relative;
+}
 .custome_pagination .perpage a{visibility: hidden; }
 .custome_pagination .pagination_open .perpage a{visibility: visible; }
 .custome_pagination .perpage b{width: 30px; height: 30px; border-radius: 50%; background: #273545; color: #fff; display: inline-block; text-shadow: none; line-height: 28px; }
@@ -747,7 +755,7 @@ button:focus{outline: 0;}
 .step5 h3{margin-top: 10px;}
 .step5 .panel-heading .input_types{margin-top: -7px;}
 .step5 .doc_card img{width: 100%; height: 100%;border-radius: 4px;}
-.step5 .doc_card .ml{position: absolute; right: -8px; top: -8px; font-size: 14px; color: #fff;background: #ef4647; border-radius: 100%;padding: 2px;}
+.step5 .doc_card .ml{position: absolute; right: -8px; top: -8px; font-size: 14px; color: #fff;background: #ef4647; border-radius: 100%;padding: 2px; z-index: 9999;}
 .step5 .swiper-wrapper .doc_card{ height:100px; background-color: #fff; box-shadow: 0px 0px 5px #888; border-radius: 4px; text-align: center; position: relative;width: 100px;margin: 0 10px; }
 .step5 .swiper-wrapper{margin-bottom: 0px;}
 
@@ -1672,3 +1680,27 @@ margin: 0px;
 .upload_lock{position: absolute;left: -106px;top: 18px;z-index: 999;}
 .reg_payment{position: absolute;text-align: center;top: 50%;left: 50%;transform: translate(-50%,-50%);}
 
+.ml_pink {background-color: #f48794 !important}
+.ml_pink:after {border-color: transparent transparent transparent #f48794 !important}
+.ml_pink:before {border-color: transparent #f48794 transparent transparent !important}
+
+.ml_red {background-color: #dd5f5f !important}
+.ml_red:after {border-color: transparent transparent transparent #dd5f5f !important}
+.ml_red:before {border-color: transparent #dd5f5f transparent transparent !important}
+
+.ml_orange {background-color: #e29213 !important}
+.ml_orange:after {border-color: transparent transparent transparent #e29213 !important}
+.ml_orange:before {border-color: transparent #e29213 transparent transparent !important}
+
+.ml_green {background-color: #1fea68 !important}
+.ml_green:after {border-color: transparent transparent transparent #1fea68 !important}
+.ml_green:before {border-color: transparent #1fea68 transparent transparent !important}
+
+.sub-head-border{ border-bottom: 1px solid #273545 !important;}
+.ml_inner_btn{width: 98%;position: absolute;text-align: center;}
+.ml_inner_btn .h_btn{display: inline-block; background: #ccc; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #000;text-shadow: none;text-align: center;cursor: pointer;padding:0px 5px;}
+.ml_inner_btn .h_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ccc;top: 0px;}
+.ml_inner_btn .h_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ccc transparent transparent;top: 0px;}
+/* .make-private-check{ position: relative; z-index: 9999 !important;} */
+
+.medium-popover .form-group .input_types input{position: relative; z-index: 9999 !important;}

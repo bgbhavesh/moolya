@@ -39,7 +39,8 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       //identity:'',
       title:null,
       gender:null,
-      citizenships:null
+      citizenships:null,
+      isValidDOB:false
       // profession:''
 
     };
@@ -186,8 +187,9 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
+    }else if(this.state.isValidDOB){
+      toastr.error("Minimum Age for registration as 'Service Provider' is 18 years")
     } else {
-
       let Details = null;
       Details = {
         registrationId: this.props.registrationId,
@@ -246,8 +248,10 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+      this.setState({"isValidDOB" : false})
     }
     else{
+      this.setState({"isValidDOB" : true})
       toastr.error("Minimum Age for registration as 'Service Provider' is 18 years")
     }
   }

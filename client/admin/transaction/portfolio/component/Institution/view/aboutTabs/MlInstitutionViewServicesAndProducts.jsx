@@ -8,12 +8,13 @@ import {findAnnotations} from '../../../../../../../commons/annotator/findAnnota
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlInstitutionViewServicesAndProducts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data : {}
+      data : {},
+      editorValue: createValueFromString(this.props.serviceProductsDetails ? this.props.serviceProductsDetails.spDescription : null)
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -110,6 +111,7 @@ export default class MlInstitutionViewServicesAndProducts extends React.Componen
   }
 
   render() {
+    const { editorValue } = this.state;
     console.log(this.props)
     return (
       <div className="col-lg-12 col-sm-12">
@@ -118,7 +120,12 @@ export default class MlInstitutionViewServicesAndProducts extends React.Componen
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              <p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+            <div>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true}
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
+              {/* <p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
 
             </div>
           </div>

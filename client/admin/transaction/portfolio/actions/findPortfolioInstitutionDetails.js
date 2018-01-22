@@ -352,7 +352,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
       portfoliodetailsId: portfoliodetailsId,
       key: key
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   var response = result.data.fetchInstitutionDetails;
@@ -410,7 +410,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
 //     variables: {
 //       portfoliodetailsId: portfoliodetailsId
 //     },
-//     forceFetch: true
+//     fetchPolicy: 'network-only'
 //   })
 //   console.log(result)
 //   const id = result.data.fetchStartupPortfolioManagement;
@@ -473,7 +473,7 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchInstitutionPortfolioAboutUs;
@@ -543,7 +543,7 @@ export async function fetchInstitutionPortfolioData(portfoliodetailsId, connecti
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchInstitutionPortfolioData;
   let reportsArray = {}
@@ -637,7 +637,7 @@ export async function fetchInstitutionPortfolioReports(portfoliodetailsId, conne
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchInstitutionPortfolioCSRReports;
   let reportsArray = {}
@@ -729,7 +729,7 @@ export async function fetchInstitutionChartsDetailsActionHandler(portfoliodetail
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchInstitutePortfolioCharts;

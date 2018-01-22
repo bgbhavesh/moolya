@@ -8,7 +8,7 @@ import {client} from '../../../core/apolloConnection';
 function stateFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.stateNames?data.data.stateNames:[];
-  if(processmapping.length>0){
+  if(processmapping&&processmapping.length){
     return <div>{processmapping.join()}</div>;
   }else{
     return <div>All</div>;
@@ -18,7 +18,7 @@ function stateFormatter(data){
 function chapterFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.chapterNames?data.data.chapterNames:[];
-  if(processmapping.length>0){
+  if(processmapping&&processmapping.length){
     return <div>{processmapping.join()}</div>;
   }else{
     return <div>All</div>;
@@ -28,7 +28,7 @@ function chapterFormatter(data){
 function subChapterFormatte(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.subChapterNames?data.data.subChapterNames:[];
-  if(processmapping.length>0){
+  if(processmapping&&processmapping.length){
     return <div>{processmapping.join()}</div>;
   }else{
     return <div>All</div>;
@@ -39,7 +39,7 @@ function subChapterFormatte(data){
 function clusterFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.clusterNames?data.data.clusterNames:[];
-  if(processmapping.length>0){
+  if(processmapping&&processmapping.length){
     return <div>{processmapping.join()}</div>;
   }else{
     return <div>All</div>;
@@ -49,7 +49,7 @@ function clusterFormatter(data){
 function professionFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.professionNames?data.data.professionNames:[];
-  if(processmapping.length>0){
+  if(processmapping&&processmapping.length){
     return <div>{processmapping.join()}</div>;
   }else{
     return <div>All</div>;
@@ -59,7 +59,7 @@ function professionFormatter(data){
 function  communityFormatter(data) {
   let processmapping = [];
   processmapping=data&&data.data&&data.data.communityNames?data.data.communityNames:[];
-  if(processmapping.length>0){
+  if(processmapping&&processmapping.length){
     return <div>{processmapping.join()}</div>;
   }else{
     return <div>All</div>;
@@ -67,7 +67,7 @@ function  communityFormatter(data) {
 }
 
 function titleFormatter(data){
-  let formatterData=data&&data.length>0?data:null;
+  let formatterData=data&&data.length?data:null;
   if(formatterData){return `${formatterData.join()}`;}else{return `All`;}
 }
 
@@ -131,7 +131,7 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          let documents=data.documents
+          let documents=data&&data.documents?data.documents:[]
           for(let i=0;i<documents.length;i++){
             if(documents[i].isActive){
 

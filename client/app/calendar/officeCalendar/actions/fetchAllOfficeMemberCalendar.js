@@ -21,7 +21,7 @@ export async function fetchAllOfficeMemberCalendarActionHandler ( month, year) {
       month: month,
       year: year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const allOfficeMemberCalendar = result.data.fetchAllOfficeMemberAppointmentCounts;
   return allOfficeMemberCalendar;

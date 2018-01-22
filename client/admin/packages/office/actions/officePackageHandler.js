@@ -21,7 +21,7 @@ import omitDeep from 'omit-deep-lodash';
 //             }
 //           }
 //         `,
-//     forceFetch:true
+//     fetchPolicy: 'network-only'
 //   })
 //
 //   const communities = result.data.data;
@@ -113,7 +113,7 @@ export async function fetchOfficePackageHandler(officeId) {
     variables:{
       officePackageId:officeId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   var communities = result.data.fetchOfficePackageById;

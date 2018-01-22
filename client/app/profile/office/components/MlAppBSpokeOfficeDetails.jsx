@@ -203,7 +203,7 @@ export default class MlAppBSpokeOfficeDetails extends Component {
             <div className="col-md-6">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName"
                            data-required={true} data-errMsg="Office Name is required"/>
                   </div>
@@ -212,7 +212,7 @@ export default class MlAppBSpokeOfficeDetails extends Component {
                     {/*defaultValue={props.branchType}/>*/}
                     <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true}
-                                  onSelect={that.optionsBySelectOfficeType}
+                                  onSelect={that.optionsBySelectOfficeType} mandatory={true}
                                   selectedValue={that.state.branchType} data-required={true}
                                   data-errMsg="Office Type is required"/>
                   </div>
@@ -224,29 +224,34 @@ export default class MlAppBSpokeOfficeDetails extends Component {
                                   onSelect={that.optionsBySelectBranchAddress}
                                   selectedValue={that.state.branchAddress}/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Office Location" className="form-control float-label" ref="officeLocation"
-                           defaultValue={props.officeLocation}/>
+                           defaultValue={props.officeLocation} data-required={true}
+                           data-errMsg="Office Location is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label" ref={"streetLocality"}
-                           defaultValue={props.streetLocality}/>
+                           defaultValue={props.streetLocality} data-required={true}
+                           data-errMsg="Street No/Locality is required"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Landmark" className="form-control float-label" ref={"landmark"}
                            defaultValue={props.landmark}/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Area" className="form-control float-label" ref={"area"}
-                           defaultValue={props.area}/>
+                           defaultValue={props.area} data-required={true}
+                           data-errMsg="Area is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Town/City" className="form-control float-label" ref={"city"}
-                           defaultValue={props.city}/>
+                           defaultValue={props.city} data-required={true}
+                           data-errMsg="Town/City is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="State" className="form-control float-label" ref={"state"}
-                           defaultValue={props.state}/>
+                           defaultValue={props.state} data-required={true}
+                           data-errMsg="State is required"/>
                   </div>
                   <div className="form-group">
                     {/*<input type="text" placeholder="Country" className="form-control float-label"*/}
@@ -254,13 +259,14 @@ export default class MlAppBSpokeOfficeDetails extends Component {
                     <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                   placeholder="Country"
                                   labelKey={'label'} queryType={"graphql"} query={countryQuery} isDynamic={true}
-                                  disabled={true}
+                                  disabled={true} data-required={true} mandatory={true}
                                   selectedValue={that.state.selectedCountry}
                                   data-errMsg="Country is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Zip Code" className="form-control float-label" ref={"zipCode"}
-                           defaultValue={props.zipCode}/>
+                           defaultValue={props.zipCode} data-required={true}
+                           data-errMsg="Zip Code is required"/>
                   </div>
                   <div className="form-group">
                     {/*<a className="mlUpload_btn" href="/app/officeMembersDetails">Next</a>*/}

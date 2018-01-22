@@ -15,6 +15,7 @@ import update from 'immutability-helper';
 import _ from 'lodash'
 import _underscore from 'underscore'
 import {mlFieldValidations, validatedEmailId} from '../../../../commons/validations/mlfieldValidation';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 var diff = require('deep-diff').diff;
 export default class EmailDetails extends React.Component{
   constructor(props){
@@ -115,7 +116,10 @@ export default class EmailDetails extends React.Component{
 
       }
     }
-
+    $('input').blur();
+    setTimeout(function(){
+     initalizeFloatLabel();
+   },1000);
     //this.findRegistration.bind(this);
   }
   async onUpdatingEmailDetails(index,value){

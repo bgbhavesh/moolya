@@ -9,6 +9,7 @@ import MlServiceCardsDetailsComponent from '../mlAppServiceDetails/MlserviceCard
 import AppointmentModal from './../AppointmentModal';
 import { cancelUserServiceCardOrder } from './../../action/cancelUserServiceCardOrder';
 import { signOffUserServiceCardOrder } from './../../action/signOffUserServiceCardOrder';
+import {fetchServiceByServiceId} from '../../action/findServiceCardDetails';
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
@@ -16,23 +17,63 @@ export default class MlAppServicePurchasedDetail extends React.Component {
     super(props);
     this.state = {
       orderId: props.orderId,
+      releasePayComponents:[],
+      amount:0,
       data: {
         client: {},
         owner: {},
         sessionInfo: [],
-        service: {}
+        service: {},
       }
     };
+    this.setPaymentAmount = this.setPaymentAmount.bind(this);
+    this.updateReleasePayCount = this.updateReleasePayCount.bind(this);
   }
 
   componentWillReceiveProps({ orderId }) {
     this.setState({ orderId }, () => {
       this.fetchAppServiceAppointmentByTransactionId();
     })
+
+    // this.setPaymentAmount();
   }
 
+  updateReleasePayCount(){
+    let releasePayComponents = this.state.releasePayComponents;
+    releasePayComponents.push(
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <div className="pull-right block_action"  onClick={e=>this.decreaseReleasePayCount()}><img
+            src="/images/remove.png"/></div>
+        </div>
+        <div className="panel-body">
+          <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Select Community</option></select></div></div></div>
+          <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Search Person Name" /></div></div></div>
+          <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Enter Units" /></div></div></div>
+          <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
+        </div>
+      </div>
+    );
+    this.setState({releasePayComponents});
+  }
+
+  decreaseReleasePayCount(){
+    let releasePayComponents = this.state.releasePayComponents;
+    if(releasePayComponents && releasePayComponents.length>0){
+      releasePayComponents.splice(releasePayComponents.length-1,1);
+    }
+      this.setState({releasePayComponents});
+  }
   componentWillMount() {
     this.fetchAppServiceAppointmentByTransactionId();
+
+  }
+
+  async setPaymentAmount(){
+    let resp = await fetchServiceByServiceId(this.state.data.service._id);
+    let amount = 0;
+    if(resp.finalAmount) amount = resp.finalAmount;
+    this.setState({amount});
   }
 
   async signOffOrder() {
@@ -69,13 +110,19 @@ export default class MlAppServicePurchasedDetail extends React.Component {
           data: data
         });
       }
+      // this.setPaymentAmount();
     }
   }
 
   render() {
 
     const { data } = this.state;
-
+    let appointmentWith = data.owner;
+    let currentUser = data.client;
+    if(Meteor.userId()===data.owner.userId) {
+      appointmentWith = data.client;
+      currentUser = data.owner;
+    }
     // console.log("This Props", this.props);
     return (
       <div className="ml_tabs">
@@ -108,34 +155,34 @@ export default class MlAppServicePurchasedDetail extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={data.client.userId} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="User Id" value={currentUser.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={data.client.name} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Name" value={currentUser.name} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" value={data.client.email} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Email ID" value={currentUser.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" value={data.client.phoneNo} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Phone no" value={currentUser.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={data.client.cluster} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Cluster" value={currentUser.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={data.client.chapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Chapter" value={currentUser.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={data.client.subChapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Sub Chapter" value={currentUser.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={data.client.community} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Community" value={currentUser.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <a className="fileUpload mlUpload_btn" onClick={() => { this.setState({ showCancelModal: true }) }}>Cancel</a>
                 <AppointmentModal
@@ -169,34 +216,35 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                   <input type="text" placeholder="Transaction ID" value={data.orderId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment With" value={data.owner.name} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment With" defaultValue="" className="form-control float-label" id=""
+                         value={appointmentWith.name}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={data.owner.userId} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="User Id" value={appointmentWith.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={data.owner.community} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Community" value={appointmentWith.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <input type="text" placeholder="subChater" value={data.owner.subChapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="subChater" value={appointmentWith.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={data.owner.chapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Chapter" value={appointmentWith.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={data.owner.cluster} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Cluster" value={appointmentWith.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Contact Number" value={data.owner.phoneNo} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Contact Number" value={appointmentWith.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email Id" value={data.owner.email} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Email Id" value={appointmentWith.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Gender" value={data.owner.gender} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Gender" value={appointmentWith.gender} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 {/*<a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>*/}
               </div>
@@ -216,8 +264,11 @@ export default class MlAppServicePurchasedDetail extends React.Component {
           </div>
           {/*fivth tab*/}
           <div className="tab-pane" id={`${data.orderId}5a`}>
-            <h3>Total Amount: 25,000 INR</h3>
+            <h3>{`Total Amount: ${data.totalAmount} INR`}</h3>
             <div className="panel panel-default">
+              <div className="panel-heading">
+                <div className="pull-right block_action"  onClick={e=>this.updateReleasePayCount()}><img src="/images/add.png"/></div>
+              </div>
               <div className="panel-body">
                 <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Select Community</option></select></div></div></div>
                 <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Search Person Name" /></div></div></div>
@@ -225,22 +276,9 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
               </div>
             </div>
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Service Provider</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Mohan Kumar" /></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5000 Units" /></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
-              </div>
-            </div>
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Investor</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Ramesh Jain" /></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5600 Units" /></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
-              </div>
-            </div>
+            {this.state.releasePayComponents&&this.state.releasePayComponents.map(obj=>{
+              return obj;
+            })}
           </div>
 
           <div className="tab-pane" id={`${data.orderId}6a`}>

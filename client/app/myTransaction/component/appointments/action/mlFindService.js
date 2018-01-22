@@ -93,7 +93,7 @@ query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId
       subChapterId,
       communityId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.getServiceBasedOnServiceId;
   let service = _.omit(response, '__typename');
@@ -162,7 +162,7 @@ query ($name: String) {
     variables: {
       name
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   console.log(result)
   const taskDetails = result.data.fetchTaskDetails;
@@ -248,7 +248,7 @@ export async function getTaskFromService (serviceId) {
     variables: {
       serviceId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   console.log(result)
   const taskDetails = result.data.getTaskFromService;
@@ -350,7 +350,7 @@ export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId,
       subChapterId,
       communityId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   var taskDetails = result.data.fetchTaskDetailsForAdminServiceCard;
   let tasks = [];

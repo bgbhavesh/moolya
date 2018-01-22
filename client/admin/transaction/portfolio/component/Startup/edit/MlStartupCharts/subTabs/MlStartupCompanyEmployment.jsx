@@ -174,24 +174,24 @@ export default class MlCompanyEmployment extends React.Component{
               <div className="col-lg-12 col-md-12 col-sm-10">
                 <div className="row">
                   <div className="form-group col-lg-6">
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-left">
                       <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                 inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}}
                                 closeOnSelect={true} ref={"eofFromYear"+defaultIndex} onChange={this.handleFromYearChange.bind(this,defaultIndex)}/>
                     </div>
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-right">
                       <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                 inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}}
                                 closeOnSelect={true} ref={"eofFromMonth"+defaultIndex} onChange={this.handleFromMonthChange.bind(this,defaultIndex)}/>
                     </div>
                   </div>
                   <div className="form-group col-lg-6">
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-left">
                       <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                 inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true}}
                                 closeOnSelect={true} ref={"eofToYear"+defaultIndex} onChange={this.handleToYearChange.bind(this,defaultIndex)}/>
                     </div>
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-right">
                       <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                 inputProps={{placeholder: "Select To Month", className:"float-label form-control",readOnly:true}}
                                 closeOnSelect={true} ref={"eofToMonth"+defaultIndex} onChange={this.handleToMonthChange.bind(this,defaultIndex)}/>

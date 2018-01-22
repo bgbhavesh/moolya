@@ -19,7 +19,7 @@ export async function fetchMyConnectionsActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchConnections?result.data.fetchConnections:[];
   return data;
@@ -44,7 +44,7 @@ export async function fetchMyFavouritesActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchFavourites?result.data.fetchFavourites:[];
   return data;
@@ -69,7 +69,7 @@ export async function fetchMyFollowersActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.followersList?result.data.followersList:[];
   return data;
@@ -94,7 +94,7 @@ export async function fetchMyFollowingsActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.followingsList?result.data.followingsList:[];
   return data;

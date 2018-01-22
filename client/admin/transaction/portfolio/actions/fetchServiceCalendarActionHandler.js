@@ -22,7 +22,7 @@ export async function fetchServiceCalendarActionHandler (portfolioId,month, year
       year: year?year:0,
       orderId : orderId ? orderId : ''
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const myCalendar = result.data.getServiceProviderCalendar;
   return myCalendar;

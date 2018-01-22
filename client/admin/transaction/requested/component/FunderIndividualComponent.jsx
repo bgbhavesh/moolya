@@ -42,8 +42,9 @@ export default class Individual extends React.Component{
       citizenships:null,
       investingFrom:null,
       investmentAmount:null,
-      currency:null
-      // profession:''
+      currency:null,
+      // profession:'',
+      isValidDOB:false
 
     };
     return this;
@@ -188,6 +189,12 @@ export default class Individual extends React.Component{
     }
   }
   async  updateregistration() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    }else if(this.state.isValidDOB){
+      toastr.error("Minimum age for registration as 'Investor' is 18 years")
+    } else {
     let Details=null;
     Details = {
       registrationId      : this.props.registrationId,
@@ -225,6 +232,7 @@ export default class Individual extends React.Component{
     }
     return response;
   }
+}
   updateRegistration(){
     const resp=this.updateregistration();
     return resp;
@@ -244,8 +252,10 @@ export default class Individual extends React.Component{
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+      this.setState({"isValidDOB" : false})
     }
     else{
+      this.setState({"isValidDOB" : true})
       toastr.error("Minimum age for registration as 'Investor' is 18 years")
     }
   }
@@ -438,7 +448,7 @@ export default class Individual extends React.Component{
                     <Select name="form-field-name"  ref={"gender"} placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" data-required={true} data-errMsg="Gender is required"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder="Select Citizenship Caategory" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
+                    <Moolyaselect multiSelect={true} placeholder="Select Citizenship Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
                     <br className="clearfix"/>                      <br className="clearfix"/>
 
                   </div>

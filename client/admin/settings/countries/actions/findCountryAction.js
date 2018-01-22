@@ -22,7 +22,7 @@ export async function findCountryActionHandler(CountryId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchCountry;
   return id

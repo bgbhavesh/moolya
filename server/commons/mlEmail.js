@@ -37,12 +37,21 @@ Meteor.startup(function () {
     };
 
     _createEmailHTML(email) {
-      return {
+      let response = {
         "from": email.from || from,
         "to": email.to,
         "subject": email.subject,
         "html": email.html
       }
+      if (email.cc)
+        response.cc = email.cc
+      return response
+      // return {
+      //   "from": email.from || from,
+      //   "to": email.to,
+      //   "subject": email.subject,
+      //   "html": email.html
+      // }
     };
 
     _createEmailAttachment(email) {

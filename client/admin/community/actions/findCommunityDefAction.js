@@ -24,7 +24,7 @@ export async function findCommunityDefActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data;
   return id

@@ -18,7 +18,7 @@ export async function findCitizenshipActionHandler(CitizenshipTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FindCitizenship;
   return id

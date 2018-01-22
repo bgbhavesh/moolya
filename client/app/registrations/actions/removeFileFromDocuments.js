@@ -20,7 +20,7 @@ export async function removeFileFromDocumentsActionHandler(fileId, docTypeId, do
       moduleName: "REGISTRATION",
       actionName: "UPDATE",
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.RemoveFileFromDocuments;
   return id

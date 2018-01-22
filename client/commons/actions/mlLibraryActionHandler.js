@@ -63,7 +63,7 @@ export async function fetchLibrary(userId, connection) {
     variables:{
       userId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchLibrary;
   return id
@@ -92,7 +92,7 @@ export async function fetchLibraryBasedOnPortfolioIdHandler(portfolioId, connect
     variables:{
       portfolioId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchLibraryBasedOnPortfolioId;
   return id
@@ -107,7 +107,7 @@ export async function getUserPermissionDetailsHandler(portfolioDetailsId,connect
       isExploring
       action
   }
-}`, forceFetch:true,
+}`, fetchPolicy: 'network-only',
     variables : {
       portfolioDetailsId
     }
@@ -135,7 +135,7 @@ export async function fetchDataFromCentralLibrary(connection) {
         isPrivate
       }
   }
-}`, forceFetch:true
+}`, fetchPolicy: 'network-only'
   })
   const id = result.data.fetchDataFromCentralLibrary;
   return id
@@ -175,7 +175,7 @@ export async function putDataIntoTheLibrary(portfolioDetailsId, files, connectio
       portfolioDetailsId,
       files
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.putDataIntoTheLibrary;
   return id;
@@ -195,7 +195,7 @@ export async function updatePrivacyDetails(privateInput, connection) {
     variables: {
       privateInput
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.updatePrivacyDetails;
   return id;
@@ -231,7 +231,7 @@ export async function fetchConnections() {
         profileImage
       }
     }`,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchConnections;
   return id
@@ -248,7 +248,7 @@ export async function getSharedConnectionsActionHandler() {
         profilePic
     }
   }`,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.getMySharedConnections;
   return id
@@ -271,7 +271,7 @@ export async function fetchSharedLibraryHandler(userId) {
 }`,
     variables: {
       userId
-    }, forceFetch: true
+    }, fetchPolicy: 'network-only'
   });
   const id = result.data.fetchSharedLibrary;
   return id
@@ -295,7 +295,7 @@ export async function removePortfolioFileUrl(portfolioDetailsId, fileUrl,tabName
       tabName,
       typeOfData
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.removePortfolioFileUrl;
   return id;
@@ -312,7 +312,7 @@ export async function fetchShareMembersInfo(connection) {
       fileType
       profileImage
   }
-}`, forceFetch:true
+}`, fetchPolicy: 'network-only'
   })
   const id = result.data.fetchShareMembersInfo;
   return id

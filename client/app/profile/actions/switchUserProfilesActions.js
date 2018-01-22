@@ -41,7 +41,7 @@ export async function fetchExternalUserProfilesActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const data = result.data&&result.data.fetchUserProfiles?result.data.fetchUserProfiles:[];
   return data;

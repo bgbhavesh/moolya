@@ -8,6 +8,8 @@ import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
+import {deleteToken} from "./MlFireBaseClientSetup"
+
 var FontAwesome = require('react-fontawesome');
 
 const build_versionToken = localStorage.getItem('build_version');
@@ -80,9 +82,11 @@ class MlAppProfileHeader extends Component {
           isAllowRegisterAs:false
         });
       }
+      console.log(response.status, response.portfolioStatus);
       if(response && response.status) {
-        console.log('profileStatus', profileStatus)
-        profileProgress = ((profileStatus ===  "REG_EMAIL_P") || (profileStatus === "REG_EMAIL_V") || (profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_ADM_REJ") )? 25 : ((profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_KYC_U_KOFF") || (profileStatus === "REG_KYC_U_PEND") || (profileStatus === "REG_KYC_A_APR") || (profileStatus === "REG_KYC_U_KOFF" )  || (profileStatus === "REG_USER_REJ") ) ? 50 : ( (profileStatus === "PORT_LIVE_NOW") || (profileStatus === "REG_USER_APR") )? 100 : 0;
+        let portfolioStatus = response.portfolioStatus;
+        if(portfolioStatus === "PORT_LIVE_NOW" || portfolioStatus === "REG_PORT_APR" || portfolioStatus === "PORT_REVIEW_INPRO" || portfolioStatus === "PORT_GO_LIVE_PEND" || portfolioStatus === "REG_PORT_PEND") profileProgress = 100;
+        else profileProgress = ((profileStatus ===  "REG_EMAIL_P") || (profileStatus === "REG_EMAIL_V") || (profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_ADM_REJ") )? 25 : ((profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_KYC_U_KOFF") || (profileStatus === "REG_KYC_U_PEND") || (profileStatus === "REG_KYC_A_APR") || (profileStatus === "REG_KYC_U_KOFF" )  || (profileStatus === "REG_USER_REJ") || (profileStatus === "REG_USER_APR") ) ? 50 : 0;
       }
       this.setState({data: response, loading:false, isCalendar: response.isCalendar, profileProgress: profileProgress })
     }
@@ -90,7 +94,9 @@ class MlAppProfileHeader extends Component {
 
   /**user logout function*/
   logoutUser() {
-    logout();
+    deleteToken(function(){
+      logout();
+    });
   }
 
   componentWillReceiveProps(user){

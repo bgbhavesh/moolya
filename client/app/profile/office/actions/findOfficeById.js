@@ -21,7 +21,7 @@ export async function fetchOfficeMemberById(officeId) {
     variables: {
       officeId: officeId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   return result.data.fetchOfficeSCById;
 }

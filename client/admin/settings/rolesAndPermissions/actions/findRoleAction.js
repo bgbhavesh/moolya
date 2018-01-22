@@ -42,7 +42,7 @@ import {client} from '../../../core/apolloConnection';
     variables: {
       id
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const did = result.data.findRole;
   return did

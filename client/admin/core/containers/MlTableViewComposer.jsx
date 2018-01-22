@@ -11,7 +11,7 @@ export default class  MlTableViewComposer extends Component {
     let config=this.props;
     //note: params are mandatory,if not data will not be fetched
     let queryOptions={
-      forceFetch: true,
+      fetchPolicy: 'network-only',
       variables: {
         offset: 0,
         limit: 10,    //config.sizePerPage||
@@ -46,7 +46,7 @@ export default class  MlTableViewComposer extends Component {
                 return prev;
               }
               return {
-                data: fetchMoreResult.data.data
+                data: fetchMoreResult.data
               };
             },
           }),

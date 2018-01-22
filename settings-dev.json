@@ -17,7 +17,8 @@
         "secure":false
       }
     },
-    "phpWebSiteLink": "https://qa.moolya.global/register"
+    "phpWebSiteLink": "https://qa.moolya.global/register",
+    "instance":"DEV"
   },
   "private": {
     "subChapterName":"moolya",

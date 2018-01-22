@@ -18,7 +18,7 @@ export async function findTechnologyActionHandler(technologyId) {
     variables: {
       technologyId:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findTechnology;
   return id

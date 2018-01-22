@@ -110,12 +110,14 @@ MlResolver.MlQueryResolver['getServiceProviderCalendar'] = (obj, args, context, 
   // let mlAppointment = new MlAppointment();
   let date = new Date();
   let day = args.month == date.getMonth() ? date.getDate() : 1;
-  let month = args.month ? args.month : date.getMonth();
+  let month = args.month!=undefined ? args.month : date.getMonth();
   let year = args.year ? args.year : date.getFullYear();
-  let finalResponse = {};
-  if (month >= date.getMonth() && year >= date.getFullYear()) {
+  let finalResponse = {}
+
+  //commented if-condition for fixing MOOLYA-3490
+  // if (month >= date.getMonth() && year >= date.getFullYear()) {
     finalResponse = MlAppointment.getUserCalendar(userId, profileId, month, year, day);
-  }
+  // }
 
   let orderId = args.orderId;
   if (orderId) {

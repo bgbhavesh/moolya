@@ -235,7 +235,7 @@ this.bookDetails(data)
                     <Select name="form-field-name" className="float-label" options={this.serviceSeeker()} placeholder="Choose Service Seeker" onChange={this.onSelectSeeker.bind(this)} value={this.state.seeker}/>
                   </div>
                   <div className="form-group">
-                    <label>Total number of Sessions Rs.
+                    <label>Total number of Sessions
                       <input className="form-control inline_input" value={this.props.serviceBasicInfo.noOfSession}/>
                     </label>
                   </div>

@@ -7,28 +7,43 @@ import NoData from '../../../../../../../commons/components/noData/noData';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlStartupViewAbout extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      loading: true
+      loading: true,isUserValidForAnnotation:false,
+      editorValue: createValueFromString(this.props.aboutUsDetails ? this.props.aboutUsDetails.startupDescription : null)
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
 
   componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
-
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
 
   componentWillMount(){
     this.setState({loading: false});
+    
+  }
+
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation: true})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
   }
 
   initalizeAnnotaor(){
@@ -101,16 +116,24 @@ export default class MlStartupViewAbout extends React.Component {
 
   render() {
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="col-lg-12 col-sm-12" id="annotatorContent" >
+      <div className="col-lg-12 col-sm-12" >
         <div  className="row">
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
-            <div className="panel-body">
-              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+            <div className="panel-body" id="annotatorContent">
+            <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true}
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
+              {/* <p >{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
+            
             </div>
+            
           </div>
         </div>
       </div>

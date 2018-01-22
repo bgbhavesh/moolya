@@ -19,7 +19,7 @@ export async function updateSubcriptionDetail(transId, subcriptionData) {
       id: transId,
       orderSubscriptionDetail:subcriptionData
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   console.log(result);
   const id = result.data.updateOfficeTransactionOrderSubscriptionDetail;

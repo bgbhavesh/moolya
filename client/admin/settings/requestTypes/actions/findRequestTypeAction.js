@@ -19,7 +19,7 @@ export async function findRequestTypeActionHandler(requestTypeId) {
     variables: {
       id:did
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FindRequestType;
   return id

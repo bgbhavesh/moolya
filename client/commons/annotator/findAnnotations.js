@@ -19,7 +19,7 @@ export async function findAnnotations(portfoliodetailsId, docId) {
       portfoliodetailsId: portfoliodetailsId,
       docId:docId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const data = result.data.fetchAnnotations;
   return data

@@ -82,8 +82,8 @@ class MlAppComponent extends Component{
         else
             query = defaultQuery;
 
-        const menuData = await appClient.query({forceFetch:true,query: query, variables: {name:'mlDefaultMenu'}});
-        const userType = await appClient.query({forceFetch:true,query:gql`query{data:fetchUserTypeFromProfile}`});
+        const menuData = await appClient.query({fetchPolicy: 'network-only',query: query, variables: {name:'mlDefaultMenu'}});
+        const userType = await appClient.query({fetchPolicy: 'network-only',query:gql`query{data:fetchUserTypeFromProfile}`});
         this.setState({loading:false,userType:userType&&userType.data&&userType.data.data?userType.data.data:null,menu:menuData&&menuData.data&&menuData.data.data?menuData.data.data.menu:[]});
     }
 

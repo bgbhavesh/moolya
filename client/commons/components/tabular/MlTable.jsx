@@ -50,6 +50,7 @@ export default class MlTable extends React.Component {
       searchEnable = true
     }
     const config = {tableHeaderClass:this.props.tableHeaderClass,
+                    trClassName:this.props.trClassName||'',
                     maxHeight: tblHeight+'px',
                     striped:true,hover:true,
                     selectRow:(this.props.selectRow?selectRow:{}) ,

@@ -28,7 +28,7 @@ export async function fetchCommunityUsersHandler(clusterId,chapterId,subChapterI
       subChapterId:subChapterId,
       userType: userType
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data.data;
   console.log(result.data);

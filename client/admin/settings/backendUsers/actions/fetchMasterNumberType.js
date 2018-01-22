@@ -10,7 +10,7 @@ export async function fetchMasterNumberType(variables) {
       }
      }`,
     variables: variables,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.fetchMasterSettingsForPlatFormAdmin;
   return id;

@@ -339,7 +339,7 @@ export default class MlFunderInvestment extends Component {
                               </div>
                               <div className="form-group">
                                 <div className="input_types">
-                                  <input id="makePrivate" type="checkbox"
+                                <input className="make-private-check" id="makePrivate" type="checkbox"
                                          checked={this.state.data.makePrivate && this.state.data.makePrivate}
                                          name="checkbox"
                                          onChange={this.onStatusChangeNotify.bind(this)}/>

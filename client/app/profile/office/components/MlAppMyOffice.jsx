@@ -86,8 +86,7 @@ export default class MlAppMyOffice extends Component {
       }
       // let isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
       const isAllowedCommunity = ["CMP", 'FUN', "INS", "STU", "SPS"].indexOf(default_User_Profile.communityDefCode) >= 0 ? true : false;
-      this.setState({showButton: isAllowedCommunity
-      })
+      this.setState({showButton: isAllowedCommunity})
     }
   }
 

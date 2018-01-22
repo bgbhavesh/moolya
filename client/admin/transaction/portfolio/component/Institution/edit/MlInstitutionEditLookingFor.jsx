@@ -28,6 +28,7 @@ export default class MlInstitutionEditLookingFor extends Component {
     };
     this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
+    this.addLookingFor = this.addLookingFor.bind(this);
     this.onSaveAction.bind(this);
     return this;
   }
@@ -36,6 +37,13 @@ export default class MlInstitutionEditLookingFor extends Component {
     OnLockSwitch();
     dataVisibilityHandler();
     initalizeFloatLabel();
+    const className = this.props.isAdmin ? "admin_header" : "app_header";
+    const WinWidth = $(window).width();
+    const WinHeight = $(window).height();
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+    }
   }
 
   componentDidMount() {
@@ -217,19 +225,14 @@ export default class MlInstitutionEditLookingFor extends Component {
           <div className="portfolio-main-wrap">
             <h2>Looking For</h2>
             <div className="requested_input main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
+              
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-3 col-sm-3">
                       <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
-                        <div className="list_block notrans" onClick={this.addLookingFor.bind(this)}>
+                        <div className="list_block notrans" onClick={this.addLookingFor}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                          <h3 onClick={this.addLookingFor.bind(this)}>Add New Looking For</h3>
+                          <h3 onClick={this.addLookingFor}>Add New Looking For</h3>
                         </div>
                       </a>
                     </div>
@@ -251,7 +254,7 @@ export default class MlInstitutionEditLookingFor extends Component {
                     })}
                   </div>
                 </div>
-              </ScrollArea>
+              
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
                 <PopoverTitle>Add New Looking For</PopoverTitle>

@@ -17,6 +17,7 @@ import MlInstitutionEditPartners from "../../../../admin/transaction/portfolio/c
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/edit/incubators/MlInstitutionIncubatorsEditTabs";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
+import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
 export default class MlAppInstitutionEditTabs extends Component {
@@ -192,7 +193,19 @@ export default class MlAppInstitutionEditTabs extends Component {
                                            getIncubators={this.getIncubators.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}
                                            backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
-      }
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices myPortfolio={true} createServiceMode={true} client={appClient} isAdmin={false}
+                                     key="10"
+          // getServiceDetails={this.getServiceDetails.bind(this)}
+                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
+      } //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+
+
     ];
     return tabs;
   }

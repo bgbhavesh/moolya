@@ -33,9 +33,9 @@ export default class MlAppFunderCalendarSlots extends Component {
       sessionId: sessionId,
       hours: hours,
       minutes: minutes,
-      day: this.props.date.getDate(),
-      month: this.props.date.getMonth(),
-      year: this.props.date.getFullYear()
+      day: this.state.date.getDate(),
+      month: this.state.date.getMonth(),
+      year: this.state.date.getFullYear()
     };
    this.setState({
      tempObject,

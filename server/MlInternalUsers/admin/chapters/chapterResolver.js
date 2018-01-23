@@ -715,4 +715,48 @@ MlResolver.MlQueryResolver['isSubChapterMoolyaNonMoolya'] = (obj, args, context,
 
 }
 
+MlResolver.MlQueryResolver['fetchActiveClusterChaptersList'] = (obj, args, context, info) => {
+  let clusters = args.id;
+  let chapters = [];
+  if (clusters && clusters.length > 0) {
+
+      clusters.map(function (clusterId) {
+        // activeChapters = MlChapters.find({"$and": [{clusterId: clusterId, isActive: true}]}).fetch();
+        activeChapters = mlDBController.find('MlChapters', {
+          "$and": [{
+            clusterId: clusterId,
+            isActive: true
+          }]
+        }, context).fetch();
+        if (activeChapters && activeChapters.length > 0) {
+          chapters = chapters.concat(activeChapters)
+        }
+      })
+
+
+  }
+
+  return chapters;
+}
+
+MlResolver.MlQueryResolver['fetchActiveSubChapterList'] = (obj, args, context, info) => {
+  let chapters = args.id;
+  let subChapters = [];
+  if (chapters && chapters.length) {
+
+
+      // activeChapters = MlChapters.find({"$and": [{clusterId: clusterId, isActive: true}]}).fetch();
+    subChapters = mlDBController.find('MlSubChapters', {
+        "$and": [{
+          chapterId: {$in : chapters},
+          isActive: true
+        }]
+      }, context).fetch();
+
+
+  }
+
+  return subChapters;
+}
+
 /******************************************** end related subChapter resolvers ********************************************/

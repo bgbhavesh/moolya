@@ -51,7 +51,8 @@ let portfolioSchema = `
         portfolioImage : String
         allocationStatus :  String
         count : String
-        communityImageLink : String
+        communityImageLink : String,
+        subDomainId : [String]
     }
     
     input privateKeys{
@@ -104,7 +105,8 @@ let portfolioSchema = `
         portfolioId     : String
         transactionId   : String
         transactionCreatedDate : String
-        transactionUpdatedDate : String
+        transactionUpdatedDate : String,
+        subDomainId : [String]
     }
    
     input portfolio{

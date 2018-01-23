@@ -932,7 +932,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       MlNotificationController.onUserApproval(regRecord);
       MlSMSNotification.sendSMSonKYCApproved(regRecord)
       // mlSmsController
-
+     
       let portfolioDetails = {
         "transactionType": "portfolio",
         "communityType": regRecord.registrationInfo.communityDefName,
@@ -960,6 +960,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         communityName: regRecord.registrationInfo.communityName,
         identityType: regRecord.registrationInfo.identityType,
         industryId: regRecord.registrationInfo.industry,
+        subDomainId:regRecord&&regRecord.registrationDetails&&regRecord.registrationDetails.subDomain?regRecord.registrationDetails.subDomain:null,
         professionId: regRecord.registrationInfo.profession,
         gender: regRecord.registrationDetails.gender,
         employmentStatus: regRecord.registrationDetails.employmentStatus,

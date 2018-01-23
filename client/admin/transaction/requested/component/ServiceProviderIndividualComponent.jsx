@@ -119,6 +119,10 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   optionsBySelectTitle(val){
     this.setState({title:val})
   }
+  optionsBySelectSubDomain(value){
+    this.setState({selectedSubDomain:value})
+  }
+
   /* optionsBySelectProfession(val){
    this.setState({profession:val})
    }
@@ -142,6 +146,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       displayName: existingObject.displayName?existingObject.displayName:null,
       dateOfBirth: existingObject.dateOfBirth?existingObject.dateOfBirth:null,
       gender: existingObject.gender?existingObject.gender:null,
+      subDomain:   existingObject.subDomain?existingObject.subDomain:null,
       //citizenships: existingObject.citizenships?existingObject.citizenships:null,
       qualification: existingObject.qualification?existingObject.qualification:null,
       employmentStatus: existingObject.employmentStatus?existingObject.employmentStatus:null,
@@ -170,7 +175,8 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       employerName: this.refs.employerName.value?this.refs.employerName.value:null,
       employerWebsite: this.refs.employerWebsite.value?this.refs.employerWebsite.value:null,
       employmentDate: this.state.employmentDate?this.state.employmentDate:null,
-      experience: this.refs.experience.value?this.refs.experience.value:null
+      experience: this.refs.experience.value?this.refs.experience.value:null,
+      subDomain:   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
     }
     var differences = diff(oldObject, newObject);
     var filteredObject = _underscore.where(differences, {kind: "E"});
@@ -196,23 +202,24 @@ export default class ServiceProviderIndividualComponent extends React.Component{
         details: {
           //identityType      : this.state.identity,
           // userType          : this.state.selectedUserType,
-          title: this.state.title,
-          firstName: this.refs.firstName.value,
-          middleName: this.refs.middleName.value,
-          lastName: this.refs.lastName.value,
-          displayName: this.refs.displayName.value,
-          dateOfBirth: this.state.dateOfBirth,
-          gender: this.state.gender,
-          citizenships: this.state.citizenships,
-          qualification: this.refs.qualification.value,
-          employmentStatus: this.state.employmentStatus,
-          professionalTag: this.refs.professionalTag.value,
-          industry: this.state.selectedTypeOfIndustry,
-          profession: this.state.profession,
-          employerName: this.refs.employerName.value,
-          employerWebsite: this.refs.employerWebsite.value,
-          employmentDate: this.state.employmentDate,
-          experience: this.refs.experience.value
+          title: this.state.title ? this.state.title:null,
+          firstName: this.refs.firstName.value?this.refs.firstName.value:null,
+          middleName: this.refs.middleName.value?this.refs.middleName.value:null,
+          lastName: this.refs.lastName.value?this.refs.lastName.value:null,
+          displayName: this.refs.displayName.value?this.refs.displayName.value:null,
+          dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth:null,
+          gender: this.state.gender?this.state.gender:null,
+          citizenships: this.state.citizenships?this.state.citizenships:null,
+          qualification: this.refs.qualification.value?this.refs.qualification.value:null,
+          employmentStatus: this.state.employmentStatus?this.state.employmentStatus:null,
+          professionalTag: this.refs.professionalTag.value?this.refs.professionalTag.value:null,
+          industry: this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+          profession: this.state.profession?this.state.profession:null,
+          employerName: this.refs.employerName.value?this.refs.employerName.value:null,
+          employerWebsite: this.refs.employerWebsite.value?this.refs.employerWebsite.value:null,
+          employmentDate: this.state.employmentDate?this.state.employmentDate:null,
+          experience: this.refs.experience.value?this.refs.experience.value:null,
+          subDomain:this.state.selectedSubDomain?this.state.selectedSubDomain:null,
         }
       }
       //this.props.getRegistrationDetails();
@@ -347,8 +354,14 @@ export default class ServiceProviderIndividualComponent extends React.Component{
      }
      }
      `;
+
+    let subDomainQuery = gql`query($industryId: String){
+      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    }
+    `;
     let employmentOption={options: { variables: {type : "EMPLOYMENTTYPE",hierarchyRefId:this.props.clusterId}}};
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.props.clusterId}}};
+    let subDomainOption={options: { variables: {industryId:this.props.registrationInfo&&this.props.registrationInfo.industry?this.props.registrationInfo.industry:null}}};
     /*let citizenshipsquery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
      label
@@ -465,6 +478,9 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                   </div>
                 <div className="form-group">
                   <input type="text" ref="professionalTag" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.professionalTag}  placeholder="Professional Tag" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={true} mandatory={true} ref="subDomain" placeholder="Select Subdomain" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedSubDomain} queryType={"graphql"} queryOptions={subDomainOption} query={subDomainQuery} onSelect={that.optionsBySelectSubDomain.bind(this)} isDynamic={true} data-required={true} data-errMsg="SubDomain is required"/>
                 </div>
                 {/* <div className="form-group">
                  <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>

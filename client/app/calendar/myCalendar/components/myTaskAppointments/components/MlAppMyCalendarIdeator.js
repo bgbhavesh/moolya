@@ -274,7 +274,7 @@ export default class MlAppMyCalendarIdeator extends Component {
                   </label>
                 </div>
                 <div className="form-group">
-                  <label>Expected intput</label>
+                  <label>Expected input</label>
                   <textarea className="form-control float-label"
                             id="expectedInput"
                             onChange={(event) => this.onChangeFormField(event)}

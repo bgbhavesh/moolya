@@ -269,7 +269,6 @@ let supportedApi = [
     {api:'fetchAppMapData', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findDefaultUserProfile', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateContactNumber', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'deActivateUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'blockUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},

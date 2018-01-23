@@ -57,7 +57,7 @@ export default class MlInstitutionEvolution extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.institutionPortfolio.evolution.institutionEvolutionDescription);
+      const editorValue = createValueFromString(that.context.institutionPortfolio.evolution && that.context.institutionPortfolio.evolution.institutionEvolutionDescription ? that.context.institutionPortfolio.evolution.institutionEvolutionDescription : null);
       this.setState({loading: false, data: that.context.institutionPortfolio.evolution,editorValue});
     }
     this.updatePrivateKeys();

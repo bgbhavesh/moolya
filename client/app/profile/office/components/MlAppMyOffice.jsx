@@ -74,6 +74,9 @@ export default class MlAppMyOffice extends Component {
     this.initializeSwiper();
   }
 
+  /**
+   * todo: get the accesses level from the server
+   */
   async fetchExternalUserProfiles() {
     const response = await fetchExternalUserProfilesActionHandler();
     if (response && response.length > 0) {
@@ -81,8 +84,9 @@ export default class MlAppMyOffice extends Component {
       if (!default_User_Profile) {
         default_User_Profile = response[0];
       }
-      let isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
-      this.setState({showButton: isFunder})
+      // let isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
+      const isAllowedCommunity = ["CMP", 'FUN', "INS", "STU", "SPS"].indexOf(default_User_Profile.communityDefCode) >= 0 ? true : false;
+      this.setState({showButton: isAllowedCommunity})
     }
   }
 

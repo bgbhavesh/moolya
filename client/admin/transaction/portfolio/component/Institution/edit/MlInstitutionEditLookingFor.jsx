@@ -59,9 +59,9 @@ export default class MlInstitutionEditLookingFor extends Component {
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.lookingFor)
+    let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.lookingFor);
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if (empty) {
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.lookingFor) {
         this.setState({
           loading: false,
@@ -78,6 +78,7 @@ export default class MlInstitutionEditLookingFor extends Component {
         institutionLookingForList: that.context.institutionPortfolio.lookingFor
       });
     }
+    this.institutionLookingForServer = response ? response : [];
   }
 
   addLookingFor() {
@@ -99,13 +100,28 @@ export default class MlInstitutionEditLookingFor extends Component {
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen),
       "selectedVal": details.lookingForId
+    }, () => {
+      this.lockPrivateKeys(index);
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionLookingForServer && this.institutionLookingForServer[selIndex]?this.institutionLookingForServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onSaveAction(e) {
@@ -307,4 +323,5 @@ export default class MlInstitutionEditLookingFor extends Component {
 }
 MlInstitutionEditLookingFor.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

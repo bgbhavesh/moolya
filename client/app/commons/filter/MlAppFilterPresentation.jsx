@@ -7,8 +7,10 @@ import Moolyaselect from  '../../../commons/containers/select/MlSelectComposer'
 export default class MlAppFilterPresentation extends Component {
 
   render() {
+   
     const that = this;
     const props = that.props;
+   
     const {filters, selectedData } = props;
     return (
       <div className="row">
@@ -18,7 +20,7 @@ export default class MlAppFilterPresentation extends Component {
               case "INPUT":
                 return (
                   <div className="col-lg-3">
-                    <input type="text"  ref="input" placeholder={filter.displayName} onChange={(evt) => props.updateFilterQuery(evt.target.value, filter.field) } className="form-control float-label" id="" disabled={filter.isRestrictedFilter}/>
+                    <input type="text"  ref="input" placeholder={filter.displayName} onChange={(evt) => props.updateFilterQuery(evt.target.value, filter.field,"INPUT") } className="form-control float-label" id="" disabled={filter.isRestrictedFilter}/>
                   </div>
                 );
                 break;
@@ -44,7 +46,7 @@ export default class MlAppFilterPresentation extends Component {
                   <div className="col-lg-3">
                     <Moolyaselect
                       connection={props.connection}
-                      multiSelect={false}
+                      multiSelect={true}
                       ref="listSelect"
                       placeholder={filter.displayName}
                       valueKey={'value'}
@@ -53,7 +55,7 @@ export default class MlAppFilterPresentation extends Component {
                       query={filter.graphQLQuery}
                       reExecuteQuery={true}
                       queryOptions={filter.graphQLOption}
-                      onSelect={(value) => props.updateFilterQuery(value, filter.field)}
+                      onSelect={(value) => props.updateFilterQuery(value, filter.field, "SELECT")}
                       isDynamic={true}
                       id={'list'+ filter.field}
                       selectedValue={selected}
@@ -63,6 +65,28 @@ export default class MlAppFilterPresentation extends Component {
                 break;
               case "MULTISELECT":
                 //Multi select
+        
+                let multiselected = selectedData[filter.field] ? selectedData[filter.field] : "";
+                return(
+                  <div className="col-lg-3">
+                    <Moolyaselect
+                      connection={props.connection}
+                      multiSelect={true}
+                      ref="listSelect"
+                      placeholder={filter.displayName}
+                      valueKey={'value'}
+                      labelKey={'label'}
+                      queryType={"graphql"}
+                      query={filter.graphQLQuery}
+                      reExecuteQuery={true}
+                      queryOptions={filter.graphQLOption}
+                      onSelect={(value) => props.updateFilterQuery(value, filter.field,"MULTISELECT")}
+                      isDynamic={true}
+                      id={'list'+ filter.field}
+                      selectedValue={multiselected}
+                    />
+                  </div>
+                );
                 break;
               case "CHECKBOX":
                 <input type="checkbox"/>

@@ -218,7 +218,8 @@ class MlAppInternalMyTaskItem extends React.Component{
     if(response) {
       toastr.success(response.result);
       FlowRouter.setQueryParams({
-        add: null
+        add: null,
+        tab:null
       });
     }
   }
@@ -328,10 +329,8 @@ class MlAppInternalMyTaskItem extends React.Component{
   }
 
   deleteDocs(index) {
-    console.log('Called');
     let docs = this.state.docs || []
     docs.splice(index, 1);
-    console.log(docs);
     this.setState({docs: docs})
   }
 

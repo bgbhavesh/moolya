@@ -1,7 +1,7 @@
 /**
  * Created by pankaj on 9/9/17.
  */
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import ScrollArea from 'react-scrollbar';
 import {fetchInternalTask} from '../actions/fetchInternalTasks';
 import MlAppInternalTaskItem from './MlAppInternalTaskItem';
@@ -18,6 +18,7 @@ export default class MlAppInternalTaskList extends React.Component{
       selectedTaskType: ''
     };
     this.fetchTaskList = this.fetchTaskList.bind(this);
+    this.selectTask = this.selectTask.bind(this);
   }
 
   // componentWillRecceiveProps(nextProps){
@@ -63,7 +64,7 @@ export default class MlAppInternalTaskList extends React.Component{
     }
   }
 
-  async fetchTaskList() {
+  async fetchTaskList(status) {
     let response = await fetchInternalTask(['pending']);
     if(response){
       this.setState({
@@ -71,6 +72,10 @@ export default class MlAppInternalTaskList extends React.Component{
         selectTask:''
       })
     };
+    if(status){
+      FlowRouter.setQueryParams({tab:capitalizeFirstLetter(status)});
+      this.context.taskStatus.updateTaskStatus();
+    }
   }
 
   selectTask(task) {
@@ -228,4 +233,12 @@ export default class MlAppInternalTaskList extends React.Component{
         </div>
     )
   }
+};
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+MlAppInternalTaskList.contextTypes = {
+  taskStatus: PropTypes.object,
 };

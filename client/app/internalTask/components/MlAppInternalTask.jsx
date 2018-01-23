@@ -2,7 +2,7 @@
  * Created by pankaj on 20/6/17.
  */
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Tabs from 'react-responsive-tabs';
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import MlAppInternalPendingTask from './MlAppInternalPendingTask';
@@ -26,10 +26,12 @@ export default class MlAppInternalTask extends React.Component{
     super(props);
     this.state={
       activeTab:'My Tasks',
+      toggle:true,
     }
     this.updateTab=this.updateTab.bind(this);
   }
   componentDidMount() {
+    this.context.taskStatus.subscribe(this.changeTab.bind(this));
   }
   componentWillMount(){
     let activeTab = FlowRouter.getQueryParam('tab');
@@ -41,6 +43,11 @@ export default class MlAppInternalTask extends React.Component{
     let tab =  this.state.tabs[index].name;
     FlowRouter.setQueryParams({ tab: tab,add: null });
   }
+
+  changeTab(tab){
+    this.setState({toggle:!this.state.toggle});
+  }
+
 
   render(){
     let MlTabs = [
@@ -92,3 +99,6 @@ export default class MlAppInternalTask extends React.Component{
   }
 };
 
+MlAppInternalTask.contextTypes = {
+  taskStatus: PropTypes.object,
+};

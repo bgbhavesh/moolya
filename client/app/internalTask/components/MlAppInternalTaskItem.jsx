@@ -95,7 +95,7 @@ componentDidMount() {
     if(response.success){
       toastr.success('Task successfully moved to '+ status);
       // toastr.success('Task Updated Successfully');
-      this.props.fetchTaskList();
+      this.props.fetchTaskList(status);
     }
   }
 

@@ -18,11 +18,11 @@ export const mlAppInstitutionConfig = new MlAppViewer({
   moduleName: "institutionPortfolioDetails",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppInstitutionListView type="INS"/>,
+  viewComponent: <MlAppInstitutionListView />,
   header: true,
   headerComponents:{
     filter: true,
-    filterComponent: <MlAppFilterContainer />,
+    filterComponent: <MlAppFilterContainer type='INS'/>,
     filterData: filterData,
     alphabeticSearch: true,
     alphabeticSearchField: "aboutUs.companyDescription",

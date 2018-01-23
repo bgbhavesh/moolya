@@ -20,11 +20,11 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
       isCurrentVersion: true,
       isBeSpoke: false,
       status: "Gone Live",
-      "community.id": { "$in" : [ 'all', profile.communityDefCode ] },
       // "cluster.id": { "$in" : [ 'all', profile.clusterId ] },
       // "state.id": { "$in" : [ 'all', profile.chapterId ] },
       validTill: { "$gte": new Date() }
     };
+    if(portfolio.userId !== context.userId ) query["community.id"] = { "$in" : [ 'all', profile.communityDefCode ] }
     let result = mlDBController.find('MlServiceCardDefinition', query , context).fetch();
     return result;
   }else {

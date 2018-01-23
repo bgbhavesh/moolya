@@ -10,6 +10,7 @@ import MlStartupCharts from "../../../../admin/transaction/portfolio/component/S
 import MlStartupAwards from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupAwards";
 import MlStartupMCL from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupMCL";
 import MlStartupLookingFor from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLookingFor";
+import MlFunderServices from "../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices"
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
@@ -140,6 +141,13 @@ class MlAppStartupEditTabs extends Component {
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      }
     ];
     return tabs;
   }

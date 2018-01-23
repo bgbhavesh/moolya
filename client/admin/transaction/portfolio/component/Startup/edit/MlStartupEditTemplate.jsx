@@ -12,6 +12,7 @@ import MlStartupMCL from "./MlStartupMCL";
 import MlStartupLookingFor from "./MlStartupLookingFor";
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
+import MlFunderServices from "../../Funders/edit/MlFunderServices"
 import {client} from '../../../../../core/apolloConnection'
 
 
@@ -109,7 +110,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Library",
         name: "Library",
-        component: <PortfolioLibrary key="7" client={client} isAdmin={false} client={client}
+        component: <PortfolioLibrary key="7" isAdmin={false} client={client}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
       {
@@ -128,6 +129,13 @@ class MlStartupEditTemplate extends Component {
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} client={client}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      }
 
 
     ]

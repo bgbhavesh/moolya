@@ -2,7 +2,7 @@
  * Created by pankaj on 8/7/17.
  */
 
-import React from 'react';
+import React,{PropTypes} from 'react';
 import {fetchSelfCreatedInternalTask} from '../../actions/fetchMyInternalTask';
 import MlAppInternalAssignTaskItem from './../MlAppInternalAssignTaskItem';
 
@@ -15,6 +15,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
       selectTask:'',
       selectedTaskType: ''
     };
+    this.fetchTaskList = this.fetchTaskList.bind(this);
   }
 
   componentDidMount() {
@@ -81,13 +82,17 @@ export default class MlAppInternalMyTaskList extends React.Component{
     }
   }
 
-  async fetchTaskList() {
+  async fetchTaskList(status) {
     let response = await fetchSelfCreatedInternalTask(['pending']);
     if(response){
       this.setState({
         tasks: response,
         selectTask: null
       })
+    }
+    if(status){
+      FlowRouter.setQueryParams({tab:capitalizeFirstLetter(status)});
+      this.context.taskStatus.updateTaskStatus();
     }
   }
 
@@ -189,3 +194,13 @@ export default class MlAppInternalMyTaskList extends React.Component{
     )
   }
 };
+
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+MlAppInternalMyTaskList.contextTypes = {
+  taskStatus: PropTypes.object,
+};
+

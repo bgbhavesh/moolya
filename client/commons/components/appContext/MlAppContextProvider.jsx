@@ -2,18 +2,25 @@ import React, { Component, PropTypes } from 'react';
 import Menu from './Menu';
 import Theme from './Theme';
 import BreadCrum from './BreadCrum';
+import TaskStatus from './TaskStatus';
 export default class MlAppContextProvider extends Component {
 
   constructor(props,c){
     super(props,c);
     this.menu = new Menu(this.props.menu);
     this.theme = new Theme(this.props.theme);
-
     this.breadcrum=new BreadCrum();
+    this.taskStatus= new TaskStatus();
   }
 
   getChildContext() {
-    return {theme: this.theme,language:'',menu:this.menu,userType:this.props.userType,breadCrum:this.breadcrum||{}}
+    return {
+      theme: this.theme,language:'',
+      menu:this.menu,
+      userType:this.props.userType,
+      breadCrum:this.breadcrum||{},
+      taskStatus:this.taskStatus||{}
+    }
   }
 
   componentWillReceiveProps(next) {
@@ -39,5 +46,6 @@ MlAppContextProvider.childContextTypes = {
   language: React.PropTypes.string,
   menu: React.PropTypes.object,
   userType:React.PropTypes.string,
-  breadCrum:React.PropTypes.object
+  breadCrum:React.PropTypes.object,
+  taskStatus:React.PropTypes.object
 }

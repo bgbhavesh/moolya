@@ -111,6 +111,7 @@ let chapterSchema = `
         longitude:Float
         isBespokeRegistration:Boolean
         isBespokeWorkFlow:Boolean
+        userCategoryId : String
         moolyaSubChapterAccess:moolyaSubChapterAccess
         associatedObj : [relatedSubChaptersOutput]
         objective: [objectiveOutput]
@@ -174,6 +175,7 @@ let chapterSchema = `
         latitude:Float,
         longitude:Float,
         isBespokeWorkFlow:Boolean,
+        userCategoryId : String
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
         associatedObj : [relatedSubChaptersInput]
         objective : [objectiveInput]
@@ -225,13 +227,14 @@ let chapterSchema = `
         fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]
         fetchRelatedSubChapters(subChapterId: String): [relatedSubChaptersOutput]
         isSubChapterMoolyaNonMoolya(id : String):SubChapter
-        
+        fetchActiveClusterChaptersList(id:[String]):[Chapter]
+        fetchActiveSubChapterList(id:[String]):[SubChapter]
     }
     
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        
+
         createSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapter:subChapterObject, moduleName:String, actionName:String):response        
         updateSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
         createRelatedSubChapters(associatedObj: relatedSubChaptersInput): response
@@ -260,6 +263,8 @@ let supportedApi = [
     {api:'fetchRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'updateRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'isSubChapterMoolyaNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
+    {api:'fetchActiveClusterChaptersList', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
+    {api:'fetchActiveSubChapterList', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

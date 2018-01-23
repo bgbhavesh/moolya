@@ -29,7 +29,6 @@ class MlAppInternalAssignTaskItem extends React.Component {
       taskId: props.taskId ? props.taskId : '',
       previewDocument:""
     };
-    console.log('Props:',props)
   }
 
   componentDidMount(){
@@ -66,9 +65,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps , this.state.taskId);
     if(this.state.taskId !== nextProps.taskId){
-      console.log('Test');
       this.setState({
         taskId: nextProps.taskId
       }, function () {
@@ -79,10 +76,8 @@ class MlAppInternalAssignTaskItem extends React.Component {
   }
 
   async fetchTaskInfo() {
-    console.log(this.props.taskId, this.state.taskId);
     if(this.state.taskId){
       let response = await fetchInternalTaskInfo(this.state.taskId);
-      console.log(response);
       if(response){
         response.attendees = response.attendees ? response.attendees : [];
         response.docs = response.docs ? response.docs : [];
@@ -96,7 +91,6 @@ class MlAppInternalAssignTaskItem extends React.Component {
   }
 
   randomDocument(link, index) {
-    console.log('link, index', link, index)
     let documentPreviewUrl = generateAbsolutePath(link.fileUrl);
     this.setState({ previewDocument: documentPreviewUrl });
   }
@@ -110,7 +104,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
     if(response.success){
       toastr.success('Task successfully moved to'+ status);
       //toastr.success('Task Updated Successfully');
-      this.props.fetchTaskList();
+      this.props.fetchTaskList(status);
     }
   }
 

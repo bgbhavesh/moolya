@@ -40,6 +40,7 @@ let UserTypesSchema = `
         FetchUserType(communityCode:String,displayAllOption:Boolean):[UserTypes]
         FetchUserTypeForMultiSelect(communityId:[String]):[UserTypes]   
         FetchUserTypeSelect:[UserTypes]
+        FetchUserTypeList(communityCode:String):[UserTypes]
     }
 `
 
@@ -51,6 +52,7 @@ let supportedApi = [
   {api:'FetchUserTypeForMultiSelect', actionName:'READ', moduleName:"USERTYPE"},
   {api:'FetchUserTypeSelect', actionName:'READ', moduleName:"USERTYPE"},
   {api:'createUserType', actionName:'CREATE', moduleName:"USERTYPE"},
-  {api:'UpdateUserType', actionName:'UPDATE', moduleName:"USERTYPE"}
+  {api:'UpdateUserType', actionName:'UPDATE', moduleName:"USERTYPE"},
+  {api:'FetchUserTypeList', actionName:'READ', moduleName:"USERTYPE", isWhiteList:true},
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

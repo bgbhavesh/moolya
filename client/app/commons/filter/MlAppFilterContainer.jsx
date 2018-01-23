@@ -6,6 +6,7 @@ import MlAppFilterPresentation from './MlAppFilterPresentation';
 import {initalizeFloatLabel} from '../../../../client/commons/utils/formElemUtil';
 import gql from "graphql-tag";
 import {appClient} from '../../core/appConnection';
+import _ from 'underscore'
 
 export default class MlAppFilterContainer extends Component {
 
@@ -88,27 +89,51 @@ export default class MlAppFilterContainer extends Component {
   }
 
   render() {
+    console.log(this.props.type);
     const that = this;
     const propsFilterData = this.props.filterData;
     let filterData = JSON.parse(JSON.stringify(propsFilterData));
-    console.log("$$$$$$$$$$$$$$$$$??????");
-    console.log(filterData);
+  
+    if(this.props.type === "IDE" || this.props.type === "INS" || this.props.type === "CMP" ){
+      filterData = _.without(filterData, _.findWhere(filterData, {
+        field: "userType",
+      }));
+    }
+
+    if(this.props.type === "IDE" || this.props.type === "FUN" || this.props.type === "SPS" || this.props.type === "CMP" || this.props.type === "INS"){
+      filterData = _.without(filterData, _.findWhere(filterData, {
+        field: "stageOfCompany",
+      }));
+    }
+
+    if(this.props.type === "IDE" || this.props.type === "FUN" || this.props.type === "SPS" || this.props.type === "CMP" || this.props.type === "INS"){
+      filterData = _.without(filterData, _.findWhere(filterData, {
+        field: "businessType",
+      }));
+    }
+
     let filters = filterData.map(function (filter) {
       if(filter.graphQLOption && filter.graphQLOption.options && filter.graphQLOption.options.variables && typeof filter.graphQLOption.options.variables == "object"){
         let variables = filter.graphQLOption.options.variables;
         for(let variable in variables){
           let objectValue = variables[variable];
           console.log('objectValue', objectValue, " adf ",variables, " adf ",variable);
+          console.log(objectValue.substr(0,2) );
           if(objectValue.substr(0,2) === "$$"){
             let value = that.state.selectedList[objectValue.substr(2)];
+            filter.graphQLOption.options.variables[variable] = value ? value : "";
+          }else if(objectValue.substr(0,2) !== "$$"){
+
+            let value = that.props.type;
             filter.graphQLOption.options.variables[variable] = value ? value : "";
           }
         }
       }
+     
       return filter;
     });
 
-    console.log(filters, that.state.filterQuery, filterData );
+    
     return (
       <div className="filter_table filter_hide">
         <div className="panel panel-default">

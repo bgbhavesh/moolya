@@ -17,7 +17,7 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
   moduleName: "serviceProviderPortfolioDetails",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppServiceProviderListView />,
+  viewComponent: <MlAppServiceProviderListView type="SPS"/>,
   showActionComponent: true,
   header: true,
   headerComponents:{

@@ -104,4 +104,46 @@ export default filterData = [
         }
     },
   },
+  {
+    type: "MULTISELECT",
+    field: "userType",
+    displayName: "User Type",
+    isGraphql: true,
+    graphQLQuery: gql`query($communityCode: String) {
+      data:FetchUserTypeList(communityCode: $communityCode) {
+          value:_id
+          label:userTypeName
+        }
+      }
+    `,
+    graphQLOption: {
+      options: {
+        variables: {
+          communityCode: "$communityCode"
+          }
+        }
+    },
+  },
+  {
+    type: "MULTISELECT",
+    field: "businessType",
+    displayName: "Type of Business",
+    isGraphql: true,
+    graphQLQuery: gql`query{
+      data:fetchBusinessTypes{label:businessTypeName,value:_id}
+    }
+    `,
+    graphQLOption: {},
+  },
+  {
+    type: "MULTISELECT",
+    field: "stageOfCompany",
+    displayName: "Startup Stage",
+    isGraphql: true,
+    graphQLQuery: gql`query{
+      data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
+    }
+    `,
+    graphQLOption: {},
+  },
 ]

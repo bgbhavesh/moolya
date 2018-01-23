@@ -15,7 +15,7 @@ export const mlAppCompanyConfig = new MlAppViewer({
   moduleName: "companyPortfolioDetails",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppCompanyListView />,
+  viewComponent: <MlAppCompanyListView type="CMP"/>,
   showActionComponent: true,
   header: true,
   headerComponents:{

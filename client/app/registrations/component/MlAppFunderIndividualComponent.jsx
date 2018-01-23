@@ -130,6 +130,10 @@ export default class MlAppFunderIndividualComponent extends React.Component {
     this.setState({investingFrom: val.value})
   }
 
+  optionsBySelectSubDomain(value) {
+    this.setState({selectedSubDomain: value})
+  }
+
   isValidated(){
     let ret = mlFieldValidations(this.refs)
     if (ret) {
@@ -161,7 +165,8 @@ export default class MlAppFunderIndividualComponent extends React.Component {
       employmentDate: existingObject.employmentDate?existingObject.employmentDate:null,
       investingFrom : existingObject.investingFrom?existingObject.investingFrom:null,
       currency : existingObject.currency?existingObject.currency:null,
-      investmentAmount : existingObject.investmentAmount?existingObject.investmentAmount:null
+      investmentAmount : existingObject.investmentAmount?existingObject.investmentAmount:null,
+      subDomain             :   existingObject.subDomain?existingObject.subDomain:null,
     }
     let newObject = {
       title: this.state.title ? this.state.title:null,
@@ -182,7 +187,8 @@ export default class MlAppFunderIndividualComponent extends React.Component {
       employmentDate: this.state.employmentDate?this.state.employmentDate:null,
       investingFrom : this.state.investingFrom?this.state.investingFrom:null,
       currency : this.state.currency?this.state.currency:null,
-      investmentAmount : this.refs.investmentAmount.value?this.refs.investmentAmount.value:null
+      investmentAmount : this.refs.investmentAmount.value?this.refs.investmentAmount.value:null,
+      subDomain             :   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
     }
     var differences = diff(oldObject, newObject);
     var filteredObject = _underscore.where(differences, {kind: "E"});
@@ -205,27 +211,27 @@ export default class MlAppFunderIndividualComponent extends React.Component {
     Details = {
       registrationId: this.props.registrationId,
       details: {
-        //identityType      : this.state.identity,
-        // userType          : this.state.selectedUserType,
-        title: this.state.title,
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        displayName: this.refs.displayName.value,
-        dateOfBirth: this.state.dateOfBirth,
-        gender: this.state.gender,
-        citizenships: this.state.citizenships,
-        qualification: this.refs.qualification.value,
-        employmentStatus: this.state.employmentStatus,
-        professionalTag: this.refs.professionalTag.value,
-        industry: this.state.selectedTypeOfIndustry,
-        profession: this.state.profession,
-        employerName: this.refs.employerName.value,
-        employerWebsite: this.refs.employerWebsite.value,
-        employmentDate: this.state.employmentDate,
-        investingFrom: this.state.investingFrom,
-        currency: this.state.currency,
-        investmentAmount: this.refs.investmentAmount.value
+
+        title: this.state.title ? this.state.title:null,
+        firstName: this.refs.firstName.value?this.refs.firstName.value:null,
+        middleName: this.refs.middleName.value?this.refs.middleName.value:null,
+        lastName: this.refs.lastName.value?this.refs.lastName.value:null,
+        displayName: this.refs.displayName.value?this.refs.displayName.value:null,
+        dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth:null,
+        gender: this.state.gender?this.state.gender:null,
+        citizenships: this.state.citizenships?this.state.citizenships:null,
+        qualification: this.refs.qualification.value?this.refs.qualification.value:null,
+        employmentStatus: this.state.employmentStatus?this.state.employmentStatus:null,
+        professionalTag: this.refs.professionalTag.value?this.refs.professionalTag.value:null,
+        industry: this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+        profession: this.state.profession?this.state.profession:null,
+        employerName: this.refs.employerName.value?this.refs.employerName.value:null,
+        employerWebsite: this.refs.employerWebsite.value?this.refs.employerWebsite.value:null,
+        employmentDate: this.state.employmentDate?this.state.employmentDate:null,
+        investingFrom : this.state.investingFrom?this.state.investingFrom:null,
+        currency : this.state.currency?this.state.currency:null,
+        investmentAmount : this.refs.investmentAmount.value?this.refs.investmentAmount.value:null,
+        subDomain             :   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
       }
     }
     //this.props.getRegistrationDetails();
@@ -399,7 +405,12 @@ export default class MlAppFunderIndividualComponent extends React.Component {
       {value: 'Personal Fund', label: 'Personal Fund'},
       {value: 'Family Fund', label: 'Family Fund'}
     ];
+    let subDomainQuery = gql`query($industryId: String){
+      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    }
+    `;
     let professionQueryOptions = {options: {variables: {industryId: this.state.selectedTypeOfIndustry}}};
+    let subDomainOption={options: { variables: {industryId:this.props.registrationInfo&&this.props.registrationInfo.industry?this.props.registrationInfo.industry:null}}};
 
     let that = this;
     const showLoader = this.state.loading;
@@ -537,6 +548,13 @@ export default class MlAppFunderIndividualComponent extends React.Component {
                   <input type="text" ref="employerWebsite"
                          defaultValue={that.state.registrationDetails && that.state.registrationDetails.employerWebsite}
                          placeholder="Employer Website" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                        <Moolyaselect multiSelect={true} mandatory={true} ref="subDomain" placeholder="Select Subdomain" 
+                        className="form-control float-label" valueKey={'value'} labelKey={'label'}  
+                        selectedValue={this.state.selectedSubDomain} queryType={"graphql"} 
+                        queryOptions={subDomainOption} query={subDomainQuery} onSelect={that.optionsBySelectSubDomain.bind(this)} 
+                        isDynamic={true} data-required={true} data-errMsg="SubDomain is required"/>
                 </div>
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Employment Date",readOnly:true}}

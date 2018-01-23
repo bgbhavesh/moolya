@@ -18,7 +18,7 @@ export const mlAppInstitutionConfig = new MlAppViewer({
   moduleName: "institutionPortfolioDetails",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppInstitutionListView />,
+  viewComponent: <MlAppInstitutionListView type="INS"/>,
   header: true,
   headerComponents:{
     filter: true,

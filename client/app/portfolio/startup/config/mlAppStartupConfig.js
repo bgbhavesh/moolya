@@ -18,7 +18,7 @@ export const mlAppStartupConfig = new MlAppViewer({
   moduleName: "startupPortfolioDetails",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppStartupListView />,
+  viewComponent: <MlAppStartupListView type='STU' />,
   showActionComponent: true,
   header: true,
   headerComponents:{

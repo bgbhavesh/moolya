@@ -1,7 +1,7 @@
 /**
  * Created by pankaj on 9/9/17.
  */
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import {fetchInternalTask} from '../actions/fetchInternalTasks';
 import MlAppInternalTaskItem from './MlAppInternalTaskItem';
@@ -74,7 +74,8 @@ export default class MlAppInternalTaskList extends React.Component{
     };
     if(status){
       FlowRouter.setQueryParams({tab:capitalizeFirstLetter(status)});
-      this.context.taskStatus.updateTaskStatus();
+      // this.context.taskStatus.updateTaskStatus();
+      this.props.config.changeTab();
     }
   }
 
@@ -238,7 +239,3 @@ export default class MlAppInternalTaskList extends React.Component{
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-MlAppInternalTaskList.contextTypes = {
-  taskStatus: PropTypes.object,
-};

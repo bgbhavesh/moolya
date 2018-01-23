@@ -90,5 +90,6 @@ MlResolver.MlQueryResolver['findSubDomain'] = (obj, args, context, info) => {
 
 
 MlResolver.MlQueryResolver['fetchIndustryDomain'] = (obj, args, context, info) => {
+
   return MlSubDomain.find({industryId:args.industryId, isActive : true}).fetch();
 }

@@ -15,6 +15,8 @@ import MlInstitutionViewPartners from "../../../../admin/transaction/portfolio/c
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/view/incubatorsViewTabs/MlInstitutionIncubatorsViewTabs";
 import MlInstitutionEditData from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditData";
 import {appClient} from "../../../core/appConnection";
+import MlBeSpokeListView from '../../../../admin/transaction/portfolio/component/Funders/edit/Services/Container/MlFunderServicesList'
+
 
 /**
  * Import of all the files from admin need to seperate from app
@@ -168,6 +170,14 @@ export default class MlAppInstitutionViewTabs extends Component {
                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                      backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title:"Services" ,
+        name:"Services" ,
+        component:<MlBeSpokeListView view={true} myPortfolio={true} key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      } //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+
     ]
     return tabs;
   }

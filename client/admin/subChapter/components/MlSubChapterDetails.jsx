@@ -1,6 +1,7 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import _ from "lodash";
 import ScrollArea from "react-scrollbar";
+import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import MlLoader from "../../../commons/components/loader/loader";
 import {findSubChapterActionHandler} from "../actions/findSubChapter";
@@ -15,6 +16,15 @@ import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
+
+const fetchUserCategory = gql`query($id:String,$displayAllOption:Boolean){
+  data:FetchUserType(communityCode:$id,displayAllOption:$displayAllOption){
+  label:userTypeName
+  value:_id
+  }
+}
+`;
+const userCategoryOption = { options: { variables: { id: "SPS", displayAllOption: false } } };
 
 class MlSubChapterDetails extends Component {
   constructor(props) {
@@ -38,7 +48,8 @@ class MlSubChapterDetails extends Component {
     this.updateSubChapter.bind(this)
     this.anchorRedirect = this.anchorRedirect.bind(this);
     this.toggleImageUpload = this.toggleImageUpload.bind(this);
-    this.onImageFileUpload=this.onImageFileUpload.bind(this);
+    this.onImageFileUpload = this.onImageFileUpload.bind(this);
+    this.optionsBySelectUserType = this.optionsBySelectUserType.bind(this);
     return this;
   }
 
@@ -150,7 +161,8 @@ class MlSubChapterDetails extends Component {
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
         isBespokeRegistration: this.refs.isBespokeRegistration.checked,
         associatedObj: this.state.associatedObj,
-        moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
+        moolyaSubChapterAccess: this.state.moolyaSubChapterAccess,
+        userCategoryId: this.state.data.userCategoryId
       }
     }
     let detailsObj = _.extend(basicObj, subChapterDetailsExtend);
@@ -242,6 +254,15 @@ class MlSubChapterDetails extends Component {
     });
   }
 
+  /**
+   * @usage for non-moolya sub-chapter only
+   * @param {*userCategory} val 
+   */
+  optionsBySelectUserType(val) {
+    let data = this.state.data;
+    data["userCategoryId"] = val ? val : null
+    this.setState({ data })
+  }
 
   render() {
     let MlActionConfig = [
@@ -263,6 +284,7 @@ class MlSubChapterDetails extends Component {
     ]
     // var subChapterQuery = gql`query($subChapterId:String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId) { value:_id, label:subChapterName}}`;
     // var subChapterOption = {options: {variables: {subChapterId: this.props.params}}};
+    const { userCategoryId } = this.state.data;
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -297,7 +319,7 @@ class MlSubChapterDetails extends Component {
                              disabled="disabled"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Sub-Chapter Name" ref="subChapterName" readOnly
+                      <input type="text" placeholder="Enter the ‘Registered Name" ref="subChapterName" readOnly
                              className="form-control float-label"
                              defaultValue={this.state.data && this.state.data.subChapterName} disabled="disabled"/>
                     </div>
@@ -307,18 +329,13 @@ class MlSubChapterDetails extends Component {
                              defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                     </div>
                     {(this.state && this.state.data && this.state.data.isDefaultSubChapter) ? <div></div> : <div>
-                      {/*<div className="form-group">*/}
-                      {/*<Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"*/}
-                      {/*className="form-control float-label" valueKey={'value'} labelKey={'label'}*/}
-                      {/*selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}*/}
-                      {/*query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}*/}
-                      {/*onSelect={this.selectAssociateChapter.bind(this)}/>*/}
-                      {/*</div>*/}
-                      {/*<br className="brclear"/>*/}
-                      {/*<div className="form-group">*/}
-                      {/*<input type="text" ref="state" placeholder="State" className="form-control float-label"*/}
-                      {/*defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>*/}
-                      {/*</div>*/}
+                      <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'}
+                                  labelKey={'label'} queryType={"graphql"} query={fetchUserCategory}
+                                  isDynamic={true}
+                                  queryOptions={userCategoryOption}
+                                  onSelect={this.optionsBySelectUserType}
+                                  selectedValue={userCategoryId} />
+
                       <div className="form-group">
                         <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email Id"
                                defaultValue={this.state.data && this.state.data.subChapterEmail}
@@ -363,12 +380,10 @@ class MlSubChapterDetails extends Component {
                       <div className="form-group">
                         <div onClick={this.toggleImageUpload} className="fileUpload mlUpload_btn">
                           <span>Upload Pic</span>
-                          {/*<input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>*/}
                         </div>
                         <div className="previewImg ProfileImg">
                           <img
                             src={this.state.data && this.state.data.subChapterImageLink ? generateAbsolutePath(this.state.data.subChapterImageLink) : '/images/def_profile.png'}/>
-                          {/*<img src="/images/ideator_01.png"/>*/}
                         </div>
                       </div>
                       <CropperModal handleImageUpload={this.onImageFileUpload} toggleShow={this.toggleImageUpload}
@@ -483,21 +498,11 @@ class MlSubChapterDetails extends Component {
                             </div>
                           </div>
                         </div>
-                      </div>
-                      {/* <div className="panel panel-default"> */}
-                        {/*<div className="form-group">*/}
-                          {/*<Moolyaselect multiSelect={false} placeholder="Related Sub-Chapters"*/}
-                                        {/*className="form-control float-label" valueKey={'value'} labelKey={'label'}*/}
-                                        {/*selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}*/}
-                                        {/*query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}*/}
-                                        {/*onSelect={this.selectAssociateChapter.bind(this)}/>*/}
-                        {/*</div>*/}
-                        {/*<div className="panel-heading">Internal Subchapter Access</div>*/}
+                      </div>                    
                         <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
                                                     curSubChapter = {this.props.params}
                                                     {...this.props}
                                                     assignedDetails={this.state.associatedObj}/>
-                      {/*</div>*/}
                       <div className="panel panel-default">
                         <div className="panel-heading">Moolya Subchapter Access</div>
                         <MlMoolyaSubChapterAccess getMoolyaAccessStatus={this.getMoolyaAccessStatus.bind(this)}

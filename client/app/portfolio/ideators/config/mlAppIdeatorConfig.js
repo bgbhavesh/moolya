@@ -30,7 +30,7 @@ export const
   header: true,
   headerComponents:{
     filter: true,
-    filterComponent: <MlAppFilterContainer />,
+    filterComponent: <MlAppFilterContainer type='IDE' />,
     filterData: filterData,
     alphabeticSearch: true,
     alphabeticSearchField: "ideas.title",

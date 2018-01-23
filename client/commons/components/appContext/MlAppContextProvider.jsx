@@ -8,12 +8,16 @@ export default class MlAppContextProvider extends Component {
     super(props,c);
     this.menu = new Menu(this.props.menu);
     this.theme = new Theme(this.props.theme);
-
     this.breadcrum=new BreadCrum();
   }
 
   getChildContext() {
-    return {theme: this.theme,language:'',menu:this.menu,userType:this.props.userType,breadCrum:this.breadcrum||{}}
+    return {
+      theme: this.theme,language:'',
+      menu:this.menu,
+      userType:this.props.userType,
+      breadCrum:this.breadcrum||{},
+    }
   }
 
   componentWillReceiveProps(next) {
@@ -39,5 +43,5 @@ MlAppContextProvider.childContextTypes = {
   language: React.PropTypes.string,
   menu: React.PropTypes.object,
   userType:React.PropTypes.string,
-  breadCrum:React.PropTypes.object
+  breadCrum:React.PropTypes.object,
 }

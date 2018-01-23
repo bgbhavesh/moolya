@@ -38,6 +38,8 @@ export default class MlAppIdeatorListView extends Component {
     let that = this
     const data = this.props.data || [];
     let loading=this.props.config&&this.props.config.loading;
+
+
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (

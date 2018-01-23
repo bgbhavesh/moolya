@@ -22,7 +22,7 @@ export const mlAppInstitutionConfig = new MlAppViewer({
   header: true,
   headerComponents:{
     filter: true,
-    filterComponent: <MlAppFilterContainer />,
+    filterComponent: <MlAppFilterContainer type='INS'/>,
     filterData: filterData,
     alphabeticSearch: true,
     alphabeticSearchField: "aboutUs.companyDescription",

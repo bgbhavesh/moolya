@@ -666,7 +666,7 @@ Accounts.validateLoginAttempt(function (user)
 
     let isValid=false;
   /**checking possible condition of login attempt*/
-  if (user && !user.allowed && (user.error.reason == 'Incorrect password'))
+  if (user && !user.allowed && (user.error.reason == 'Incorrect password')|| user && !user.allowed && (user.error.reason == "User has no password set"))
     throw new Meteor.Error(403, "Username or password incorrect");
   else if (user && !user.allowed) {
     /**if user is not present but available in registrations*/

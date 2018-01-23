@@ -20,15 +20,26 @@ export function mlFieldValidations(elements) {
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
        var value = selectObj.props['selectedValue']?selectObj.props['selectedValue']:selectObj.props['value'];
-      if (!value)
+      if (typeof value !== 'object' && !value){
         value = selectObj.props['defaultValue'] ? selectObj.props['defaultValue'] : null                                /**case for the date-time required field*/
-      var  multi= selectObj.props['multiSelect']
+        var  multi= selectObj.props['multiSelect']
 
-        if (isRequired && multi&&value.length==0) {
+        if (isRequired && multi) {
           return selectObj.props['data-errMsg']
         }else if (isRequired && !value) {
           return selectObj.props['data-errMsg']
         }
+      }else if(typeof value === 'object' && !value || (value && !value.length)){
+        value = selectObj.props['defaultValue'] ? selectObj.props['defaultValue'] : null                                /**case for the date-time required field*/
+        var  multi= selectObj.props['multiSelect']
+
+        if (isRequired && multi) {
+          return selectObj.props['data-errMsg']
+        }else if (isRequired && !value) {
+          return selectObj.props['data-errMsg']
+        }
+      }
+       
 
 
     }

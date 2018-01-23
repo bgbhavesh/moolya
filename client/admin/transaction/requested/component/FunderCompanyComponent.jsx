@@ -213,38 +213,43 @@ export default class Company extends React.Component{
   }
 
   async  updateregistration() {
+    let ret = mlFieldValidations(this.refs)
+    
+    if (ret) {
+      toastr.error(ret);
+    }else{
     let Details = {
       registrationId      : this.props.registrationId,
       details:{
-        userType              :   this.state.selectedUserType,
-        companyName           :   this.refs.companyName.value,
-        groupName             :   this.refs.groupName.value,
-        companyWebsite        :   this.refs.companyWebsite.value,
-        companyEmail          :   this.refs.companyEmail.value,
-        foundationDate        :   this.state.foundationDate,
-        headQuarterLocation   :   this.state.selectedHeadquarter,
-        branchLocations       :   this.state.selectedBranches,
-        companytyp            :   this.state.selectedTypeOfCompany,
-        entityType            :   this.state.selectedTypeOfEntity,
-        businessType          :   this.state.selectedTypeOfBusiness,
-        industry              :   this.state.selectedTypeOfIndustry,
-        subDomain             :   this.state.selectedSubDomain,
-        stageOfCompany        :   this.state.selectedStageOfCompany,
-        subsidaryCompany      :   this.state.selectedSubsidaryComapny,
-        registrationNumber    :   this.refs.registrationNumber.value,
-        isoAccrediationNumber :   this.refs.isoAccrediationNumber.value,
-        companyTurnOver       :   this.refs.companyTurnOver.value,
-        partnerCompanies      :   this.refs.partnerCompanies.value,
-        investors             :   this.refs.investors.value,
-        lookingFor            :   this.state.selectedLookingFor,
-        companyCEOName        :   this.refs.companyCEOName.value,
-        parentCompany         :   this.refs.parentCompany.value,
-        companyManagement     :   this.refs.companyManagement.value,
-        toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value,
-        associatedCompanies   :   this.refs.associatedCompanies.value,
-        investingFrom         :   this.state.investingFrom,
-        currency               :   this.state.currency,
-        investmentAmount       :   this.refs.investmentAmount.value
+        userType              :   this.state.selectedUserType?this.state.selectedUserType:null,
+        companyName           :   this.refs.companyName.value||null,
+        groupName             :   this.refs.groupName.value||null,
+        companyWebsite        :   this.refs.companyWebsite.value?this.refs.companyWebsite.value:null,
+        companyEmail          :   this.refs.companyEmail.value?this.refs.companyEmail.value:null,
+        foundationDate        :   this.state.foundationDate?this.state.foundationDate:null,
+        headQuarterLocation   :   this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
+        branchLocations       :   this.state.selectedBranches?this.state.selectedBranches:null,
+        companytyp            :   this.state.selectedTypeOfCompany?this.state.selectedTypeOfCompany:null,
+        entityType            :   this.state.selectedTypeOfEntity?this.state.selectedTypeOfEntity:null,
+        businessType          :   this.state.selectedTypeOfBusiness?this.state.selectedTypeOfBusiness:null,
+        industry              :   this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+        subDomain             :   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
+        stageOfCompany        :   this.state.selectedStageOfCompany?this.state.selectedStageOfCompany:null,
+        subsidaryCompany      :   this.state.selectedSubsidaryComapny?this.state.selectedSubsidaryComapny:null,
+        registrationNumber    :   this.refs.registrationNumber.value?this.refs.registrationNumber.value:null,
+        isoAccrediationNumber :   this.refs.isoAccrediationNumber.value?this.refs.isoAccrediationNumber.value:null,
+        companyTurnOver       :   this.refs.companyTurnOver.value?this.refs.companyTurnOver.value:null,
+        partnerCompanies      :   this.refs.partnerCompanies.value?this.refs.partnerCompanies.value:null,
+        investors             :   this.refs.investors.value?this.refs.investors.value:null,
+        lookingFor            :   this.state.selectedLookingFor?this.state.selectedLookingFor:null,
+        companyCEOName        :   this.refs.companyCEOName.value?this.refs.companyCEOName.value:null,
+        parentCompany         :   this.refs.parentCompany&&this.refs.parentCompany.value?this.refs.parentCompany.value:null,
+        companyManagement     :   this.refs.companyManagement.value?this.refs.companyManagement.value:null,
+        toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value?this.refs.toatalEmployeeCount.value:null,
+        associatedCompanies   :   this.refs.associatedCompanies.value?this.refs.associatedCompanies.value:null,
+        investingFrom         :   this.state.investingFrom?this.state.investingFrom:null,
+        currency              :   this.state.currency?this.state.currency:null,
+        investmentAmount      :   this.refs.investmentAmount.value?this.refs.investmentAmount.value:null
       }
     }
     //this.props.getRegistrationDetails(Details);
@@ -257,6 +262,7 @@ export default class Company extends React.Component{
     }
    // toastr.success("Saved Successfully");
     return response;
+  }
   }
   updateRegistration(){
     const resp=this.updateregistration();
@@ -388,8 +394,15 @@ export default class Company extends React.Component{
     }
     `;
 
+    let subDomainQuery = gql`query($industryId: String){
+      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    }
+    `;
+
     let countryOption = {options: { variables: {countryId:this.state&&this.state.selectedHeadquarter?this.state.selectedHeadquarter:""}}};
     let branchesOption = {options: { variables: {countryId:this.state&&this.state.selectedBranches?this.state.selectedBranches:null}}};
+    let subDomainOption={options: { variables: {industryId:this.props.registrationInfo&&this.props.registrationInfo.industry?this.props.registrationInfo.industry:null}}};
+
     let that=this;
     let foundationActive =''
     if(that.state.foundationDate){
@@ -489,6 +502,9 @@ export default class Company extends React.Component{
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select Subdomain" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedSubDomain} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectStageOfCompany.bind(this)} isDynamic={true}/>
               </div>*/}
+              <div className="form-group">
+                <Moolyaselect multiSelect={true} mandatory={true} ref="subDomain" placeholder="Select Subdomain" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedSubDomain} queryType={"graphql"} queryOptions={subDomainOption} query={subDomainQuery} onSelect={that.optionsBySelectSubDomain.bind(this)} isDynamic={true} data-required={true} data-errMsg="SubDomain is required"/>
+              </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select Stage Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedStageOfCompany} queryType={"graphql"} query={stageofcompquery} onSelect={that.optionsBySelectStageOfCompany.bind(this)} isDynamic={true}/>
               </div>

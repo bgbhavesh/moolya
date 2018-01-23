@@ -69,7 +69,7 @@ export default class MlInfiniteScrollComposer extends Component {
               module: "activity"
             },
             updateQuery: (prev, {fetchMoreResult}) => {
-              // console.log(fetchMoreResult, prev);
+              
               if (!fetchMoreResult.data) {
                 return prev;
               }
@@ -77,10 +77,12 @@ export default class MlInfiniteScrollComposer extends Component {
               let response={};
 
               if(pagination){
-                response = {
+               /* response = {
                   count: fetchMoreResult.data.data.count,
                   data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
-                };
+
+                };*/
+                response = Object.assign({},{count:fetchMoreResult.data.count,data:[...fetchMoreResult.data.data]});
               }else{
                 response = Object.assign({},{count:fetchMoreResult.data.count,data:[...fetchMoreResult.data.data]});
               }

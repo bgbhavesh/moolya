@@ -225,6 +225,8 @@ let chapterSchema = `
         fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]
         fetchRelatedSubChapters(subChapterId: String): [relatedSubChaptersOutput]
         isSubChapterMoolyaNonMoolya(id : String):SubChapter
+        fetchActiveClusterChaptersList(id:[String]):[Chapter]
+        fetchActiveSubChapterList(id:[String]):[SubChapter]
         
     }
     
@@ -260,6 +262,8 @@ let supportedApi = [
     {api:'fetchRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'updateRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'isSubChapterMoolyaNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
+    {api:'fetchActiveClusterChaptersList', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
+    {api:'fetchActiveSubChapterList', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

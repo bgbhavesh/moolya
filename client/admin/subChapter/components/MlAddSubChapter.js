@@ -14,14 +14,22 @@ import ScrollArea from "react-scrollbar";
 import {addSubChapterActionHandler} from "../actions/addSubChapter";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
-// import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
 import CropperModal from "../../../../client/commons/components/cropperModal";
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
-// import gql from "graphql-tag";
+import gql from "graphql-tag";
 // var Select = require('react-select');
 // var FontAwesome = require('react-fontawesome');
 
+const fetchUserCategory = gql`query($id:String,$displayAllOption:Boolean){
+  data:FetchUserType(communityCode:$id,displayAllOption:$displayAllOption){
+  label:userTypeName
+  value:_id
+  }
+}
+`;
+const userCategoryOption = { options: { variables: { id: "SPS", displayAllOption: false } } };
 
 class MlAddSubChapter extends React.Component {
   constructor(props) {
@@ -35,6 +43,7 @@ class MlAddSubChapter extends React.Component {
       data: {},
       showAddPicModal: false,
       uploadingPic: false,
+      userCategory: null
     };
     this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
     this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
@@ -45,6 +54,7 @@ class MlAddSubChapter extends React.Component {
     this.toggleAddPicModal = this.toggleAddPicModal.bind(this);
     this.onPicUpload = this.onPicUpload.bind(this);
     this.onImageFileUpload = this.onImageFileUpload.bind(this);
+    this.optionsBySelectUserType = this.optionsBySelectUserType.bind(this);
     // this.findChapterActionHandler.bind(this);
     // this.updateSubChapter.bind(this)
     return this;
@@ -136,7 +146,8 @@ class MlAddSubChapter extends React.Component {
     dataGet.isBespokeWorkFlow = this.refs.isBespokeWorkFlow.checked
     dataGet.isBespokeRegistration = this.refs.isBespokeRegistration.checked
     dataGet.associatedObj = this.state.associatedObj
-    dataGet.moolyaSubChapterAccess = this.state.moolyaSubChapterAccess
+    dataGet.moolyaSubChapterAccess = this.state.moolyaSubChapterAccess;
+    dataGet.userCategoryId = this.state.userCategory;
 
     if (dataGet.subChapterName) {
       let data = dataGet;
@@ -188,8 +199,8 @@ class MlAddSubChapter extends React.Component {
 
   async findChapterDetails() {
     console.log(this.props);
-    let clusterId = this.props ? this.props.clusterId : ''
-    let chapterId = this.props ? this.props.chapterId : ''
+    const clusterId = this.props ? this.props.clusterId : ''
+    const chapterId = this.props ? this.props.chapterId : ''
     if (chapterId) {
       const response = await findChapterActionHandler(clusterId, chapterId);
       this.setState({loading: false, data: response});
@@ -245,6 +256,10 @@ class MlAddSubChapter extends React.Component {
     this.onImageFileUpload(image);
   }
 
+  optionsBySelectUserType(val) {
+    this.setState({ userCategory: val ? val : null })
+  }
+
   render() {
     let MlActionConfig = [
       {
@@ -294,9 +309,18 @@ class MlAddSubChapter extends React.Component {
                              readOnly defaultValue={this.state.data && this.state.data.chapterName}
                              disabled="disabled"/>
                     </div>
+
+
+                    <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'}
+                                  labelKey={'label'} queryType={"graphql"} query={fetchUserCategory}
+                                  isDynamic={true}
+                                  queryOptions={userCategoryOption}
+                                  onSelect={this.optionsBySelectUserType}
+                                  selectedValue={this.state.userCategory} />
+
                     <div className="form-group">
-                      <input type="text" placeholder="Sub-Chapter Name" ref="subChapterName"
-                             className="form-control float-label"/>
+                      <input type="text" placeholder="Enter the ‘Registered Name’ here" ref="subChapterName"
+                             className="form-control float-label mandatory"/>
                     </div>
                     <br className="brclear"/>
                     <div className="form-group">

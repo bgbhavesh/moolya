@@ -111,6 +111,7 @@ let chapterSchema = `
         longitude:Float
         isBespokeRegistration:Boolean
         isBespokeWorkFlow:Boolean
+        userCategoryId : String
         moolyaSubChapterAccess:moolyaSubChapterAccess
         associatedObj : [relatedSubChaptersOutput]
         objective: [objectiveOutput]
@@ -174,6 +175,7 @@ let chapterSchema = `
         latitude:Float,
         longitude:Float,
         isBespokeWorkFlow:Boolean,
+        userCategoryId : String
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
         associatedObj : [relatedSubChaptersInput]
         objective : [objectiveInput]
@@ -225,13 +227,12 @@ let chapterSchema = `
         fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]
         fetchRelatedSubChapters(subChapterId: String): [relatedSubChaptersOutput]
         isSubChapterMoolyaNonMoolya(id : String):SubChapter
-        
     }
     
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        
+
         createSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapter:subChapterObject, moduleName:String, actionName:String):response        
         updateSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
         createRelatedSubChapters(associatedObj: relatedSubChaptersInput): response

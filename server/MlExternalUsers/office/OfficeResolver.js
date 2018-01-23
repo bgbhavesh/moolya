@@ -264,8 +264,9 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     let scId = "";
     let officeDetails = args.myOffice;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
-    let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
-    if(isFunder){
+    // let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
+    const isAllowedCommunity = ["CMP", 'FUN', "INS", "STU", "SPS"].indexOf(profile.communityDefCode) >= 0 ? true : false;
+    if(isAllowedCommunity){
       // office beSpoke Service Card Definition
       if(officeDetails.isBeSpoke){
         var ret = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context);

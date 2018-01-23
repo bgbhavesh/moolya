@@ -13,7 +13,7 @@ export const mlAppFunderConfig=new MlViewer.View({
   pagination:true,
   moduleName:"FunderPortfolio",
   sort:true,
-  viewComponent:<MlAppFunderListView type="FUN"/>,
+  viewComponent:<MlAppFunderListView />,
   showActionComponent:true,
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {

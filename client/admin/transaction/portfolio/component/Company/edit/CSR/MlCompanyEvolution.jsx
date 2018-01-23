@@ -48,7 +48,7 @@ export default class MlCompanyEvolution extends React.Component{
     if(empty){
       const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.evolution) {
-        const editorValue = createValueFromString(response.evolution.evolutionDescription);
+        const editorValue = createValueFromString(response && response.evolution && response.evolution.evolutionDescription ? response.evolution.evolutionDescription : null);
         var object = response.evolution;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
@@ -57,7 +57,7 @@ export default class MlCompanyEvolution extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.companyPortfolio.evolution.evolutionDescription);
+      const editorValue = createValueFromString(that.context.companyPortfolio.evolution && that.context.companyPortfolio.evolution.evolutionDescription ? that.context.companyPortfolio.evolution.evolutionDescription : null);
       this.setState({loading: false, data: that.context.companyPortfolio.evolution, editorValue});
     }
   }

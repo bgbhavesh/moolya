@@ -48,7 +48,7 @@ export default class MlCompanyListOfIncubators extends React.Component{
     if(empty){
       const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.listOfIncubators) {
-        const editorValue = createValueFromString(response.listOfIncubators.listOfIncubatorsDescription);
+        const editorValue = createValueFromString(response && response.listOfIncubators && response.listOfIncubators.listOfIncubatorsDescription ?  response.listOfIncubators.listOfIncubatorsDescription : null);
         var object = response.listOfIncubators;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
@@ -57,7 +57,7 @@ export default class MlCompanyListOfIncubators extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.companyPortfolio.listOfIncubators.listOfIncubatorsDescription);
+      const editorValue = createValueFromString(that.context.companyPortfolio.listOfIncubators && that.context.companyPortfolio.listOfIncubators.listOfIncubatorsDescription ? that.context.companyPortfolio.listOfIncubators.listOfIncubatorsDescription : null);
       this.setState({loading: false, data: that.context.companyPortfolio.listOfIncubators,editorValue});
     }
   }

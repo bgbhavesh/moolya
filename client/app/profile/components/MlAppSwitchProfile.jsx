@@ -51,6 +51,15 @@ export default class MlAppSwitchProfile extends React.Component{
       $('.float-label').jvFloat();
     });
 
+    if(localStorage.getItem('switchProfile')){
+      toastr.success("Profile switched successfully");
+      localStorage.removeItem('switchProfile');
+    }
+
+    if(localStorage.getItem('defaultProfile')){
+      toastr.success("'Default Profile' set successfully");
+      localStorage.removeItem('defaultProfile');
+    }
    // this.initializeSwiper();
   }
 componentDidUpdate(){
@@ -78,6 +87,7 @@ componentDidUpdate(){
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
+      localStorage.setItem('defaultProfile','1');
       toastr.success("'Default Profile' set successfully");
       reloadPage();
     }else{
@@ -97,6 +107,7 @@ componentDidUpdate(){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
       toastr.success("Profile switched successfully");
+      localStorage.setItem('switchProfile','1');
       reloadPage();
     }else{
       //throw error

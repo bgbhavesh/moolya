@@ -30,6 +30,7 @@ query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId
         validTill
         sessionFrequency
         finalAmount
+        serviceExpiry
         transactionId
         duration{
          hours

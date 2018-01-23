@@ -48,7 +48,7 @@ export default class MlInstitutionPolicy extends React.Component{
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.policy) {
-        const editorValue = createValueFromString(response.policy.institutionPolicyDescription);
+        const editorValue = createValueFromString(response && response.policy && response.policy.institutionPolicyDescription ? response.policy.institutionPolicyDescription : null);
         var object = response.policy;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
@@ -57,7 +57,7 @@ export default class MlInstitutionPolicy extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.institutionPortfolio.policy.institutionPolicyDescription);
+      const editorValue = createValueFromString(that.context.institutionPortfolio.policy && that.context.institutionPortfolio.policy.institutionPolicyDescription ? that.context.institutionPortfolio.policy.institutionPolicyDescription : null);
       this.setState({loading: false, data: that.context.institutionPortfolio.policy,editorValue});
     }
     this.updatePrivateKeys();

@@ -154,7 +154,7 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "Looking For",
         name: "Looking For",
-        component: <MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
+        component: <MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} isAdmin={true}
                                                 portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
       {

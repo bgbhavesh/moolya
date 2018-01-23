@@ -48,7 +48,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.institutionIncubators) {
-        const editorValue = createValueFromString(response.institutionIncubators.institutionIncubatorsDescription);
+        const editorValue = createValueFromString(response && response.institutionIncubators && response.institutionIncubators.institutionIncubatorsDescription ? response.institutionIncubators.institutionIncubatorsDescription : null);
         var object = response.institutionIncubators;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
@@ -56,7 +56,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
       }else{
         this.setState({loading:false})
       }
-    }else{  const editorValue = createValueFromString(that.context.institutionPortfolio.institutionIncubators.institutionIncubatorsDescription);
+    }else{  const editorValue = createValueFromString(that.context.institutionPortfolio.institutionIncubators && that.context.institutionPortfolio.institutionIncubators.institutionIncubatorsDescription ? that.context.institutionPortfolio.institutionIncubators.institutionIncubatorsDescription : null);
       this.setState({loading: false, data: that.context.institutionPortfolio.institutionIncubators,editorValue});
     }
     this.updatePrivateKeys();

@@ -504,7 +504,7 @@ class MlCronJobControllerClass {
     }
 
     sendHtmlEmail(emailObject) {
-      if (Meteor.settings.public.instance == "DEV") {
+      if (Meteor.settings.public.instance != "DEV") {
         console.log("cron sending mail>>>>>>>>>>>>>.", emailObject.html);
         Meteor.setTimeout(function () {
           mlEmail.sendHtml({

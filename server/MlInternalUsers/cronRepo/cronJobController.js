@@ -1,4 +1,5 @@
 import EmailTemplates from 'swig-email-templates'; 
+import path from "path";
 import { remove, compact } from 'lodash';
 const fromEmail = Meteor.settings.private.fromEmailAddr; 
 
@@ -492,10 +493,14 @@ class MlCronJobControllerClass {
           cache:false
         }
       });
-      var absoluteFilePath = Npm.require('fs').realpathSync(process.cwd() + '/../../../../..') + '/server/MlInternalUsers/cronRepo/cronMoolyaReport.html';
+    //   path.resolve(__dirname, '../client/index.html')
+    //   var absoluteFilePath = Npm.require('fs').realpathSync(process.cwd() + '/../../../../..') + '/server/MlInternalUsers/cronRepo/cronMoolyaReport.html';
+    //   const absoluteFilePath = path.resolve('/public/html/cronMoolyaReport.html');
+      const absoluteFilePath = Assets.absoluteFilePath('report/cronMoolyaReport.html');
       var context = {
         data: data
       };
+      console.log("absoluteFilePath", absoluteFilePath);
       customTemplates.render(absoluteFilePath, context, Meteor.bindEnvironment((err, html, text, subject) => {
         console.log("err", err);
         emailObject.html = html;

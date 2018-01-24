@@ -52,7 +52,9 @@ let portfolioSchema = `
         allocationStatus :  String
         count : String
         communityImageLink : String,
-        subDomainId : [String]
+        subDomainId : [String],
+        businessType    : String,
+        stageOfCompany    : String
     }
     
     input privateKeys{
@@ -106,7 +108,9 @@ let portfolioSchema = `
         transactionId   : String
         transactionCreatedDate : String
         transactionUpdatedDate : String,
-        subDomainId : [String]
+        subDomainId : [String],
+        businessType    : String,
+        stageOfCompany    : String
     }
    
     input portfolio{

@@ -2,7 +2,7 @@
  * Created by pankaj on 20/6/17.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import Tabs from 'react-responsive-tabs';
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import MlAppInternalPendingTask from './MlAppInternalPendingTask';
@@ -30,9 +30,7 @@ export default class MlAppInternalTask extends React.Component{
     }
     this.updateTab=this.updateTab.bind(this);
   }
-  componentDidMount() {
-    this.context.taskStatus.subscribe(this.changeTab.bind(this));
-  }
+
   componentWillMount(){
     let activeTab = FlowRouter.getQueryParam('tab');
     if(activeTab){
@@ -50,30 +48,35 @@ export default class MlAppInternalTask extends React.Component{
 
 
   render(){
+    const _mlMyAppPendingInternalTaskConfig = _.extend(mlMyAppPendingInternalTaskConfig,{changeTab:this.changeTab.bind(this)});
+    const _mlMyAppCurrentInternalTaskConfig = _.extend(mlMyAppCurrentInternalTaskConfig,{changeTab:this.changeTab.bind(this)});
+    const _mlMyAppStartedInternalTaskConfig = _.extend(mlMyAppStartedInternalTaskConfig,{changeTab:this.changeTab.bind(this)});
+    const _mlMyAppCompletedInternalTaskConfig = _.extend(mlMyAppCompletedInternalTaskConfig,{changeTab:this.changeTab.bind(this)});
+    const _mlMyAppRejectedInternalTaskConfig = _.extend(mlMyAppRejectedInternalTaskConfig,{changeTab:this.changeTab.bind(this)});
     let MlTabs = [
       {
         name: 'My Tasks',
-        tabContent: <MlAppInternalMyTask />
+        tabContent: <MlAppInternalMyTask changeTab={this.changeTab.bind(this)} />
       },
       {
         name: 'Assigned',
-        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppPendingInternalTaskConfig} />
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={_mlMyAppPendingInternalTaskConfig} />
       },
       {
         name: 'Accepted',
-        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppCurrentInternalTaskConfig} />
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={_mlMyAppCurrentInternalTaskConfig} />
       },
       {
         name: 'Started',
-        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppStartedInternalTaskConfig} />
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={_mlMyAppStartedInternalTaskConfig} />
       },
       {
         name: 'Completed',
-        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppCompletedInternalTaskConfig} />
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={_mlMyAppCompletedInternalTaskConfig} />
       },
       {
         name: 'Rejected',
-        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppRejectedInternalTaskConfig} />
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={_mlMyAppRejectedInternalTaskConfig} />
       }
     ];
 
@@ -99,6 +102,3 @@ export default class MlAppInternalTask extends React.Component{
   }
 };
 
-MlAppInternalTask.contextTypes = {
-  taskStatus: PropTypes.object,
-};

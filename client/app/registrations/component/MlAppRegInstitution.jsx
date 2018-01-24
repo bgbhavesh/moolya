@@ -131,22 +131,22 @@ export default class MlAppRegInstitution extends Component {
     let Details = {
       registrationId: this.props.registrationId,
       details: {
-        userType: this.state.selectedUserType,
-        institutionType: this.state.selectedInstitutionType,
-        instituteName: this.refs.instituteName.value,
-        instituteGroupName: this.refs.instituteGroupName.value,
-        foundationYear: this.state.foundationDate,
-        website: this.refs.website.value,
-        registrationNumber: this.refs.registrationNumber.value,
-        isoAccrediationNumber: this.refs.isoAccrediationNumber.value,
-        curriculamProvider: this.refs.curriculamProvider.value,
-        associatedUniversity: this.refs.associatedUniversity.value,
-        studentCount: this.refs.studentCount.value,
-        staffCount: this.refs.staffCount.value,
-        chairman: this.refs.chairman.value,
-        dean: this.refs.dean.value,
-        headQuarterLocation: this.state.selectedHeadquarter,
-        branchLocations: this.state.selectedBranches
+        userType        : this.state.selectedUserType?this.state.selectedUserType:null,
+      institutionType     : this.state.selectedInstitutionType?this.state.selectedInstitutionType:null,
+      instituteName       : this.refs.instituteName.value?this.refs.instituteName.value:null,
+      instituteGroupName  : this.refs.instituteGroupName.value?this.refs.instituteGroupName.value:null,
+      foundationYear      : this.state.foundationDate?this.state.foundationDate:null,
+      website             : this.refs.website.value?this.refs.website.value:null,
+      registrationNumber  : this.refs.registrationNumber.value?this.refs.registrationNumber.value:null,
+      isoAccrediationNumber: this.refs.isoAccrediationNumber.value?this.refs.isoAccrediationNumber.value:null,
+      curriculamProvider  : this.refs.curriculamProvider.value?this.refs.curriculamProvider.value:null,
+      associatedUniversity: this.refs.associatedUniversity.value?this.refs.associatedUniversity.value:null,
+      studentCount        : this.refs.studentCount.value?this.refs.studentCount.value:null,
+      staffCount          : this.refs.staffCount.value?this.refs.staffCount.value:null,
+      chairman            : this.refs.chairman.value?this.refs.chairman.value:null,
+      dean                : this.refs.dean.value?this.refs.dean.value:null,
+      headQuarterLocation:  this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
+      branchLocations:  this.state.selectedBranches?this.state.selectedBranches:null
       }
     }
     //this.props.getRegistrationDetails();

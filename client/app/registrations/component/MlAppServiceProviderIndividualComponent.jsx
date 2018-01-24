@@ -139,23 +139,24 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
         details: {
           //identityType      : this.state.identity,
           // userType          : this.state.selectedUserType,
-          title: this.state.title,
-          firstName: this.refs.firstName.value,
-          middleName: this.refs.middleName.value,
-          lastName: this.refs.lastName.value,
-          displayName: this.refs.displayName.value,
-          dateOfBirth: this.state.dateOfBirth,
-          gender: this.state.gender,
-          citizenships: this.state.citizenships,
-          qualification: this.refs.qualification.value,
-          employmentStatus: this.state.employmentStatus,
-          professionalTag: this.refs.professionalTag.value,
-          industry: this.state.selectedTypeOfIndustry,
-          profession: this.state.profession,
-          employerName: this.refs.employerName.value,
-          employerWebsite: this.refs.employerWebsite.value,
-          employmentDate: this.state.employmentDate,
-          experience: this.refs.experience.value
+          title: this.state.title ? this.state.title:null,
+          firstName: this.refs.firstName.value?this.refs.firstName.value:null,
+          middleName: this.refs.middleName.value?this.refs.middleName.value:null,
+          lastName: this.refs.lastName.value?this.refs.lastName.value:null,
+          displayName: this.refs.displayName.value?this.refs.displayName.value:null,
+          dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth:null,
+          gender: this.state.gender?this.state.gender:null,
+          citizenships: this.state.citizenships?this.state.citizenships:null,
+          qualification: this.refs.qualification.value?this.refs.qualification.value:null,
+          employmentStatus: this.state.employmentStatus?this.state.employmentStatus:null,
+          professionalTag: this.refs.professionalTag.value?this.refs.professionalTag.value:null,
+          industry: this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+          profession: this.state.profession?this.state.profession:null,
+          employerName: this.refs.employerName.value?this.refs.employerName.value:null,
+          employerWebsite: this.refs.employerWebsite.value?this.refs.employerWebsite.value:null,
+          employmentDate: this.state.employmentDate?this.state.employmentDate:null,
+          experience: this.refs.experience.value?this.refs.experience.value:null,
+          subDomain             :   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
         }
       }
       //this.props.getRegistrationDetails();
@@ -205,6 +206,10 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
     this.setState({citizenships: val})
   }
 
+  optionsBySelectSubDomain(value) {
+    this.setState({selectedSubDomain: value})
+  }
+
   isValidated(){
     let ret = mlFieldValidations(this.refs)
     if (ret) {
@@ -233,7 +238,8 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
       employerName: existingObject.employerName?existingObject.employerName:null,
       employerWebsite: existingObject.employerWebsite?existingObject.employerWebsite:null,
       employmentDate: existingObject.employmentDate?existingObject.employmentDate:null,
-      experience: existingObject.experience?existingObject.experience:null
+      experience: existingObject.experience?existingObject.experience:null,
+      subDomain             :   existingObject.subDomain?existingObject.subDomain:null,
     }
     let newObject = {
       title: this.state.title ? this.state.title:null,
@@ -252,7 +258,8 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
       employerName: this.refs.employerName.value?this.refs.employerName.value:null,
       employerWebsite: this.refs.employerWebsite.value?this.refs.employerWebsite.value:null,
       employmentDate: this.state.employmentDate?this.state.employmentDate:null,
-      experience: this.refs.experience.value?this.refs.experience.value:null
+      experience: this.refs.experience.value?this.refs.experience.value:null,
+      subDomain             :   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
     }
     var differences = diff(oldObject, newObject);
     //console.log(differences);
@@ -374,6 +381,13 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
         }
         }
      `;
+     let subDomainQuery = gql`query($industryId: String){
+      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    }
+    `;
+    
+    let subDomainOption={options: { variables: {industryId:this.props.registrationInfo&&this.props.registrationInfo.industry?this.props.registrationInfo.industry:null}}};
+
     let professionQueryOptions = {options: {variables: {industryId: this.state.selectedTypeOfIndustry}}};
 
     let that = this;
@@ -500,6 +514,13 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
                          defaultValue={that.state.registrationDetails && that.state.registrationDetails.employerWebsite}
                          placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
+                <div className="form-group">
+                        <Moolyaselect multiSelect={true} mandatory={true} ref="subDomain" placeholder="Select Subdomain" 
+                        className="form-control float-label" valueKey={'value'} labelKey={'label'}  
+                        selectedValue={this.state.selectedSubDomain} queryType={"graphql"} 
+                        queryOptions={subDomainOption} query={subDomainQuery} onSelect={that.optionsBySelectSubDomain.bind(this)} 
+                        isDynamic={true} data-required={true} data-errMsg="SubDomain is required"/>
+                    </div>
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Employment Date",readOnly:true}}
                             closeOnSelect={true} value={that.state.employmentDate}

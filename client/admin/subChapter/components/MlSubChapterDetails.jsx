@@ -48,7 +48,8 @@ class MlSubChapterDetails extends Component {
     this.updateSubChapter.bind(this)
     this.anchorRedirect = this.anchorRedirect.bind(this);
     this.toggleImageUpload = this.toggleImageUpload.bind(this);
-    this.onImageFileUpload=this.onImageFileUpload.bind(this);
+    this.onImageFileUpload = this.onImageFileUpload.bind(this);
+    this.optionsBySelectUserType = this.optionsBySelectUserType.bind(this);
     return this;
   }
 
@@ -160,7 +161,8 @@ class MlSubChapterDetails extends Component {
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
         isBespokeRegistration: this.refs.isBespokeRegistration.checked,
         associatedObj: this.state.associatedObj,
-        moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
+        moolyaSubChapterAccess: this.state.moolyaSubChapterAccess,
+        userCategoryId: this.state.data.userCategoryId
       }
     }
     let detailsObj = _.extend(basicObj, subChapterDetailsExtend);
@@ -252,6 +254,15 @@ class MlSubChapterDetails extends Component {
     });
   }
 
+  /**
+   * @usage for non-moolya sub-chapter only
+   * @param {*userCategory} val 
+   */
+  optionsBySelectUserType(val) {
+    let data = this.state.data;
+    data["userCategoryId"] = val ? val : null
+    this.setState({ data })
+  }
 
   render() {
     let MlActionConfig = [
@@ -273,6 +284,7 @@ class MlSubChapterDetails extends Component {
     ]
     // var subChapterQuery = gql`query($subChapterId:String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId) { value:_id, label:subChapterName}}`;
     // var subChapterOption = {options: {variables: {subChapterId: this.props.params}}};
+    const { userCategoryId } = this.state.data;
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -317,18 +329,13 @@ class MlSubChapterDetails extends Component {
                              defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                     </div>
                     {(this.state && this.state.data && this.state.data.isDefaultSubChapter) ? <div></div> : <div>
-                      {/*<div className="form-group">*/}
-                      {/*<Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"*/}
-                      {/*className="form-control float-label" valueKey={'value'} labelKey={'label'}*/}
-                      {/*selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}*/}
-                      {/*query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}*/}
-                      {/*onSelect={this.selectAssociateChapter.bind(this)}/>*/}
-                      {/*</div>*/}
-                      {/*<br className="brclear"/>*/}
-                      {/*<div className="form-group">*/}
-                      {/*<input type="text" ref="state" placeholder="State" className="form-control float-label"*/}
-                      {/*defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>*/}
-                      {/*</div>*/}
+                      <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'}
+                                  labelKey={'label'} queryType={"graphql"} query={fetchUserCategory}
+                                  isDynamic={true}
+                                  queryOptions={userCategoryOption}
+                                  onSelect={this.optionsBySelectUserType}
+                                  selectedValue={userCategoryId} />
+
                       <div className="form-group">
                         <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email Id"
                                defaultValue={this.state.data && this.state.data.subChapterEmail}

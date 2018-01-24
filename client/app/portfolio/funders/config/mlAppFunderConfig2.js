@@ -14,7 +14,7 @@ export const mlAppFunderConfig2=new MlAppViewer({
   header: true,
   headerComponents:{
     filter: true,
-    filterComponent: <MlAppFilterContainer />,
+    filterComponent: <MlAppFilterContainer type="FUN"/>,
     filterData: filterData,
     alphabeticSearch: true,
     alphabeticSearchField: "funderAbout.firstName",

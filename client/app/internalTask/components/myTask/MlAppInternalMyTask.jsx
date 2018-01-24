@@ -27,11 +27,12 @@ export default class MlAppInternalMyTask extends React.Component{
     const that = this;
     switch (that.state.type) {
       case 'new':
-        return < MlAppInternalMyTaskItem updateType={that.updateType} />;
+        return < MlAppInternalMyTaskItem changeTab={that.props.changeTab} updateType={that.updateType} />;
       case 'edit':
         return '';
       default:
-      return <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppSelfInternalTaskConfig} />
+        const _mlMyAppSelfInternalTaskConfig = _.extend(mlMyAppSelfInternalTaskConfig,{changeTab:that.props.changeTab});
+      return <MlInfiniteScroll viewMode={false} showInfinity={false} config={_mlMyAppSelfInternalTaskConfig} />
     }
   }
 

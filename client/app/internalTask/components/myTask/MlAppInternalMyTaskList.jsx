@@ -92,7 +92,8 @@ export default class MlAppInternalMyTaskList extends React.Component{
     }
     if(status){
       FlowRouter.setQueryParams({tab:capitalizeFirstLetter(status)});
-      this.context.taskStatus.updateTaskStatus();
+      // this.context.taskStatus.updateTaskStatus();
+      this.props.config.changeTab();
     }
   }
 
@@ -200,7 +201,4 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-MlAppInternalMyTaskList.contextTypes = {
-  taskStatus: PropTypes.object,
-};
 

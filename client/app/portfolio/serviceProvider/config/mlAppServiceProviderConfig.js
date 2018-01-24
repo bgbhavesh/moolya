@@ -22,7 +22,7 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
   header: true,
   headerComponents:{
     filter: true,
-    filterComponent: <MlAppFilterContainer />,
+    filterComponent: <MlAppFilterContainer type="SPS"/>,
     filterData: filterData,
     alphabeticSearch: true,
     alphabeticSearchField: "about.aboutTitle",

@@ -23,7 +23,7 @@ export const mlAppStartupConfig = new MlAppViewer({
   header: true,
   headerComponents:{
     filter: true,
-    filterComponent: <MlAppFilterContainer />,
+    filterComponent: <MlAppFilterContainer type='STU' />,
     filterData: filterData,
     alphabeticSearch: true,
     alphabeticSearchField: "aboutUs.startupDescription",

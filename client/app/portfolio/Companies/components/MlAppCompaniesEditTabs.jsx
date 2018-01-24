@@ -18,6 +18,7 @@ import MlCompanyRAndD from '../../../../admin/transaction/portfolio/component/Co
 import MlCompanyLookingFor from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyLookingFor'
 import MlCompanyCharts from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyEditCharts";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices'
 
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
@@ -179,6 +180,17 @@ export default class MlAppCompaniesEditTabs extends Component {
                                         getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices myPortfolio={true} createServiceMode={true} client={appClient} isAdmin={false}
+                                     key="10"
+                                     // getServiceDetails={this.getServiceDetails.bind(this)}
+                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
+      } //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+
     ]
     return tabs;
   }

@@ -497,6 +497,7 @@ class MlCronJobControllerClass {
         data: data
       };
       customTemplates.render(absoluteFilePath, context, Meteor.bindEnvironment((err, html, text, subject) => {
+        console.log("err", err);
         emailObject.html = html;
         emailObject.text = text;
         _this.sendHtmlEmail(emailObject);

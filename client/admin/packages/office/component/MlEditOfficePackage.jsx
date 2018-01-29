@@ -8,6 +8,7 @@ import MlActionComponent from "../../../../commons/components/actions/ActionComp
 import MoolyaSelect from '../../../commons/components/MlAdminSelectWrapper'
 import {fetchOfficePackageHandler, updateOfficePackageHandler} from '../actions/officePackageHandler'
 import {mlFieldValidations} from "../../../../commons/validations/mlfieldValidation"
+import {initalizeFloatLabel} from "../../../../commons/utils/formElemUtil";
 
 import _ from 'lodash'
 
@@ -41,23 +42,9 @@ class MlEditOfficePackage extends Component{
     this.optionsBySelectServiceCardTypes = this.optionsBySelectServiceCardTypes.bind(this);
     this.optionsBySelectCommunity = this.optionsBySelectCommunity.bind(this);
     this.optionsBySelectApplicableCommunity = this.optionsBySelectApplicableCommunity.bind(this);
-    this.intializeFolatingLabel = this.intializeFolatingLabel.bind(this);
   }
 
   componentDidMount(){}
-
-  intializeFolatingLabel(){
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-  }
 
   componentWillMount() {
     const resp = this.fetchOfficePackageDetails();
@@ -138,7 +125,7 @@ class MlEditOfficePackage extends Component{
         isOthers: response.isOthers,
         isActive: response.isActive
       },()=>{
-        this.intializeFolatingLabel();
+        initalizeFloatLabel();
       })
     }
 

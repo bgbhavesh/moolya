@@ -41,9 +41,12 @@ class MlEditOfficePackage extends Component{
     this.optionsBySelectServiceCardTypes = this.optionsBySelectServiceCardTypes.bind(this);
     this.optionsBySelectCommunity = this.optionsBySelectCommunity.bind(this);
     this.optionsBySelectApplicableCommunity = this.optionsBySelectApplicableCommunity.bind(this);
+    this.intializeFolatingLabel = this.intializeFolatingLabel.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount(){}
+
+  intializeFolatingLabel(){
     $(function() {
       $('.float-label').jvFloat();
     });
@@ -74,7 +77,6 @@ class MlEditOfficePackage extends Component{
     var officePackageId = this.props.config.officeId;
     var response = await fetchOfficePackageHandler(officePackageId);
     if(response){
-      console.log(response)
       this.refs.serviceCardName.value  = response.serviceCardName;
       this.refs.displayName.value = response.displayName;
       this.refs.isMoolya.checked = response.isMoolya;
@@ -135,6 +137,8 @@ class MlEditOfficePackage extends Component{
         isMoolya: response.isMoolya,
         isOthers: response.isOthers,
         isActive: response.isActive
+      },()=>{
+        this.intializeFolatingLabel();
       })
     }
 

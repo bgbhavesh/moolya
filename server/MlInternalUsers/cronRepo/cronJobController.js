@@ -1,4 +1,5 @@
 import EmailTemplates from 'swig-email-templates'; 
+import path from "path";
 import { remove, compact } from 'lodash';
 const fromEmail = Meteor.settings.private.fromEmailAddr; 
 
@@ -492,11 +493,16 @@ class MlCronJobControllerClass {
           cache:false
         }
       });
-      var absoluteFilePath = Npm.require('fs').realpathSync(process.cwd() + '/../../../../..') + '/server/MlInternalUsers/cronRepo/cronMoolyaReport.html';
+    //   path.resolve(__dirname, '../client/index.html')
+    //   var absoluteFilePath = Npm.require('fs').realpathSync(process.cwd() + '/../../../../..') + '/server/MlInternalUsers/cronRepo/cronMoolyaReport.html';
+    //   const absoluteFilePath = path.resolve('/public/html/cronMoolyaReport.html');
+      const absoluteFilePath = Assets.absoluteFilePath('report/cronMoolyaReport.html');
       var context = {
         data: data
       };
+      console.log("absoluteFilePath", absoluteFilePath);
       customTemplates.render(absoluteFilePath, context, Meteor.bindEnvironment((err, html, text, subject) => {
+        console.log("err", err);
         emailObject.html = html;
         emailObject.text = text;
         _this.sendHtmlEmail(emailObject);
@@ -505,13 +511,13 @@ class MlCronJobControllerClass {
 
     sendHtmlEmail(emailObject) {
       if (Meteor.settings.public.instance != "DEV") {
-        console.log("cron sending mail");
+        console.log("cron sending mail>>>>>>>>>>>>>.", emailObject.html);
         Meteor.setTimeout(function () {
           mlEmail.sendHtml({
             from: fromEmail,
             to: "rudra.pratap@raksan.in",
             cc: "vishwadeep.kapoor@raksan.in",
-            subject: "moolya daily monitoring report",
+            subject: "moolya daily monitoring report instance "+(Meteor.settings.public.instance),
             html: emailObject.html
           });
         }, 2 * 1000);

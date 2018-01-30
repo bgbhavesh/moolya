@@ -4,6 +4,9 @@ import _ from 'lodash'
 import MlAdminContextQueryConstructor from '../core/repository/mlAdminContextQueryConstructor';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 
+/**
+ * @note [fetchAppMapData] for map used in "externalUserResolver.js"
+ */
 MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};

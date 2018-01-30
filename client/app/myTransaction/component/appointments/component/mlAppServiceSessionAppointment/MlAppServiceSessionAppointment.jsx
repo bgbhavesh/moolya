@@ -21,6 +21,9 @@ export default class MlAppServiceSessionAppointment extends Component {
       showSession: false,
       loadingSlots: false,
       validTill:"",
+      clientName:"",
+      startDate:"",
+      endDate:"",
       data: {
         appointmentInfo: {},
         client: {},
@@ -119,10 +122,14 @@ export default class MlAppServiceSessionAppointment extends Component {
         data.availableSlots = availableSlots ? availableSlots : [];
         this.setState({
           data,
-          loadingSlots: false
+          loadingSlots: false,
+          clientName: data.client.name,
+          startDate: data.startDate,
+          endDate: data.endDate,
         });
       }
     }
+    this.forceUpdate();
   }
 
   render() {
@@ -304,7 +311,13 @@ export default class MlAppServiceSessionAppointment extends Component {
                   appointmentId: this.state.orderId,
                   resourceId: this.state.data.appointmentInfo.taskId,
                   sessionId: this.state.data.appointmentInfo.sessionId
-                }} />
+                }} 
+                data = {{
+                  client: this.state.clientName,
+                  endDate: this.state.endDate,
+                  startDate:this.state.startDate
+                }} 
+                />
               </div>
               <div className="tab-pane" id={`${this.state.orderId}4a`}>
                 <div className="row">

@@ -93,13 +93,14 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$lookup':{ from: 'mlOfficeSCDef', localField: 'officeSC.scDefId', foreignField: '_id', as: 'officeSCDef'}},
     {'$unwind':'$officeSCDef'}
   ];
-  let result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
+  let _result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
+  let result = Object.assign({},_result);
   if(result && result.length>0){
     result.map((obj)=>{
       if(obj.office && obj.office.country){
         let clusterData = mlDBController.findOne('MlClusters', {_id:obj.office.country});
         obj.office.country='';
-        if(clusterData.countryName){
+        if(clusterData && clusterData.countryName){
           obj.office.country = clusterData.countryName;
         }
       }

@@ -32,7 +32,9 @@ export default class MlInstitutionInformation extends Component{
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.information)
     const editorValue = createValueFromString(this.context.institutionPortfolio && this.context.institutionPortfolio.information ? this.context.institutionPortfolio.information.informationDescription : null);
     if (!empty) {
-      this.setState({ loading: false, data: this.context.institutionPortfolio.information, editorValue });
+      this.setState({ loading: false, data: this.context.institutionPortfolio.information, editorValue }, () => {
+        this.lockPrivateKeys();
+      });
     } else {
       this.setState({ loading: false }, () => {
         this.lockPrivateKeys();

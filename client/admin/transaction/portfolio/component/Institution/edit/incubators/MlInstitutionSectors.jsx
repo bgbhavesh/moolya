@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
+import _ from 'lodash';
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "sectorsAndServices"
@@ -29,7 +30,7 @@ export default class MlInstitutionSectors extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
   // componentWillMount(){
   //   let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts)
@@ -44,22 +45,27 @@ export default class MlInstitutionSectors extends React.Component{
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.sectorsAndServices)
-    if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
+    if(empty){   
       if (response && response.sectorsAndServices) {
         const editorValue = createValueFromString(response && response.sectorsAndServices && response.sectorsAndServices.sectorsAndServicesDescription ? response.sectorsAndServices.sectorsAndServicesDescription : null);
         var object = response.sectorsAndServices;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
+        this.setState({ loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue }, () => {
+          this.lockPrivateKeys()
+        });
       }else{
         this.setState({loading:false})
       }
     }else{
       const editorValue = createValueFromString(that.context.institutionPortfolio.sectorsAndServices && that.context.institutionPortfolio.sectorsAndServices.sectorsAndServicesDescription ? that.context.institutionPortfolio.sectorsAndServices.sectorsAndServicesDescription : null);
-      this.setState({loading: false, data: that.context.institutionPortfolio.sectorsAndServices,editorValue});
+      this.setState({ loading: false, data: that.context.institutionPortfolio.sectorsAndServices, privateValues: response.sectorsAndServices.privateFields, editorValue}, () => {
+        this.lockPrivateKeys()
+      });
+      // this.setState({loading: false, data: that.context.institutionPortfolio.sectorsAndServices,editorValue});
     }
-    this.updatePrivateKeys()
+    // this.updatePrivateKeys()
   }
 
   handleBlur(value,keyName){
@@ -83,32 +89,33 @@ export default class MlInstitutionSectors extends React.Component{
     this.props.getSectors(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate,tabName: this.props.tabName}
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
-
-  updatePrivateKeys(){
-    let response = this.state.data
-    _.each(response.privateFields, function (pf) {
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
-
-
+  // updatePrivateKeys(){
+  //   let response = this.state.data
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
   render(){
     let that = this;
     const showLoader = that.state.loading;
@@ -146,4 +153,5 @@ export default class MlInstitutionSectors extends React.Component{
 }
 MlInstitutionSectors.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

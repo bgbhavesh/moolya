@@ -27,6 +27,7 @@ export default class MlAppTaskMyAppointmentBasicInfo extends Component {
 
   componentDidMount() {
     // $('.float-label').jvFloat();
+    console.log("this.props", this.props);
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
   }
@@ -120,7 +121,7 @@ export default class MlAppTaskMyAppointmentBasicInfo extends Component {
                 <div className="form-group">
                   <Select name="form-field-name"
                           options={this.options}
-                          value={task.sessionFrequency}
+                          defaultValue={task.sessionFrequency ? task.sessionFrequency: ''}
                           placeholder='Frequency Type'
                           disabled />
                 </div>

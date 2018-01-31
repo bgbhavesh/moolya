@@ -1390,6 +1390,8 @@ MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, cont
         "paymentStatus": 1,
         "createdAt": 1,
         "appointmentInfo": 1,
+        "startDate":1,
+        "endDate":1,
         "owner": {
           "userId": "$owner.userId",
           "profileId": "$owner.profileId",

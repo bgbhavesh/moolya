@@ -157,7 +157,7 @@ export default class MlAppBSpokeOfficeDetails extends Component {
                     <div className="panel-heading"> Subscription: Basic Office</div>
                     <div className="panel-body">
                       <div className="col-lg-6 col-md-6 col-sm-12 nopadding-left">
-                        <p>Total Users: {props.teamUserCount}</p>
+                        <p>Total Users: {props.totalCount}</p>
                       </div>
                       <div className="clearfix"></div>
                       <div className="col-lg-6 col-md-6 col-sm-12 nopadding-left">

@@ -93,8 +93,8 @@ export default class MlAppFilterContainer extends Component {
     const that = this;
     const propsFilterData = this.props.filterData;
     let filterData = JSON.parse(JSON.stringify(propsFilterData));
-  
-    if(this.props.type === "IDE" || this.props.type === "INS" || this.props.type === "CMP" ){
+
+    if(this.props.type === "IDE" || this.props.type === "CMP" ){
       filterData = _.without(filterData, _.findWhere(filterData, {
         field: "userType",
       }));
@@ -109,6 +109,12 @@ export default class MlAppFilterContainer extends Component {
     if(this.props.type === "IDE" || this.props.type === "FUN" || this.props.type === "SPS" || this.props.type === "CMP" || this.props.type === "INS"){
       filterData = _.without(filterData, _.findWhere(filterData, {
         field: "businessType",
+      }));
+    }
+
+    if(this.props.type === "INS" ){
+      filterData = _.without(filterData, _.findWhere(filterData, {
+        field: "subDomainId",
       }));
     }
 
@@ -129,11 +135,11 @@ export default class MlAppFilterContainer extends Component {
           }
         }
       }
-     
+
       return filter;
     });
 
-    
+
     return (
       <div className="filter_table filter_hide">
         <div className="panel panel-default">

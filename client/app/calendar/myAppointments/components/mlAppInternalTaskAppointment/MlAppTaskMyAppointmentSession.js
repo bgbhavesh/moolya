@@ -18,7 +18,7 @@ export default class MlAppTaskMyAppointmentSession extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount() { 
     initalizeFloatLabel();
     let mySwiper = new Swiper('.manage_tasks', {
       speed: 400,
@@ -137,16 +137,16 @@ export default class MlAppTaskMyAppointmentSession extends Component {
                   <div className="col-md-3 nopadding text-center">
                     <img src={user.profileImage ? generateAbsolutePath(user.profileImage) : '/images/img2.png'} className="image" />
                     <div className="">
-                      <span>{`${user.firstName} ${user.lastName}`}</span>
+                      <span>{`${this.props.data.client}`}</span>
                     </div>
                   </div>
                   <div className="col-md-9">
                     <br />
                     <div className="form-group">
-                      <input className="form-control float-label" type="text" placeholder="Start Date Time" defaultValue={data.startDate ? new Moment(data.startDate).format('MM-DD-YYYY HH:mm:ss') : ''} id="" disabled />
+                      <input className="form-control float-label" type="text" placeholder="Start Date Time" defaultValue={this.props.data.startDate ? new Moment(this.props.data.startDate).format('MM-DD-YYYY HH:mm:ss') : ''} id="" disabled />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="End Date Time" defaultValue={data.endDate ? new Moment(data.endDate).format('MM-DD-YYYY HH:mm:ss') : ''} className="form-control float-label" id="" disabled />
+                      <input type="text" placeholder="End Date Time" defaultValue={this.props.data.endDate ? new Moment(this.props.data.endDate).format('MM-DD-YYYY HH:mm:ss') : ''} className="form-control float-label" id="" disabled />
                     </div>
                   </div>
                 </div>

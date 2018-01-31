@@ -63,7 +63,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlInstitutionEvolution client={client} isAdmin={true} key="1"  getInstitutionEvolution={this.getInstitutionEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlInstitutionEvolution client={client} isAdmin={true} key="1"  getInstitutionEvolution={this.getInstitutionEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="evolution"/> },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',

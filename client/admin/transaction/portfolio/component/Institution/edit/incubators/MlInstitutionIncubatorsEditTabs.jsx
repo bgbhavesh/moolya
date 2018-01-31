@@ -64,9 +64,9 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlInstitutionStartupIncubators client={client} isAdmin={true} key="1"  getStartupIncubators={this.getStartupIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlInstitutionSectors key="2" getSectors={this.getSectors.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlInstitutionListOfIncubators client={client} isAdmin={true} key="3" getListOfIncubators={this.getListOfIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlInstitutionStartupIncubators client={client} isAdmin={true} key="1"  getStartupIncubators={this.getStartupIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="institutionIncubators"/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlInstitutionSectors key="2" getSectors={this.getSectors.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="sectorsAndServices" />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlInstitutionListOfIncubators client={client} isAdmin={true} key="3" getListOfIncubators={this.getListOfIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="listOfIncubators" />},
     ]
     return tabs;
   }

@@ -347,7 +347,6 @@ export default class MlInstitutionEditTab extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp

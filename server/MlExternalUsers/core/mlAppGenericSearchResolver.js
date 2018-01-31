@@ -89,9 +89,9 @@ MlResolver.MlUnionResolver.AppGenericSearchUnion = {
 MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
 
   const filterQuery = args.queryProperty && args.queryProperty.filterQuery ? JSON.parse(args.queryProperty.filterQuery) : {};
- 
+
   //const filterQuery = { clusterId: { '$in': [ 'hwzPbwq5saa6LuhHDa' ] } }
- 
+
   const searchText = args.queryProperty && args.queryProperty.searchText ? args.queryProperty.searchText : '';
   const searchFields = args.queryProperty && args.queryProperty.searchFields ? args.queryProperty.searchFields : [];
   const alphabeticSearch = args.queryProperty && args.queryProperty.alphabeticSearch ? JSON.parse(args.queryProperty.alphabeticSearch) : {};
@@ -184,8 +184,11 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           lastName: '$user.profile.lastName',
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
+          subChapterId: '$port.subChapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          subDomainId: '$port.subDomainId',
+          userType: '$port.userType',
           profileImage: '$user.profile.profileImage',
           subChapterName: '$subChapter.subChapterName',
           isDefaultSubChapter: '$subChapter.isDefaultSubChapter',
@@ -236,8 +239,11 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           lastName: '$user.profile.lastName',
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
+          subChapterId: '$port.subChapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          subDomainId: '$port.subDomainId',
+          userType: '$port.userType',
           profileImage: '$user.profile.profileImage',
           subChapterName: '$subChapter.subChapterName',
           isDefaultSubChapter: '$subChapter.isDefaultSubChapter',
@@ -402,8 +408,13 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           lastName: '$user.profile.lastName',
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
+          subChapterId: '$port.subChapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          subDomainId: '$port.subDomainId',
+          businessType: '$port.businessType',
+          stageOfCompany: '$port.stageOfCompany',
+          userType: '$port.userType',
           profileImage: '$user.profile.profileImage',
           likes: { $size: '$likes' },
           connections: { $size: '$connection' },
@@ -495,8 +506,10 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
           subChapterId: '$port.subChapterId',
+          subDomainId: '$port.subDomainId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          userType: '$port.userType',
           profileImage: '$user.profile.profileImage',
           subChapterName: '$subChapter.subChapterName',
           isDefaultSubChapter: '$subChapter.isDefaultSubChapter',
@@ -504,7 +517,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
       },
       { $match: { $and: [searchQuery, filterQuery, alphabeticSearch] } },
     ];
-  
+
       data = mlDBController.aggregate('MlIdeas', pipeline, context);
     count = data.length;
   } else if (args.module == 'institutionPortfolioDetails') {
@@ -626,8 +639,11 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           lastName: '$user.profile.lastName',
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
+          subChapterId: '$port.subChapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          subDomainId: '$port.subDomainId',
+          userType: '$port.userType',
           profileImage: '$user.profile.profileImage',
           likes: { $size: '$likes' },
           connections: { $size: '$connection' },
@@ -760,9 +776,12 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           lastName: '$user.profile.lastName',
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
+          subChapterId: '$port.subChapterId',
           communityCode: '$port.communityCode',
           profileImage: '$user.profile.profileImage',
           industryId: '$port.industryId',
+          subDomainId: '$port.subDomainId',
+          userType: '$port.userType',
           likes: { $size: '$likes' },
           connections: { $size: '$connection' },
           views: { $size: '$views' },

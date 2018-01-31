@@ -391,8 +391,12 @@ export default class IdeatorIndividualComponent extends React.Component{
         }
         }
      `;
+    let subDomainQuery = gql`query($industryId: String){
+      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    }
+    `;
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
-
+    let subDomainOption={options: { variables: {industryId:this.props.registrationInfo&&this.props.registrationInfo.industry?this.props.registrationInfo.industry:null}}};
     let that=this;
     let dateofbirthActive ='', employementdateActive =''
     if(that.state.dateOfBirth){

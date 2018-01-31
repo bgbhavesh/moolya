@@ -35,12 +35,17 @@ export default class MapDetails extends Component {
         title = "Service P"
       }else {
 
-        switch(m.key){
+        switch (m.key) {
           case "cluster":
             title = "Chapters"
             break;
           case "chapter":
             title = "Sub Chapters"
+            break;
+          case "accelerator":
+          case "incubator":
+          case "co_working":
+            title = m.key
             break;
         }
       }

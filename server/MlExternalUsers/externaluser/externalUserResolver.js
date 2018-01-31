@@ -593,7 +593,6 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           relatedChapterId = _.uniq(relatedChapterId);
       }
   }
-  console.log(args.moduleName)
   switch(args.moduleName){
       case "cluster":
           moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
@@ -609,7 +608,6 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               chapterCount = mlDBController.find('MlChapters', {clusterId:args.id, isActive:true, _id:{$in:relatedChapterId}}, context).count();
               query={"clusterId":args.id, isActive:true, "chapterId":{$in:relatedChapterId}, "subChapterId":{$in:relatedSubChapterIds}};
           }
-          console.log("query.subChapterId", query.subChapterId);
           break;
       case "chapter":
           moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
@@ -631,7 +629,6 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               query={$or:[{"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, "subChapterId":{$in:relatedSubChapterIds}}, {"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, isDefaultSubChapter:true}]};
           }
 
-          console.log("query.subChapterId", query.subChapterId);
           break;
       case "subChapter":
           moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
@@ -647,16 +644,12 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   }
   query.isActive=true;
 
-  // console.log("query....................", query);
   let response=[];
-
-  // let communityData= mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch(); 
   const communityData = mlDBController.find('MlCommunityDefinition', { isActive: true, code: { "$nin": ["OFB", "BRW"] } }, context).fetch();
 
   _.each(communityData,function (item,value) {
       query.communityDefName = item.name;
       query.isApprove=true;
-      // if(item.communityImageLink!="ml my-ml-browser_5" && item.communityImageLink!="ml ml-moolya-symbol"){
 
           var queryObj = query;
           var pipeline=[
@@ -678,7 +671,6 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
                   pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})
               }
           }
-          // console.log("console.log(query);", query);
           let users=mlDBController.aggregate('users',pipeline,context);
 
           response.push({
@@ -686,7 +678,6 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
             count:users.length,
             icon: item.communityImageLink
           })
-      // }
   });
 
   let TU = _.map(response, 'count');
@@ -707,13 +698,36 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
     })
   }
 
+  const categoryData = getCategoryData(args.moduleName, args.id);
+  if (categoryData.length)
+    response = response.concat(categoryData[0].userCategory);
   return response;
 };
 
-//todo: switch case to handle all conditions for different context
+
+/**
+ * @function getCategoryData
+ * @param {*["cluster", "chapter"]} type 
+ * @param {*typeId} id 
+ * @note expected drill down to be only two level
+ * @todo {*Accelerator, Incubator, Co-Working Space} $userCategory.userTypeName
+ *       need to find in the lowerCase
+ */
 const getCategoryData = (type, id) => {
-  return [
-    { $match: { clusterId: cId } },
+  let typeQuery = {};
+  switch (type) {
+    case "cluster":
+      typeQuery = { clusterId: id, isActive: true }
+      break;
+    case "chapter":
+      typeQuery = { chapterId: id, isActive: true }
+      break;
+    default:
+      return [];
+  }
+
+  const pipeline = [
+    { $match: typeQuery },
     { $lookup: { from: "mlUserTypes", localField: "userCategoryId", foreignField: "_id", as: "userCategory" } },
     { $unwind: { path: "$userCategory", preserveNullAndEmptyArrays: true } },
     {
@@ -736,6 +750,24 @@ const getCategoryData = (type, id) => {
           $sum: { $cond: [{ $eq: ["$userCategory.userTypeName", "Co-Working Space"] }, 1, 0] }
         }
       }
-    }
-  ]
+    },
+    {
+      $addFields: {
+        userCategory: [
+          { key: "accelerator", count: "$accelerator", icon: "ml my-ml-chapter" },
+          { key: "incubator", count: "$incubator", icon: "ml my-ml-chapter" },
+          { key: "co_working", count: "$co_working", icon: "ml my-ml-chapter" }]
+      }
+    },
+    { $project: { userCategory: 1 } }
+  ];
+
+  const data = mlDBController.aggregate('MlSubChapters', pipeline);
+  const emptyCategoryAry = [{
+    userCategory: [
+      { key: "accelerator", count: 0, icon: "ml my-ml-chapter" },
+      { key: "incubator", count: 0, icon: "ml my-ml-chapter" },
+      { key: "co_working", count: 0, icon: "ml my-ml-chapter" }]
+  }]
+  return data.length ? data : emptyCategoryAry;
 }

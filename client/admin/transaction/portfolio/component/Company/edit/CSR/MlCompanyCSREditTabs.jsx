@@ -60,7 +60,7 @@ export default class MlCompanyCSREditTabs extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlCompanyEvolution client={client} isAdmin={true} key="1"  getEvolution={this.getEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlCompanyEvolution client={client} isAdmin={true} key="1"  getEvolution={this.getEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="evolution"/> },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
@@ -69,7 +69,7 @@ export default class MlCompanyCSREditTabs extends React.Component{
                                          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports", component:<MlCompanyCSRReports client={client} isAdmin={true} key="4" getReports={this.getReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlCompanyPolicy client={client} isAdmin={true} key="3" getPolicy={this.getPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlCompanyPolicy client={client} isAdmin={true} key="3" getPolicy={this.getPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="policy" />},
     ]
     return tabs;
   }

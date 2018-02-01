@@ -55,7 +55,7 @@ export default class MlAppFilterContainer extends Component {
   }
 
   updateFilterQuery(value, filter,type){
-
+  
       let filterQuery = this.state.filterQuery;
       let selectedList =  this.state.selectedList
       if(value && !(type == "MULTISELECT")){
@@ -64,6 +64,9 @@ export default class MlAppFilterContainer extends Component {
       }else if(value && value.length && type == "MULTISELECT"){
         filterQuery[filter] = {$in : value}
         selectedList[filter] = value
+      }else if(value && !value.length){
+        selectedList[filter] = []
+        delete filterQuery[filter];
       }else {
         delete filterQuery[filter];
       }

@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
+import _ from 'lodash';
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "policy"
@@ -30,7 +31,7 @@ export default class MlCompanyPolicy extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
   // componentWillMount(){
   //   let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts)
@@ -45,20 +46,24 @@ export default class MlCompanyPolicy extends React.Component{
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.policy)
-    if(empty){
-      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+    if(empty){   
       if (response && response.policy) {
         const editorValue = createValueFromString(response && response.policy && response.policy.policyDescription ? response.policy.policyDescription : null);
         var object = response.policy;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
+        this.setState({ loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue }, () => {
+          this.lockPrivateKeys()
+        });
       }else{
         this.setState({loading:false})
       }
     }else{
       const editorValue = createValueFromString(that.context.companyPortfolio.policy && that.context.companyPortfolio.policy.policyDescription ? that.context.companyPortfolio.policy.policyDescription : null);
-      this.setState({loading: false, data: that.context.companyPortfolio.policy,editorValue});
+      this.setState({ loading: false, data: that.context.companyPortfolio.policy, privateValues: response.policy.privateFields, editorValue }, () => {
+        this.lockPrivateKeys()
+      });
     }
   }
 
@@ -88,18 +93,30 @@ export default class MlCompanyPolicy extends React.Component{
     if(className.indexOf("fa-lock") != -1){
       isPrivate = true
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate};
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate,tabName: this.props.tabName};
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
-  updatePrivateKeys(){
-    let response = this.state.data
-    _.each(response.privateFields, function (pf) {
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
+
+  // updatePrivateKeys(){
+  //   let response = this.state.data
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
 
 
   render(){
@@ -137,4 +154,5 @@ export default class MlCompanyPolicy extends React.Component{
 }
 MlCompanyPolicy.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

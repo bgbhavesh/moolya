@@ -7,6 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formE
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
+import _ from 'lodash';
 const KEY = "institutionIncubators"
 
 export default class MlInstitutionStartupIncubators extends React.Component{
@@ -30,7 +31,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
   // componentWillMount(){
   //   let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts)
@@ -45,21 +46,25 @@ export default class MlInstitutionStartupIncubators extends React.Component{
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.institutionIncubators)
-    if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
+    if(empty){   
       if (response && response.institutionIncubators) {
-        const editorValue = createValueFromString(response.institutionIncubators.institutionIncubatorsDescription);
+        const editorValue = createValueFromString(response && response.institutionIncubators && response.institutionIncubators.institutionIncubatorsDescription ? response.institutionIncubators.institutionIncubatorsDescription : null);
         var object = response.institutionIncubators;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
+        this.setState({ loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue }, () => {
+          this.lockPrivateKeys()
+        });
       }else{
         this.setState({loading:false})
       }
-    }else{  const editorValue = createValueFromString(that.context.institutionPortfolio.institutionIncubators.institutionIncubatorsDescription);
-      this.setState({loading: false, data: that.context.institutionPortfolio.institutionIncubators,editorValue});
+    }else{  const editorValue = createValueFromString(that.context.institutionPortfolio.institutionIncubators && that.context.institutionPortfolio.institutionIncubators.institutionIncubatorsDescription ? that.context.institutionPortfolio.institutionIncubators.institutionIncubatorsDescription : null);
+      this.setState({ loading: false, data: that.context.institutionPortfolio.institutionIncubators, privateValues: response.institutionIncubators.privateFields, editorValue }, () => {
+        this.lockPrivateKeys()
+      });
     }
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
 
   handleBlur(value,keyName){
@@ -83,32 +88,33 @@ export default class MlInstitutionStartupIncubators extends React.Component{
     this.props.getStartupIncubators(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+   const privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate,tabName: this.props.tabName}
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
-
-  updatePrivateKeys(){
-    let response = this.state.data
-    _.each(response.privateFields, function (pf) {
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
-
-
+  // updatePrivateKeys(){
+  //   let response = this.state.data
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
   render(){
     let that = this;
     const showLoader = that.state.loading;
@@ -121,9 +127,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
           <div className="row">
             <h2>Startup Incubators</h2>
             <div className="panel panel-default panel-form">
-
               <div className="panel-body">
-
                 <div className="form-group nomargin-bottom">
                   {/* <textarea placeholder="Describe..." name="institutionIncubatorsDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.institutionIncubatorsDescription} onBlur={this.handleBlur.bind(this)}></textarea> */}
                   <MlTextEditor
@@ -132,11 +136,8 @@ export default class MlInstitutionStartupIncubators extends React.Component{
                     />
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInstitutionIncubatorsPrivate" defaultValue={this.state.data&&this.state.data.isInstitutionIncubatorsPrivate} onClick={this.onLockChange.bind(this, "institutionIncubatorsDescription", "isInstitutionIncubatorsPrivate")}/>
                 </div>
-
               </div>
             </div>
-
-
           </div>
         </div>
       </div>)}
@@ -146,4 +147,5 @@ export default class MlInstitutionStartupIncubators extends React.Component{
 }
 MlInstitutionStartupIncubators.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

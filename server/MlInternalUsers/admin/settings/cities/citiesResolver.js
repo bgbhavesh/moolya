@@ -108,9 +108,11 @@ MlResolver.MlQueryResolver['fetchCitiesPerStates'] = (obj, args, context, info) 
     let resp;
     if(args.stateIds[0] && args.stateIds.indexOf('all') >= 0 ) {
       resp = mlDBController.find('MlCities', {"isActive":true, "countryId":args.countryId}, context).fetch()
+      if(resp.length) resp.push({"name" : "All","_id" : "all"})
     } else {
       // let resp = MlCities.find({"stateId":args.stateId,"isActive":true}).fetch()
       resp = mlDBController.find('MlCities', {"stateId": { "$in": args.stateIds },"isActive":true}, context).fetch()
+      if(resp.length) resp.push({"name" : "All","_id" : "all"})
     }
     return resp;
   }

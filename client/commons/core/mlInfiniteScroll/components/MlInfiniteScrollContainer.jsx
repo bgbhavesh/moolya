@@ -36,7 +36,7 @@ export default class MlInfiniteScrollContainer extends Component {
 
   componentWillMount() {
     let WinHeight = $(window).height();
-    $('.infinite_scroll').height(WinHeight-(210+$('.app_header').outerHeight(true)));
+    //$('.infinite_scroll').height(WinHeight-(210+$('.app_header').outerHeight(true)));
   }
 
 
@@ -67,7 +67,6 @@ export default class MlInfiniteScrollContainer extends Component {
     if(props.sort) {
       options.queryProperty['sortBy'] = props.sortBy;
     }
-    console.log(options);
     this.props.fetchMore(options, isReset);
   }
 

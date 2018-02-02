@@ -1,36 +1,33 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import { connect } from 'react-redux';
 import ScrollArea from "react-scrollbar";
+import _ from 'lodash';
+var FontAwesome = require('react-fontawesome');
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-var FontAwesome = require('react-fontawesome');
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
-import _ from 'lodash'
-var Select = require('react-select');
 import Confirm from '../../../../../../../commons/utils/confirm';
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 
 const KEY = 'aboutUs'
 
-class MlStartupAboutUs extends React.Component{
-  constructor(props, context){
+class MlStartupAboutUs extends Component{
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
-      privateKey:{},
-      data:this.props.aboutUsDetails || {},
+      privateKey: {},
+      data: this.props.aboutUsDetails || {},
       editorValue: createValueFromString(this.props.aboutUsDetails ? this.props.aboutUsDetails.startupDescription : null)
     }
-
     this.handleBlur = this.handleBlur.bind(this);
     this.fetchOnlyImages.bind(this);
-    this.libraryAction.bind(this);
     return this;
-
   }
+
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
@@ -51,13 +48,18 @@ class MlStartupAboutUs extends React.Component{
     //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     this.fetchOnlyImages()
     // this.lockPrivateKeys()
-    // this.props.getStartupAboutUs(this.state.data)    
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
     const editorValue = createValueFromString(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs ? this.context.startupPortfolio.aboutUs.startupDescription : null);
     if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.aboutUs,editorValue});
+      this.setState({ loading: false, data: this.context.startupPortfolio.aboutUs, editorValue }, () => {
+        this.lockPrivateKeys();
+      });
+    }else{
+      this.setState({ loading: false }, () => {
+        this.lockPrivateKeys();
+      })
     }
   }
 
@@ -65,28 +67,22 @@ class MlStartupAboutUs extends React.Component{
    * UI creating lock function
    * */
   lockPrivateKeys() {
-    var filterPrivateKeys = _.filter(this.props.keys.privateKeys, { tabName: this.props.tabName })
-    var filterRemovePrivateKeys = _.filter(this.props.keys.removePrivateKeys, { tabName: this.props.tabName })
-    var finalKeys = _.unionBy(filterPrivateKeys, this.state.data.privateFields, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssssss', keys)
     _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
-  }
-
   handleBlur(value, keyName){
-    let details =this.state.data;
-    // let name  = e.target.name;
-    // details=_.omit(details,[name]);
-    // details=_.extend(details,{[name]:e.target.value});
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[keyName]: value.toString('html')});
-    this.setState({data:details,editorValue: value}, function () {
+    let details = this.state.data;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [keyName]: value.toString('html') });
+    this.setState({ data: details, editorValue: value }, function () {
       this.sendDataToParent()
     })
   }
@@ -158,26 +154,17 @@ class MlStartupAboutUs extends React.Component{
         })
       }, 10)
     }
-
     this.setState({loading:false})
   }
-  onLockChange(fieldName, field, e){
+
+  onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:this.props.tabName}
-    // this.setState({privateKey:privateKey})
-
-    this.setState({data:details,privateKey:privateKey}, function () {
+    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName }
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
   }
@@ -191,12 +178,11 @@ class MlStartupAboutUs extends React.Component{
         </div>
       )
     }));
-
+    const showLoader = this.state.loading;
     return(
       <div className="requested_input"> 
-      <h2>
-              About Us
-            </h2> 
+        <h2>About Us</h2> 
+        {showLoader === true ? (<MlLoader />) : (
       <div className="main_wrap_scroll">      
         <div className="col-lg-12">
           <div className="row">
@@ -229,9 +215,9 @@ class MlStartupAboutUs extends React.Component{
               </div>
             </div>
 
-          </div> </div>
-        
-      </div>
+            </div>
+          </div>
+      </div>)}
       </div>
     )
   }

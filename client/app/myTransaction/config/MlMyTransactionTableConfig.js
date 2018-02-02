@@ -26,6 +26,8 @@ const mlMyTransactionTableConfig = new MlViewer.View({
   isExpandableRow: (row)=> {
     return true;
   },
+  asyncExpand:true,
+  asyncExpandRowKey:'_id',
   expandComponent: MlGenericTransactionAccordion,
   columns: [
     {dataField: "_id", title: "_id", 'isKey': true, isHidden: true},

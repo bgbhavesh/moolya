@@ -4,7 +4,7 @@ import _ from "lodash";
 import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupManagement from "./MlStartupManagement";
-import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
+import MlStartupAboutUsLandingPage from "./aboutUs/MlStartupAboutUsLandingPage";
 import MlStartupInvestor from "./MlStartupInvestor";
 import MlStartupData from "./MlStartupData";
 import MlStartupAwards from "./MlStartupAwards";
@@ -12,6 +12,7 @@ import MlStartupMCL from "./MlStartupMCL";
 import MlStartupLookingFor from "./MlStartupLookingFor";
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
+import MlFunderServices from "../../Funders/edit/MlFunderServices"
 import {client} from '../../../../../core/apolloConnection'
 
 
@@ -59,7 +60,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "About",
         name: "About",
-        component: <MlStartupAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
+        component: <MlStartupAboutUsLandingPage key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.backClickHandler.bind(this)}/>
       },
@@ -109,7 +110,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Library",
         name: "Library",
-        component: <PortfolioLibrary key="7" client={client} isAdmin={false} client={client}
+        component: <PortfolioLibrary key="7" isAdmin={false} client={client}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
       {
@@ -128,6 +129,13 @@ class MlStartupEditTemplate extends Component {
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} client={client}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      }
 
 
     ]
@@ -137,7 +145,7 @@ class MlStartupEditTemplate extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', 'privateFields']);
     // this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
     this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }

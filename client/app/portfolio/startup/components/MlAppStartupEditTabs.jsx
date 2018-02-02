@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import _ from 'lodash'
 import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlStartupAboutUs from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
+import MlStartupAboutUsLandingPage from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
 import MlStartupManagement from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
 import MlStartupInvestor from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupInvestor";
 import MlStartupData from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupData";
@@ -10,6 +10,7 @@ import MlStartupCharts from "../../../../admin/transaction/portfolio/component/S
 import MlStartupAwards from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupAwards";
 import MlStartupMCL from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupMCL";
 import MlStartupLookingFor from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLookingFor";
+import MlFunderServices from "../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices"
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
@@ -67,7 +68,7 @@ class MlAppStartupEditTabs extends Component {
         panelClassName: 'panel',
         title: "About",
         name: "About",
-        component: <MlStartupAboutUs client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)}
+        component: <MlStartupAboutUsLandingPage client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
       },
@@ -140,6 +141,13 @@ class MlAppStartupEditTabs extends Component {
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      }
     ];
     return tabs;
   }
@@ -147,7 +155,7 @@ class MlAppStartupEditTabs extends Component {
   getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', 'privateFields']);
     this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 

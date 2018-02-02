@@ -215,7 +215,7 @@ MlResolver.MlQueryResolver['getSharedCalendar'] = (obj, args, context, info) => 
     let response = profiles.reduce(function (data ,profile) {
       console.log("Data: ",data);
       let profileId = profile.profileId;
-      console.log("getSharedCalendar", userId, profileId);
+      // console.log("getSharedCalendar", userId, profileId);
       let userCalendar = MlAppointment.getUserCalendar(userId,profileId, args.month, args.year, 1);
       if(data && data.days && data.days.length) {
         let dataDays = data && data.days ? data.days : [];

@@ -30,6 +30,7 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
           showOnMap
           isActive
           isBespokeRegistration
+          userCategoryId
           isBespokeWorkFlow
           associatedObj{
             isActive

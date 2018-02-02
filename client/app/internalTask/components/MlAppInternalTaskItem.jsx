@@ -95,7 +95,7 @@ componentDidMount() {
     if(response.success){
       toastr.success('Task successfully moved to '+ status);
       // toastr.success('Task Updated Successfully');
-      this.props.fetchTaskList();
+      this.props.fetchTaskList(status);
     }
   }
 
@@ -250,7 +250,7 @@ componentDidMount() {
                             <li key={index}>
                               <a href="">
                                 <span></span>
-                                  <img src={ user.profileUrl ? user.profileUrl : "/images/def_profile.png"} /><br />
+                                  <img src={ user.profileUrl ? generateAbsolutePath(user.profileUrl) : "/images/def_profile.png"} /><br />
                                     <div className="tooltiprefer">
                                   <span>{user.name}</span>
                                 </div>

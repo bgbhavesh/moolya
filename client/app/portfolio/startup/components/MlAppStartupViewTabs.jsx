@@ -9,6 +9,7 @@ import MlStartupViewLookingFor from "../../../../admin/transaction/portfolio/com
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import PortfolioLibrary from "../../../../commons/components/portfolioLibrary/PortfolioLibrary";
 import MlStartupViewCharts from "../../../../admin/transaction/portfolio/component/Startup/view/MlStartupViewCharts";
+import MlFunderServices from "../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices"
 import {appClient} from "../../../core/appConnection";
 // import MlStartupViewAboutUs from "../../../admin/transaction/portfolio/component/StartupView/MlStartupViewAboutUs";
 // import MlStartupViewBranches from "../../../admin/transaction/portfolio/component/StartupView/MlStartupViewBranches";
@@ -119,6 +120,13 @@ export default class MlAppStartupViewTabs extends Component {
         component: <MlStartupViewLookingFor key="10" portfolioDetailsId={this.props.portfolioDetailsId}
                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      }
     ]
     return tabs;title
   }

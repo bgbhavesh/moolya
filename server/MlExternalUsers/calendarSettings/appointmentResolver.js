@@ -1140,36 +1140,71 @@ MlResolver.MlQueryResolver['fetchSelfTask'] = (obj, args, context, info) => {
   }
 };
 
-MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, context, info, pipeline) => {
   let orderId = args.orderId;
+  var pipeline = pipeline ? pipeline : serviceTransactionQueryBuilder(orderId, context)
+  var result = mlDBController.aggregate('MlScOrder', pipeline);
+  if (result.length < 1) {
+    pipeline = serviceTransactionQueryBuilder(orderId, context, true);
+    response = fetchTransactionForBookedServices(pipeline);
+    return response;
+  }
+  else {
+    result = JSON.stringify(result);
+    var code = 200;
+    response = new MlRespPayload().successPayload(result, code);
+    return response;
+  }
+};
+
+let fetchTransactionForBookedServices = pipeline => {
+  var result = mlDBController.aggregate('MlScOrder', pipeline);
+  if(result) {
+    result = JSON.stringify(result);
+    let  code = 200;
+    var resp = new MlRespPayload().successPayload(result, code);
+    if(resp)return resp;
+  }
+}
+
+
+let serviceTransactionQueryBuilder = (orderId, context, changeQuery) =>{
+let jsonQuery =  changeQuery ? {"$project": {"task": 0, "isSameSession": 0}} : {
+    "$match": {
+      "$or": [
+        {"appointment.appointmentInfo.serviceOrderId": orderId},
+        {"appointment": {"$exists": false}}
+      ]
+    }
+  }
   let pipeline = [
-    { "$match": { orderId: orderId } },
+    {"$match": {orderId: orderId}},
     {
       "$lookup":
-      {
-        from: "mlServiceCardDefinition",
-        localField: "serviceId",
-        foreignField: "_id",
-        as: "service"
-      }
+        {
+          from: "mlServiceCardDefinition",
+          localField: "serviceId",
+          foreignField: "_id",
+          as: "service"
+        }
     },
-    { "$unwind": "$service" },
-    { "$addFields": { "sessionInfo": "$service.tasks" } },
-    { "$unwind": "$sessionInfo" },
+    {"$unwind": "$service"},
+    {"$addFields": {"sessionInfo": "$service.tasks"}},
+    {"$unwind": "$sessionInfo"},
     {
       "$lookup":
-      {
-        from: "mlTask",
-        localField: "sessionInfo.id",
-        foreignField: "_id",
-        as: "task"
-      }
+        {
+          from: "mlTask",
+          localField: "sessionInfo.id",
+          foreignField: "_id",
+          as: "task"
+        }
     },
-    { "$unwind": "$task" },
-    { "$unwind": "$sessionInfo.sessions" },
-    { "$unwind": "$task.session" },
-    { "$addFields": { "isSameSession": { "$eq": ["$sessionInfo.sessions.id", "$task.session.sessionId"] } } },
-    { "$match": { "isSameSession": true } },
+    {"$unwind": "$task"},
+    {"$unwind": "$sessionInfo.sessions"},
+    {"$unwind": "$task.session"},
+    {"$addFields": {"isSameSession": {"$eq": ["$sessionInfo.sessions.id", "$task.session.sessionId"]}}},
+    {"$match": {"isSameSession": true}},
     {
       "$addFields": {
         "sessionInfo.duration": "$task.session.duration",
@@ -1183,31 +1218,24 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
         }
       }
     },
-    { "$project": { "task": 0, "isSameSession": 0 } },
+    {"$project": {"task": 0, "isSameSession": 0}},
     {
       "$lookup":
-      {
-        from: "mlAppointments",
-        localField: "sessionInfo.sessions.id",
-        foreignField: "appointmentInfo.sessionId",
-        as: "appointment"
-      }
+        {
+          from: "mlAppointments",
+          localField: "sessionInfo.sessions.id",
+          foreignField: "appointmentInfo.sessionId",
+          as: "appointment"
+        }
     },
     {
       "$unwind":
-      {
-        path: "$appointment",
-        preserveNullAndEmptyArrays: true
-      }
+        {
+          path: "$appointment",
+          preserveNullAndEmptyArrays: true
+        }
     },
-    {
-      "$match": {
-        "$or": [
-          { "appointment.appointmentInfo.serviceOrderId": orderId },
-          { "appointment": { "$exists": false } }
-        ]
-      }
-    },
+    jsonQuery,
     {
       "$addFields": {
         "sessionInfo.status": "$appointment.status",
@@ -1217,20 +1245,20 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
     {
       "$group": {
         "_id": "$_id",
-        "orderId": { "$first": "$orderId" },
-        "serviceId": { "$first": "$serviceId" },
-        "service": { "$first": "$service" },
-        "serviceName": { "$first": "$serviceName" },
-        "amount": { "$first": "$amount" },
-        "tax": { "$first": "$tax" },
-        "discountedAmount": { "$first": "$discountedAmount" },
-        "totalAmount": { "$first": "$totalAmount" },
-        "isActive": { "$first": "$isActive" },
-        "paymentStatus": { "$first": "$paymentStatus" },
-        "createdAt": { "$first": "$createdAt" },
-        "owner": { "$first": "$owner" },
-        "client": { "$first": "$client" },
-        "sessionInfo": { "$push": "$sessionInfo" },
+        "orderId": {"$first": "$orderId"},
+        "serviceId": {"$first": "$serviceId"},
+        "service": {"$first": "$service"},
+        "serviceName": {"$first": "$serviceName"},
+        "amount": {"$first": "$amount"},
+        "tax": {"$first": "$tax"},
+        "discountedAmount": {"$first": "$discountedAmount"},
+        "totalAmount": {"$first": "$totalAmount"},
+        "isActive": {"$first": "$isActive"},
+        "paymentStatus": {"$first": "$paymentStatus"},
+        "createdAt": {"$first": "$createdAt"},
+        "owner": {"$first": "$owner"},
+        "client": {"$first": "$client"},
+        "sessionInfo": {"$push": "$sessionInfo"},
       }
     },
     {
@@ -1241,8 +1269,8 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
         "as": "ownerInfo"
       }
     },
-    { "$unwind": "$ownerInfo" },
-    { "$unwind": "$ownerInfo.profile.externalUserProfiles" },
+    {"$unwind": "$ownerInfo"},
+    {"$unwind": "$ownerInfo.profile.externalUserProfiles"},
     {
       "$lookup": {
         "from": "users",
@@ -1251,15 +1279,15 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
         "as": "clientInfo"
       }
     },
-    { "$unwind": "$clientInfo" },
-    { "$unwind": "$clientInfo.profile.externalUserProfiles" },
+    {"$unwind": "$clientInfo"},
+    {"$unwind": "$clientInfo.profile.externalUserProfiles"},
     {
       "$addFields": {
-        "isSameOwnerProfile": { "$eq": ["$ownerInfo.profile.externalUserProfiles.profileId", "$owner.profileId"] },
-        "isSameClientProfile": { "$eq": ["$clientInfo.profile.externalUserProfiles.profileId", "$client.profileId"] }
+        "isSameOwnerProfile": {"$eq": ["$ownerInfo.profile.externalUserProfiles.profileId", "$owner.profileId"]},
+        "isSameClientProfile": {"$eq": ["$clientInfo.profile.externalUserProfiles.profileId", "$client.profileId"]}
       }
     },
-    { "$match": { "isSameOwnerProfile": true, "isSameClientProfile": true } },
+    {"$match": {"isSameOwnerProfile": true, "isSameClientProfile": true}},
     {
       "$project": {
         "_id": 1,
@@ -1302,12 +1330,9 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
       }
     }
   ];
-  let result = mlDBController.aggregate('MlScOrder', pipeline);
-  result = JSON.stringify(result);
-  let code = 200;
-  let response = new MlRespPayload().successPayload(result, code);
-  return response;
+  return pipeline;
 };
+
 
 MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, context, info) => {
   let orderId = args.orderId;
@@ -1365,6 +1390,8 @@ MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, cont
         "paymentStatus": 1,
         "createdAt": 1,
         "appointmentInfo": 1,
+        "startDate":1,
+        "endDate":1,
         "owner": {
           "userId": "$owner.userId",
           "profileId": "$owner.profileId",
@@ -1399,10 +1426,11 @@ MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, cont
   return response;
 };
 
+
 MlResolver.MlMutationResolver["fetchAppAppointmentByTransactionId"] = (obj, args, context, info) => {
-  const result = mlDBController.findOne('MlTransactionsLog', { _id: args.transactionId }, context);
-  if (result.activity === 'Service-Purchased')
-    return MlResolver.MlMutationResolver['fetchAdminServiceAppointment'](obj, { orderId: result.docId }, context, info);
+  const result = mlDBController.findOne('MlTransactionsLog', {_id: args.transactionId}, context);
+  if(result.activity === 'Service-Purchased')
+    return MlResolver.MlMutationResolver['fetchAdminServiceAppointment'](obj, {orderId: result.docId}, context, info);
   else
     return MlResolver.MlMutationResolver['fetchAdminSessionAppointment'](obj, { orderId: result.docId }, context, info);
 };

@@ -22,7 +22,7 @@ import {client} from '../../../../../core/apolloConnection'
 export default class MlServiceProviderEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, serviceProviderPortfolio: {}};
+    this.state = { tabs: [], aboutUs: {}, serviceProviderPortfolio: {}, portfolioKeys: { privateKeys: [], removePrivateKeys: [] } };
     this.getChildContext.bind(this)
     this.getAwardsDetails.bind(this);
     this.getFunderLibrary.bind(this)

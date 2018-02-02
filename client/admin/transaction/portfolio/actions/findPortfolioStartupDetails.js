@@ -93,6 +93,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     keyName,
                     booleanKey
                     tabName
+                    index
                   }
                 }
                 clients{
@@ -119,11 +120,19 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   privateFields{
                     keyName,
                     booleanKey
+                    tabName
+                    index
                   }
                 }
                 information{
                   informationDescription
                   isDescriptionPrivate
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
                 assets{
                   assetTypeName
@@ -139,6 +148,12 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileUrl
                   }
                   index
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
                 branches{
                   addressTypeId
@@ -189,13 +204,31 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileUrl
                   }
                   index
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
                 legalIssue{
                   legalDescription
                   isDescriptionPrivate
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
                 rating{
                   rating
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
             }
           }

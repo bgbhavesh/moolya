@@ -28,6 +28,7 @@ export default class MlInstitutionClients extends Component{
       selectedVal:null,
       selectedObject:"default"
     };
+    this.institutionClientsServer = this.props.clientsDetails || [];
     this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
@@ -53,6 +54,7 @@ export default class MlInstitutionClients extends Component{
     }
   },200);
   }
+
   componentWillMount(){
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.clients)
     if(!empty){
@@ -75,12 +77,30 @@ export default class MlInstitutionClients extends Component{
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
-    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({
+      selectedIndex: index,
+      data: details, selectedObject: uiIndex,
+      popoverOpen: !(this.state.popoverOpen), "selectedVal": details.companyId
+    }, () => {
+      this.lockPrivateKeys(index);
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  lockPrivateKeys(selIndex) {
+    const privateValues = this.institutionClientsServer && this.institutionClientsServer[selIndex]?this.institutionClientsServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e){
@@ -89,7 +109,7 @@ export default class MlInstitutionClients extends Component{
     if(className.indexOf("fa-lock") != -1){
       isPrivate = true
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: KEY }
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -121,9 +141,7 @@ export default class MlInstitutionClients extends Component{
     } else {
       updatedData=_.extend(updatedData,{[key]:false});
     }
-    this.setState({data:updatedData}, function () {
-      // this.sendDataToParent()
-    })
+    this.setState({data:updatedData})
   }
 
   handleBlur(e){
@@ -131,9 +149,7 @@ export default class MlInstitutionClients extends Component{
     let name  = e.target.name;
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
-      // this.sendDataToParent()
-    })
+    this.setState({data:details})
   }
 
   getFieldValidations() {
@@ -172,7 +188,6 @@ export default class MlInstitutionClients extends Component{
     institutionClients = arr;
     this.setState({institutionClients:institutionClients})
     this.props.getInstitutionClients(institutionClients, this.state.privateKey);
-
   }
 
   onLogoFileUpload(e){
@@ -206,8 +221,6 @@ export default class MlInstitutionClients extends Component{
             fileName: file && file.name ? file.name : "",
             fileUrl: result.result
           };
-          // this.setState({loading: true})
-          // this.fetchOnlyImages();
         }
       }
   }
@@ -220,23 +233,6 @@ export default class MlInstitutionClients extends Component{
     } else {
       toastr.success(resp.result)
       return resp;
-    }
-  }
-
-  async fetchOnlyImages(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.clients) {
-      let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.institutionClients
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if(specificData){
-        let curUpload=response.clients[thisState]
-        specificData['logo']= curUpload['logo']
-        this.setState({loading: false, institutionClients:cloneBackUp });
-      }else {
-        this.setState({loading: false})
-      }
     }
   }
 
@@ -329,4 +325,5 @@ export default class MlInstitutionClients extends Component{
 }
 MlInstitutionClients.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys : PropTypes.object
 };

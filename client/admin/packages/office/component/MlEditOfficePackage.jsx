@@ -8,6 +8,7 @@ import MlActionComponent from "../../../../commons/components/actions/ActionComp
 import MoolyaSelect from '../../../commons/components/MlAdminSelectWrapper'
 import {fetchOfficePackageHandler, updateOfficePackageHandler} from '../actions/officePackageHandler'
 import {mlFieldValidations} from "../../../../commons/validations/mlfieldValidation"
+import {initalizeFloatLabel} from "../../../../commons/utils/formElemUtil";
 
 import _ from 'lodash'
 
@@ -43,18 +44,7 @@ class MlEditOfficePackage extends Component{
     this.optionsBySelectApplicableCommunity = this.optionsBySelectApplicableCommunity.bind(this);
   }
 
-  componentDidMount(){
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-  }
+  componentDidMount(){}
 
   componentWillMount() {
     const resp = this.fetchOfficePackageDetails();
@@ -74,7 +64,6 @@ class MlEditOfficePackage extends Component{
     var officePackageId = this.props.config.officeId;
     var response = await fetchOfficePackageHandler(officePackageId);
     if(response){
-      console.log(response)
       this.refs.serviceCardName.value  = response.serviceCardName;
       this.refs.displayName.value = response.displayName;
       this.refs.isMoolya.checked = response.isMoolya;
@@ -135,6 +124,8 @@ class MlEditOfficePackage extends Component{
         isMoolya: response.isMoolya,
         isOthers: response.isOthers,
         isActive: response.isActive
+      },()=>{
+        initalizeFloatLabel();
       })
     }
 

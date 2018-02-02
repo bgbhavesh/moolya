@@ -128,6 +128,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
         duration: service.duration,
         profileId: service.profileId,
         name: service.name,
+        serviceExpiry:service.serviceExpiry||'',
         displayName: service.displayName,
         noOfSession: service.noOfSession,
         sessionFrequency: service.sessionFrequency,
@@ -200,7 +201,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
     remainingDate = isNaN(remainingDate) ? '' : remainingDate;
     data = {
       serviceBasicInfo: serviceBasicInfo,
-      daysRemaining: remainingDate,
+      // daysRemaining: remainingDate,
+      daysRemaining:serviceBasicInfo.serviceExpiry,
       clusterData: clusterData,
       serviceTask: serviceTask,
       serviceTermAndCondition: serviceTermAndCondition,

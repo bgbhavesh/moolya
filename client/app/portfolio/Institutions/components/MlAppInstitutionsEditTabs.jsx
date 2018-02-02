@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import _ from 'lodash'
 import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlInstitutionAboutUs from "../../../../admin/transaction/portfolio/component/Institution/edit/aboutUs/MlInstitutionAboutUsLandingPage"
+import MlInstitutionAboutUsLandingPage from "../../../../admin/transaction/portfolio/component/Institution/edit/aboutUs/MlInstitutionAboutUsLandingPage"
 import MlInstitutionEditManagement from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditManagement"
 import MlInstitutionInvestor from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditInvestor";
 import MlInstitutionData from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditData";
@@ -17,6 +17,7 @@ import MlInstitutionEditPartners from "../../../../admin/transaction/portfolio/c
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/edit/incubators/MlInstitutionIncubatorsEditTabs";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
+import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
 export default class MlAppInstitutionEditTabs extends Component {
@@ -75,7 +76,7 @@ export default class MlAppInstitutionEditTabs extends Component {
         panelClassName: 'panel',
         title: "About",
         name: "About",
-        component: <MlInstitutionAboutUs client={appClient} isAdmin={false} key="1"
+        component: <MlInstitutionAboutUsLandingPage client={appClient} isAdmin={false} key="1"
                                          getAboutus={this.getAboutus.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
                                          backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
@@ -192,7 +193,19 @@ export default class MlAppInstitutionEditTabs extends Component {
                                            getIncubators={this.getIncubators.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}
                                            backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
-      }
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        name: "Services",
+        component: <MlFunderServices myPortfolio={true} createServiceMode={true} client={appClient} isAdmin={false}
+                                     key="10"
+          // getServiceDetails={this.getServiceDetails.bind(this)}
+                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
+      } //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+
+
     ];
     return tabs;
   }
@@ -200,7 +213,7 @@ export default class MlAppInstitutionEditTabs extends Component {
   getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', 'privateFields']);
     this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
   }
 

@@ -1,12 +1,46 @@
 import React, { Component } from 'react'
 import { graphql,compose } from 'react-apollo';
-import MlTableView from "../components/MlTableView"
+import MlTableView from "../components/MlTableView";
+import _ from 'lodash';
 
 const DataComposerType='graphQl';
 export default class  MlTableViewComposer extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      priorityFilter:[]
+    }
+    this.addPriorityFilter = this.addPriorityFilter.bind(this);
   }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.priorityFilter){
+      this.setState({priorityFilter:nextProps.priorityFilter});
+    }
+  }
+
+  addPriorityFilter(fieldsData){
+    if(fieldsData && fieldsData.length &&
+      _.findIndex(fieldsData, function(o) { return o.fieldName == 'status'; })>=0){   //if user uses status filter
+      return fieldsData;
+    }
+
+    if(this.state.priorityFilter){
+      if(fieldsData && fieldsData.length){
+        for(let i=0;i<fieldsData.length;i++){
+          if(fieldsData[i].fieldName === "status"){
+            fieldsData.splice(i,1);
+            i--;
+          }
+        }
+        fieldsData = [...fieldsData, ...this.state.priorityFilter];
+      }else{
+        fieldsData = this.state.priorityFilter;
+      }
+    }
+    return fieldsData;
+  }
+
   render () {
     let config=this.props;
     //note: params are mandatory,if not data will not be fetched
@@ -16,7 +50,7 @@ export default class  MlTableViewComposer extends Component {
         offset: 0,
         limit: 10,    //config.sizePerPage||
         context:null,
-        fieldsData:config.fieldsData||null,
+        fieldsData:this.addPriorityFilter(config.fieldsData)||null,
         sortData:config.sort||null
       }
     };
@@ -37,7 +71,7 @@ export default class  MlTableViewComposer extends Component {
             variables: {
               offset:sizePerPage*(pageNumber-1)||0,
               limit:sizePerPage||10,
-              fieldsData:searchFilter||null,
+              fieldsData:this.addPriorityFilter(searchFilter)||null,
               sortData:sortData||null,
               context:context||null
             },

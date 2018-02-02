@@ -17,12 +17,12 @@ class MlResourceConfigRepo{
           var allowedCommunities = [];
           switch (resource.code){
               case 'OFFICE':{
-                  allowedCommunities = ['FUN']
+                  allowedCommunities = ["CMP",'FUN', "INS", "STU", "SPS"]
               }
               break;
 
               case 'MANAGESCHEDULE':{
-                  allowedCommunities = ['SPS', 'FUN']
+                  allowedCommunities = ["CMP",'FUN', "INS", "STU", "SPS"]
               }
               break;
           }

@@ -23,6 +23,26 @@ function paymentFormatter(data) {
   }
 }
 
+export function registrationRowClassNameFormat(row, rowIdx) {
+  let status=row.status;
+  let paymentDetails = row.paymentDetails;
+
+  if(paymentDetails && paymentDetails.isPaid){
+    paymentDetails = true;
+  }else{
+    paymentDetails = false;
+  }
+  var rowClassName='';
+
+  if(status === 'Payment Received' && paymentDetails){
+    rowClassName='ml_red';
+  }
+  else if(status === 'Payment Generated' && !paymentDetails){
+    rowClassName='ml_orange';
+  }
+  return rowClassName;
+}
+
 const mlOfficeTableConfig=new MlViewer.View({
   name:"officeTable",
   module:"office",//Module name for filter.
@@ -57,6 +77,7 @@ const mlOfficeTableConfig=new MlViewer.View({
     {dataField:"updatedAt", title:"Action"},
   ],
   tableHeaderClass:'react_table_head',
+  trClassName:registrationRowClassNameFormat,
   showActionComponent:false,
   actionConfiguration:[],
   graphQlQuery:gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){

@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
+import _ from 'lodash';
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "startupIncubators"
@@ -30,7 +31,6 @@ export default class MlCompanyStartupIncubators extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
   }
   // componentWillMount(){
   //   let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts)
@@ -46,20 +46,24 @@ export default class MlCompanyStartupIncubators extends React.Component{
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.startupIncubators)
+    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.startupIncubators) {
-        const editorValue = createValueFromString(response.startupIncubators.startupIncubatorsDescription);
+        const editorValue = createValueFromString(response && response.startupIncubators && response.startupIncubators.startupIncubatorsDescription ? response.startupIncubators.startupIncubatorsDescription : null);
         var object = response.startupIncubators;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
+        this.setState({ loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue }, () => {
+          this.lockPrivateKeys()
+        });
       }else{
         this.setState({loading:false})
       }
     }else{
       const editorValue = createValueFromString(that.context.companyPortfolio.startupIncubators.startupIncubatorsDescription);
-      this.setState({loading: false, data: that.context.companyPortfolio.startupIncubators,editorValue});
+      this.setState({ loading: false, data: that.context.companyPortfolio.startupIncubators, privateValues: response.startupIncubators.privateFields, editorValue }, () => {
+        this.lockPrivateKeys()
+      });
     }
   }
 
@@ -84,31 +88,33 @@ export default class MlCompanyStartupIncubators extends React.Component{
     this.props.getStartupIncubators(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate,tabName: this.props.tabName}
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
-
-  updatePrivateKeys(){
-    let response = this.state.data
-    _.each(response.privateFields, function (pf) {
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
-
+  // updatePrivateKeys(){
+  //   let response = this.state.data
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
 
   render(){
     let that = this;
@@ -136,8 +142,6 @@ export default class MlCompanyStartupIncubators extends React.Component{
 
               </div>
             </div>
-
-
           </div>
         </div>
       </div>)}
@@ -147,4 +151,5 @@ export default class MlCompanyStartupIncubators extends React.Component{
 }
 MlCompanyStartupIncubators.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

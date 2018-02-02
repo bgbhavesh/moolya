@@ -70,9 +70,9 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyStartupIncubators client={client} isAdmin={true} key="1"  getStartupIncubators={this.getStartupIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyStartupIncubators client={client} isAdmin={true} key="1"  getStartupIncubators={this.getStartupIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="startupIncubators"/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanySectors key="2" client={client} getSectors={this.getSectors.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="sectorsAndServices" />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyListOfIncubators client={client} isAdmin={true} key="3" getListOfIncubators={this.getListOfIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyListOfIncubators client={client} isAdmin={true} key="3" getListOfIncubators={this.getListOfIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="listOfIncubators" />},
     ]
     return tabs;
   }

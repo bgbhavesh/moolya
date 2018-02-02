@@ -29,7 +29,6 @@ class MlAppInternalAssignTaskItem extends React.Component {
       taskId: props.taskId ? props.taskId : '',
       previewDocument:""
     };
-    console.log('Props:',props)
   }
 
   componentDidMount(){
@@ -66,9 +65,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps , this.state.taskId);
     if(this.state.taskId !== nextProps.taskId){
-      console.log('Test');
       this.setState({
         taskId: nextProps.taskId
       }, function () {
@@ -79,10 +76,8 @@ class MlAppInternalAssignTaskItem extends React.Component {
   }
 
   async fetchTaskInfo() {
-    console.log(this.props.taskId, this.state.taskId);
     if(this.state.taskId){
       let response = await fetchInternalTaskInfo(this.state.taskId);
-      console.log(response);
       if(response){
         response.attendees = response.attendees ? response.attendees : [];
         response.docs = response.docs ? response.docs : [];
@@ -96,7 +91,6 @@ class MlAppInternalAssignTaskItem extends React.Component {
   }
 
   randomDocument(link, index) {
-    console.log('link, index', link, index)
     let documentPreviewUrl = generateAbsolutePath(link.fileUrl);
     this.setState({ previewDocument: documentPreviewUrl });
   }
@@ -108,9 +102,9 @@ class MlAppInternalAssignTaskItem extends React.Component {
     };
     let response = await updateInternalTaskInfo(taskId, dataToUpdata);
     if(response.success){
-      toastr.success('Task successfully moved to'+ status);
+      toastr.success('Task successfully moved to '+ status);
       //toastr.success('Task Updated Successfully');
-      this.props.fetchTaskList();
+      this.props.fetchTaskList(status);
     }
   }
 
@@ -290,7 +284,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
                         <li key={index}>
                           <a href="">
                             <span></span>
-                            <img src={ user.profileUrl ? user.profileUrl : "/images/def_profile.png"} /><br />
+                            <img src={ user.profileUrl ? generateAbsolutePath(user.profileUrl) : "/images/def_profile.png"} /><br />
                             <div className="tooltiprefer">
                               <span>{user.name}</span>
                             </div>

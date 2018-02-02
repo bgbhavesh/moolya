@@ -90,6 +90,16 @@ MlResolver.MlQueryResolver['findSubDomain'] = (obj, args, context, info) => {
 
 
 MlResolver.MlQueryResolver['fetchIndustryDomain'] = (obj, args, context, info) => {
-
-  return MlSubDomain.find({industryId:args.industryId, isActive : true}).fetch();
+  var queryChange;
+  queryChange = {
+    $and: [{
+      isActive: true
+    }, {
+      'industryId': {
+        $in: args.industryId
+      }
+    }]
+  }
+  //return MlSubDomain.find({industryId:args.industryId, isActive : true}).fetch();
+  return mlDBController.find('MlSubDomain', queryChange, context).fetch() || []
 }

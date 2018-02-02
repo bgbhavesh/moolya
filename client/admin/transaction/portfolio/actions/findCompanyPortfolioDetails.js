@@ -140,7 +140,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       isSPDescriptionPrivate,
                       privateFields{
                           keyName,
-                          booleanKey
+                          booleanKey,
+                          tabName
                       }
                   },
                   information{
@@ -148,7 +149,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       isInformationDescriptionPrivate,
                       privateFields{
                           keyName,
-                          booleanKey
+                          booleanKey,
+                          tabName
                       }
                   },
                   clients{
@@ -238,7 +240,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                     isMembershipsDescriptionPrivate,
                     privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
                     }
                   },
                   
@@ -247,7 +249,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      isCompliancesDescriptionPrivate,
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
                      }
                   },
                   
@@ -256,7 +258,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      isLicensesDescriptionPrivate,
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
                      }
                   }
                   startupIncubators{

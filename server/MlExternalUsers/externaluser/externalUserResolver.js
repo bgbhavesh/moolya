@@ -698,7 +698,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
     })
   }
 
-  const categoryData = getCategoryData(args.moduleName, args.id);
+  const categoryData = getCategoryData(args.moduleName, args.id, query);
   if (categoryData.length)
     response = response.concat(categoryData[0].userCategory);
   return response;
@@ -713,15 +713,18 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
  * @todo {*Accelerator, Incubator, Co-Working Space} $userCategory.userTypeName
  *       need to find in the lowerCase
  */
-const getCategoryData = (type, id) => {
+const getCategoryData = (type, id, query) => {
+  // console.log("................", query.subChapterId);
+  // typeQuery = { clusterId: id, isActive: true }
+  // typeQuery = { chapterId: id, isActive: true }
   let typeQuery = {};
   switch (type) {
     case "cluster":
-      typeQuery = { clusterId: id, isActive: true }
-      break;
     case "chapter":
-      typeQuery = { chapterId: id, isActive: true }
+      typeQuery = { _id: query.subChapterId, isActive: true }
       break;
+      // typeQuery = { _id: query.subChapterId, isActive: true }
+      // break;
     default:
       return [];
   }

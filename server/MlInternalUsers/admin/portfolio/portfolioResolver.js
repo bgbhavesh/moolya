@@ -292,7 +292,13 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 
     if(response && response.success){
 
-      MlSMSNotification.portfolioUpdate(args.portfoliodetailsId);
+      if (args.portfoliodetailsId) {
+        const details = MlPortfolioDetails.findOne({ "_id": args.portfoliodetailsId })
+        MlSMSNotification.portfolioUpdate(args.portfoliodetailsId);
+        MlEmailNotification.onPortfolioUpdate(details);
+        MlNotificationController.onPotfolioUpdate(details);
+      }
+      
     }
 
     return response;

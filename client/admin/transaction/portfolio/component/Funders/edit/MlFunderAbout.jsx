@@ -99,14 +99,12 @@ export default class MlFunderAbout extends React.Component {
     } else {
       details = _.extend(details, { [key]: false });
     }
-    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, objectName: "investmentBudget", tabName: "funderAbout" }
-    this.setState({ privateKey: privateKey })
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, objectName: "investmentBudget", tabName: "funderAbout" }
     let data = this.state.data;
     data['investmentBudget'] = details
-    this.setState({ data: data }, function () {
+    this.setState({ privateKey: privateKey, data: data }, () => {
       this.sendDataToParent()
     })
-
   }
 
   handleYearsOfExperience(value) {

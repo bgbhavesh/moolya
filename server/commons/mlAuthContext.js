@@ -11,7 +11,7 @@ export default function ({req})
   if (!token) return {}
   check(token, String)
   const hashedToken = Accounts._hashLoginToken(token)
-
+  // console.log("token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", token, "hashedToken", hashedToken);
   // Get the user from the database
   const user = Meteor.users.findOne({'services.resume.loginTokens.hashedToken': hashedToken}, { fields: { _id: 1, 'services.resume.loginTokens.$': 1 } })
 

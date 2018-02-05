@@ -169,17 +169,17 @@ export default class MlFunderInvestmentView extends Component {
     }
     this.state.content = null;
     this.state.annotations = [];
-    this.setState({loading: false, viewCurDetail: ary, tabIndex: id});
+    this.setState({ loading: false, viewCurDetail: ary, tabIndex: id }, () => {
+      _.each(getData.privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    });
     if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor();
       this.fetchAnnotations(id);
     }
     $('.investement-view-content .funding-investers').slideUp();
-    $('#funding_show').slideDown()
-
-    _.each(getData.privateFields, function (pf) {
-      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    })
+    $('#funding_show').slideDown();
   }
 
   resetAllLocks() {
@@ -195,7 +195,7 @@ export default class MlFunderInvestmentView extends Component {
         <div key={value}>
           <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
           <ul className="list_left">
-            <li>Date1 : {say.dateOfInvestment} <FontAwesome name='unlock' className="un_lock" id="isDateOfInvestmentPrivate"/></li>
+            <li>Date : {say.dateOfInvestment} <FontAwesome name='unlock' className="un_lock" id="isDateOfInvestmentPrivate"/></li>
             <li>Company - {say.investmentcompanyName}<FontAwesome name='unlock' className="un_lock" id="isCompanyNamePrivate"/></li>
             <li>Amount - {say.investmentAmount}<FontAwesome name='unlock' className="un_lock" id="isInvestmentAmountPrivate"/></li>
             <li>Funding Type - {say.typeOfFundingName}</li>
@@ -211,22 +211,7 @@ export default class MlFunderInvestmentView extends Component {
   render() {
     const that = this;
     const showLoader = that.state.loading;
-    // const detailData = this.state.viewCurDetail && this.state.viewCurDetail.length > 0 ? this.state.viewCurDetail : [];
-    // const detailView = detailData.map(function (say, value) {
-    //   return (
-    //     <div key={value}>
-    //       <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
-    //       <ul className="list_left">
-    //         <li>Date : {say.dateOfInvestment} <FontAwesome name='lock'/></li>
-    //         <li>Company - {say.investmentcompanyName}<FontAwesome name='lock'/></li>
-    //         <li>Amount - {say.investmentAmount}<FontAwesome name='lock'/></li>
-    //         <li>Funding Type - {say.typeOfFundingName}<FontAwesome name='lock'/></li>
-    //       </ul>
-    //       <br className="brclear" />
-    //       <p>{say.aboutInvestment ? say.aboutInvestment : '--'}</p>
-    //     </div>
-    //   )
-    // })
+
     let investmentArray = that.state.funderInvestmentList || [];
     if(_.isEmpty(investmentArray)){
       return (
@@ -302,7 +287,7 @@ export default class MlFunderInvestmentView extends Component {
                     default={true}
                   >
                     <div className="col-lg-12" id="psContent">
-                      <div className="row">
+                      <div className="row hide_unlock">
                         <div className="investement-view-content">
                           <div className="funding-investers" id="funding_show">
                             {/* {detailView} */}

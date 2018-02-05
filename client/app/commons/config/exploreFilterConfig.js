@@ -89,7 +89,7 @@ export default filterData = [
     field: "subDomainId",
     displayName: "SubDomain",
     isGraphql: true,
-    graphQLQuery: gql`query($industryId: String) {
+    graphQLQuery: gql`query($industryId: [String]) {
       data:fetchIndustryDomain(industryId: $industryId) {
           value:_id
           label:name

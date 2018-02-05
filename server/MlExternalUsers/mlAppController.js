@@ -83,8 +83,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
             };
           // var context = getContext({req});
           var context = getContext({req});
+
             if(!context||!context.userId){
-              res.json({unAuthorized:true,message:"Invalid Token"})
+              // console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", context);
+              res.json({ invalidToken: true, message: "Invalid Token"})
               return;
             }
 

@@ -44,7 +44,8 @@ class portfolioValidation {
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
     //Pre Condition for restricting the private fields.
     var allowPrivateFields = portfolioValidation.allowPrivateFields(portfolioDetails, context);
-    var praviteFields = portfolioDetails.privateFields
+    // var praviteFields = portfolioDetails.privateFields
+    const praviteFields = _.filter(portfolioDetails.privateFields, { tabName: tabName });
     var omittedFields = []
 
     /**
@@ -57,13 +58,13 @@ class portfolioValidation {
         var omittedfields = []
         _.each(praviteFields, function (praviteField) {
           if ((item[praviteField.keyName] != undefined || ((_.isEmpty(item[praviteField.objectName]) == false && item[praviteField.objectName][praviteField.keyName] != undefined))) && praviteField.index == index) {
-            if(praviteField.tabName === tabName){
-              if (!allowPrivateFields) {
-                delete item[praviteField.keyName]
-              }
+            // if(praviteField.tabName === tabName){
+            if (!allowPrivateFields) {
+              delete item[praviteField.keyName]
             }
-            // var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName})
-            var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName, tabName: praviteField.tabName});
+            // }
+            const praviteObject = _.find(praviteFields, {keyName: praviteField.keyName})
+            // var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName, tabName: praviteField.tabName});
             omittedfields.push(praviteObject)
           }
         })
@@ -80,15 +81,16 @@ class portfolioValidation {
      */
     _.each(praviteFields, function (praviteField) {
       if (object[praviteField.keyName] != undefined || ((_.isEmpty(object[praviteField.objectName]) == false && object[praviteField.objectName][praviteField.keyName] != undefined))) {
-        if (praviteField.tabName === tabName) {
+        // if (praviteField.tabName === tabName) {
           if (!allowPrivateFields) {
             if (object[praviteField.keyName])
               delete object[praviteField.keyName]
             else
               delete object[praviteField.objectName][praviteField.keyName]
           }
-        } 
-        var praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: tabName });      //filtering only the required tab keys
+        // } 
+        // var praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: tabName });      //filtering only the required tab keys
+          const praviteObject = _.find(praviteFields, { keyName: praviteField.keyName });
         if (praviteObject)
           omittedFields.push(praviteObject)
       }

@@ -848,30 +848,30 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                     membershipDescription,
                     isDescriptionPrivate,
                     privateFields{
-                        keyName
-                        booleanKey
-                        tabName
+                      keyName
+                      booleanKey
+                      tabName
                     }
                   },
                   
                   compliances{
-                     complianceDescription, 
-                     isDescriptionPrivate,
-                     privateFields{
-                        keyName,
-                        booleanKey
-                        tabName
-                     }
+                    complianceDescription, 
+                    isDescriptionPrivate,
+                    privateFields{
+                      keyName
+                      booleanKey
+                      tabName
+                    }
                   },
                   
                   licenses{
-                     licenseDescription, 
-                     isDescriptionPrivate,
-                     privateFields{
-                        keyName,
-                        booleanKey,
-                        tabName
-                     }
+                    licenseDescription, 
+                    isDescriptionPrivate,
+                    privateFields{
+                      keyName
+                      booleanKey
+                      tabName
+                    }
                   }
               }
           }
@@ -883,7 +883,7 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
     fetchPolicy: 'network-only'
   })
 
-  var response = result.data.fetchStartupDetails;
+  const response = result.data.fetchStartupDetails;
   return response;
 
 }

@@ -1,6 +1,4 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import React, { Component } from 'react';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
@@ -10,11 +8,10 @@ import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const KEY = "lookingFor"
-export default class MlStartupViewLookingFor extends React.Component {
+export default class MlStartupViewLookingFor extends Component {
   constructor(props) {
     super(props);
-    this.state = {startupLookingforList: [],loading:true};
-    this.fetchPortfolioStartupDetails.bind(this);
+    this.state = { startupLookingforList: [], loading: true };
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -27,7 +24,8 @@ export default class MlStartupViewLookingFor extends React.Component {
   }
 
   componentWillMount(){
-    this.fetchPortfolioStartupDetails();
+    const resp = this.fetchPortfolioStartupDetails();
+    return resp
   }
 
   initalizeAnnotaor(){
@@ -71,8 +69,6 @@ export default class MlStartupViewLookingFor extends React.Component {
     return response;
   }
 
-
-
   async fetchAnnotations(isCreate){
     const response = await findAnnotations(this.props.portfolioDetailsId, "startupLookingFor");
     let resp = JSON.parse(response.result);
@@ -94,25 +90,23 @@ export default class MlStartupViewLookingFor extends React.Component {
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
-
     return response;
   }
 
   async fetchPortfolioStartupDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.lookingFor) {
       this.setState({startupLookingforList: response});
     }
-
     this.setState({loading:false})
-
   }
+
   render(){
-    let that = this;
+    const that = this;
     let lookingforArray = that.state.startupLookingforList && that.state.startupLookingforList.lookingFor  || [];
-    let loading = this.state.loading;
+    const loading = this.state.loading;
     return ( <div>
       {loading === true ? ( <MlLoader/>) : (
         <div>

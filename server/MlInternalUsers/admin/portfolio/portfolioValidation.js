@@ -34,8 +34,8 @@ class portfolioValidation {
   }
 
   /**
-   * 
-   * @param {*} portfolioDetailsId 
+   *
+   * @param {*} portfolioDetailsId
    * @param {*} object "data to be checked"
    * @param {*} context "login user context"
    * @param {*} tabName "for which data to be filtered"
@@ -43,10 +43,10 @@ class portfolioValidation {
   omitPrivateDetails(portfolioDetailsId, object, context, tabName) {
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
     //Pre Condition for restricting the private fields.
-    var allowPrivateFields = portfolioValidation.allowPrivateFields(portfolioDetails, context);
+    const allowPrivateFields = portfolioValidation.allowPrivateFields(portfolioDetails, context);
     // var praviteFields = portfolioDetails.privateFields
     const praviteFields = _.filter(portfolioDetails.privateFields, { tabName: tabName });
-    var omittedFields = []
+    let omittedFields = []
 
     /**
      * for tabs containing array or multiple objects
@@ -88,7 +88,7 @@ class portfolioValidation {
             else
               delete object[praviteField.objectName][praviteField.keyName]
           }
-        // } 
+        // }
         // var praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: tabName });      //filtering only the required tab keys
           const praviteObject = _.find(praviteFields, { keyName: praviteField.keyName });
         if (praviteObject)

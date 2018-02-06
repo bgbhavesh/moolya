@@ -58,7 +58,7 @@ export default class MlGenericAwardsView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id ? id : 0,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -76,6 +76,7 @@ export default class MlGenericAwardsView extends React.Component {
 
 
   viewDetails(id, e) {
+    $(".input_icon").removeClass('fa-lock').addClass('un_lock fa-unlock');  //reset of lock in UI
     let data = this.props.awardsList;
     var getData = data[id]
     this.setState({viewCurDetail: getData});
@@ -92,9 +93,9 @@ export default class MlGenericAwardsView extends React.Component {
   }
 
   render() {
-    var _this = this
+    const _this = this
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.awardsList ? _this.props.awardsList : []
+    const arrayList = _this.props.awardsList ? _this.props.awardsList : []
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -121,7 +122,6 @@ export default class MlGenericAwardsView extends React.Component {
             </div>
 
             <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
-
               <div className="top_block_scroller" id="forcecentered">
                 <ul>
                   {arrayList && arrayList.map(function (details, idx) {
@@ -140,18 +140,18 @@ export default class MlGenericAwardsView extends React.Component {
               </div>
 
               <div className="main_wrap_scroll">
-               <div className="col-lg-12">
-                    <div className="row">
-                      <div className="investement-view-content">
-                        <div className="panel panel-default panel-form-view">
-                          <div className="panel-body">
-                            <textarea name="awardsDescription" placeholder="About" className="form-control float-label" value={this.state.viewCurDetail.awardsDescription?this.state.viewCurDetail.awardsDescription: ''} />
-                            <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.viewCurDetail.isDescriptionPrivate}/>
-                          </div>
+                <div className="col-lg-12 hide_unlock">
+                  <div className="row">
+                    <div className="investement-view-content">
+                      <div className="panel panel-default panel-form-view">
+                        <div className="panel-body">
+                          <textarea name="awardsDescription" placeholder="About" className="form-control float-label" value={this.state.viewCurDetail.awardsDescription ? this.state.viewCurDetail.awardsDescription : ""} disabled />
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" />
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
               </div>
             </div>
           </div>

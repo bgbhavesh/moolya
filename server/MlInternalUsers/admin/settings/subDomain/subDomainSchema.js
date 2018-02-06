@@ -38,7 +38,8 @@ let SubDomainSchema = `
     }
     type Query{
         findSubDomain(SubDomainId:String): SubDomain
-        fetchIndustryDomain(industryId: [String]):[SubDomain]
+        fetchIndustryDomain(industryId: String):[SubDomain]
+        fetchIndustryBasedSubDomain(industryId: [String]):[SubDomain]
     }
 `
 
@@ -48,7 +49,8 @@ let supportedApi = [
   {api:'updateSelectedSubDomain', actionName:'UPDATE', moduleName:"SUBDOMAIN"},
 
   {api:'findSubDomain', actionName:'READ', moduleName:"SUBDOMAIN"},
-  {api:'fetchIndustryDomain', actionName:'READ', moduleName:"SUBDOMAIN", isWhiteList:true}
+  {api:'fetchIndustryDomain', actionName:'READ', moduleName:"SUBDOMAIN", isWhiteList:true},
+  {api:'fetchIndustryBasedSubDomain', actionName:'READ', moduleName:"SUBDOMAIN", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

@@ -622,17 +622,15 @@ class MlCronJobControllerClass {
                   totalLikes: 1,
                   totalViews: 1,
                   totalConnections: 1,
-                  "profile.firebaseInfo.firebaseId": 1,
-                  "profile.firebaseInfo.frequency": 1,
+                  "profile.firebaseInfo": 1,
               }
           } 
       ]
       let usersData = mlDBController.aggregate('users', pipeLine);
 
       async.each(usersData, function (object, callback){
-        if(object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId && 
-          object.profile.firebaseInfo.frequency == frequencyType){
-
+        if((object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId) && 
+          ((object.profile.firebaseInfo.frequency == frequencyType) || (object.profile.firebaseInfo.frequency == undefined && frequencyType=='Once a day'))){
           const message = new gcm.Message({
             data: {
               notification: {
@@ -668,7 +666,6 @@ class MlCronJobControllerClass {
     }
 
     sendPushNotificationsToALLUsers(frequencyType) {
-
       let allUsersData = mlDBController.find('users', {}).fetch();
       let totalUserCount = mlDBController.find('users', {}).count();
       let ids = [];
@@ -687,8 +684,8 @@ class MlCronJobControllerClass {
       });
 
       async.each(allUsersData, function (object, callback){
-        if(object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId && 
-          object.profile.firebaseInfo.frequency == frequencyType){
+        if((object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId) && 
+          ((object.profile.firebaseInfo.frequency == frequencyType) || (object.profile.firebaseInfo.frequency == undefined && frequencyType=='Once a day'))){
           ids.push(object.profile.firebaseInfo.firebaseId);
         }
         callback();

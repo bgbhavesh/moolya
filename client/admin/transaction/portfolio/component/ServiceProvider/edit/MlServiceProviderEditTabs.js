@@ -58,7 +58,7 @@ export default class MlServiceProviderEditTabs extends Component {
         panelClassName: 'panel',
         title: "About",
         component: <MlServiceProviderAbout client={client} isAdmin={true} key="1" getAboutus={this.getAboutus.bind(this)}
-                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                  portfolioDetailsId={this.props.portfolioDetailsId} tabName="about"/>
       },
       {
         tabClassName: 'tab',

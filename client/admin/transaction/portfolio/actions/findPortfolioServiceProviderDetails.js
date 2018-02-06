@@ -444,7 +444,8 @@ export async function findServiceProviderAboutActionHandler(portfoliodetailsId) 
                   }
                   privateFields{
                     keyName,
-                    booleanKey
+                    booleanKey,
+                    tabName
                   }
                 }
             }

@@ -17,7 +17,8 @@ export default class MlServiceProviderAbout extends Component {
     this.state = {
       loading: true,
       data: {},
-      privateKey: {}
+      privateKey: {},
+      privateValues:[]
     }
     this.onClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
@@ -49,7 +50,7 @@ export default class MlServiceProviderAbout extends Component {
     if (className.indexOf("fa-lock") != -1) {
       isPrivate = true;
     }
-    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate }
+    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName }
     this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
@@ -82,7 +83,6 @@ export default class MlServiceProviderAbout extends Component {
         delete data[propName];
       }
     }
-
     data = _.omit(data, ["privateFields"]);
     this.props.getAboutus(data, this.state.privateKey)
   }
@@ -96,16 +96,29 @@ export default class MlServiceProviderAbout extends Component {
       if (response) {
         const editorValue = createValueFromString(response && response.aboutDescription ? response.aboutDescription : null);
         this.setState({ loading: false, data: response, editorValue });
-      }
-      _.each(response.privateFields, function (pf) {
-        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-
+        _.each(response.privateFields, function (pf) {
+          $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
+      } 
     } else {
       this.fetchOnlyImages();
       const editorValue = createValueFromString(that.context.serviceProviderPortfolio.about && that.context.serviceProviderPortfolio.about.aboutDescription ? that.context.serviceProviderPortfolio.about.aboutDescription : null);
       this.setState({ loading: true, data: that.context.serviceProviderPortfolio.about, editorValue });
     }
+  }
+
+/**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onAboutImageFileUpload(e) {
@@ -128,7 +141,9 @@ export default class MlServiceProviderAbout extends Component {
     if (response) {
       let dataDetails = this.state.data
       dataDetails['aboutImages'] = response.aboutImages
-      this.setState({loading: false, data: dataDetails});
+      this.setState({loading: false, data: dataDetails,privateValues: response.privateFields}, () =>{
+        this.lockPrivateKeys();
+      });
     }
   }
 
@@ -239,4 +254,5 @@ export default class MlServiceProviderAbout extends Component {
 };
 MlServiceProviderAbout.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

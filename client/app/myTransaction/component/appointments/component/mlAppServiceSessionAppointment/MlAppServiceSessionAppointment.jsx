@@ -134,7 +134,6 @@ export default class MlAppServiceSessionAppointment extends Component {
   }
 
   render() {
-    console.log('state=',this.state);
     let currentUser = this.state.data.owner;
     let appointmentWith = this.state.data.client;
     var yesterday = Datetime.moment().subtract(1, 'day');

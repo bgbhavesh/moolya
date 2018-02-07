@@ -68,13 +68,67 @@ export default class MlTaskAppointmentTermAndCondition extends Component{
    * @returns {XML}
    */
   render() {
+    let service = this.props.service|| {};
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <br className="brclear"/>
           <div className="col-md-6 nopadding-left">
             <label><strong>Terms and conditions</strong></label>
+            { this.props.showCancelAndRescheduleInfo &&
+            <div className="form_bg">
+              <form>
+                <div className="form-group switch_wrap switch_names inline_switch">
+                  <label htmlFor="cancelable">Can be cancelled</label>
+                  <span className={(service.termsAndCondition && service.termsAndCondition.isCancelable) ? 'state_label acLabel' : 'state_label'}>Yes</span>
+                  <label className="switch nocolor-switch">
+                    <input id="cancelable" type="checkbox"
+                           checked={!(service.termsAndCondition && service.termsAndCondition.isCancelable)}
+                           value={(service.termsAndCondition && service.termsAndCondition.isCancelable)}/>
+                    <div className="slider"/>
+                  </label>
+                  <span className={(service.termsAndCondition && service.termsAndCondition.isCancelable) ? 'state_label' : 'state_label acLabel'}>No</span>
+                </div>
+                <br className="brclear"/><br className="brclear"/><br className="brclear"/>
+                <div className="form-group switch_wrap switch_names inline_switch">
+                  <label htmlFor="schedulable">Can be rescheduled</label>
+                  <span
+                    className={(service.termsAndCondition && service.termsAndCondition.isReschedulable) ? 'state_label acLabel' : 'state_label'}>Yes</span><label
+                  className="switch nocolor-switch">
+                  <input id="schedulable" type="checkbox"
+                         checked={!(service.termsAndCondition && service.termsAndCondition.isReschedulable)}
+                         value={(service.termsAndCondition && service.termsAndCondition.isReschedulable)}/>
+                  <div className="slider"></div>
+                </label>
+                  <span className={(service.termsAndCondition && service.termsAndCondition.isReschedulable) ?
+                    'state_label' : 'state_label acLabel'}>No</span>
+                </div>
+              </form>
+            </div>}
           </div>
+          {this.props.showCancelAndRescheduleInfo && <div className="col-md-6 nopadding-right">
+            <br className="brclear"/><br className="brclear"/>
+            <div className="form_bg">
+              <form>
+                <div className="form-group">
+                  <label>Can be cancelled &nbsp;
+                    <input className="form-control inline_input medium_in"
+                           id="cancelationday"
+                           disabled={!(service.termsAndCondition && service.termsAndCondition.isCancelable)}
+                           value={(service.termsAndCondition && service.termsAndCondition.noOfDaysBeforeCancelation)} /> days
+                  </label>
+                </div>
+                <br className="brclear"/>
+                <div className="form-group">
+                  <label>Can be rescheduled  &nbsp;<input className="form-control inline_input medium_in"
+                                                          id="rescheduler"
+                                                          disabled={!(service.termsAndCondition && service.termsAndCondition.isReschedulable)}
+                                                          value={(service.termsAndCondition && service.termsAndCondition.noOfReschedulable)}/> times
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>}
           <br className="brclear"/>
           {this.getAttachmentsList()}
         </ScrollArea>

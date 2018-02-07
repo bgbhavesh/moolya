@@ -1,7 +1,9 @@
 import React, { Component, PropTypes }  from "react";
 import ScrollArea from 'react-scrollbar';
-import MlLoader from '../../../../../../commons/components/loader/loader'
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
+
+import MlLoader from '../../../../../../commons/components/loader/loader'
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import MlTextEditor, { createValueFromString } from "../../../../../../commons/components/textEditor/MlTextEditor";
@@ -26,7 +28,7 @@ export default class MlCompanyMCL extends Component{
     this.onLockChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
-    this.updateprivateFields.bind(this)
+    // this.updateprivateFields.bind(this)
   }
 
   componentWillMount(){
@@ -34,11 +36,11 @@ export default class MlCompanyMCL extends Component{
     return resp;
   }
 
-  updateprivateFields(){
-    var that = this
+  updateprivateFields(privateAry) {
+    // var that = this
     setTimeout(function () {
-      _.each(that.state.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      _.each(privateAry, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
   }
@@ -49,15 +51,18 @@ export default class MlCompanyMCL extends Component{
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     let data = {};
     let membershipsDescription;
     let compliancesDescription;
     let licensesDescription;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    // let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.memberships)
-    // let compliancesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.compliances)
-    // let licensesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.licenses)
+    // let valueFromContext = true;
+    let privateAry = [];
+    const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
+    const responseC = await fetchCompanyDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
+    const responseL = await fetchCompanyDetailsHandler(portfoliodetailsId, LICENSEKEY);
+    
     if(that.context.companyPortfolio && (that.context.companyPortfolio.memberships || that.context.companyPortfolio.compliances || that.context.companyPortfolio.licenses)){
       data = {
         memberships:that.context.companyPortfolio.memberships,
@@ -67,48 +72,73 @@ export default class MlCompanyMCL extends Component{
       membershipsDescription = createValueFromString(that.context.companyPortfolio.memberships ? that.context.companyPortfolio.memberships.membershipsDescription : null);
       compliancesDescription = createValueFromString(that.context.companyPortfolio.compliances ? that.context.companyPortfolio.compliances.compliancesDescription : null);
       licensesDescription = createValueFromString(that.context.companyPortfolio.licenses ? that.context.companyPortfolio.licenses.licensesDescription : null);
+
     }else {
-      var responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
+      // var responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
       if (responseM && responseM.memberships) {
-        var object = responseM.memberships;
+        let object = responseM.memberships;
         object = _.omit(object, '__typename')
-        // this.setState({memberships: object});
         data.memberships = object;
-        this.setState({privateFields:object.privateFields});
+        privateAry = object.privateFields;
+        // this.setState({privateFields:object.privateFields});
         membershipsDescription = createValueFromString(data.memberships ? data.memberships.membershipsDescription : null);
       }
 
-      var responseC = await fetchCompanyDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
+      // var responseC = await fetchCompanyDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
       if (responseC && responseC.compliances) {
         var object = responseC.compliances;
         object = _.omit(object, '__typename')
-        // this.setState({compliances: object});
         data.compliances = object;
-        var pf = this.state.privateFields;
+        // var pf = this.state.privateFields;
         if(object.privateFields){
-          pf = pf.concat(object.privateFields)
-          this.setState({privateFields:pf});
+          // pf = pf.concat(object.privateFields)
+          privateAry = privateAry.concat(object.privateFields);
+          // this.setState({privateFields:pf});
         }
         compliancesDescription = createValueFromString(data.compliances ? data.compliances.compliancesDescription : null);
       }
 
-      var responseL = await fetchCompanyDetailsHandler(portfoliodetailsId, LICENSEKEY);
+      // var responseL = await fetchCompanyDetailsHandler(portfoliodetailsId, LICENSEKEY);
       if (responseL && responseL.licenses) {
         var object = responseL.licenses;
         object = _.omit(object, '__typename')
-        // this.setState({licenses: object});
         data.licenses = object;
-        var pf = this.state.privateFields;
+        // var pf = this.state.privateFields;
         if(object.privateFields){
-          pf = pf.concat(object.privateFields)
-          this.setState({privateFields:pf});
+          // pf = pf.concat(object.privateFields);
+          privateAry = privateAry.concat(object.privateFields);
+          // this.setState({privateFields:pf});
         }
         licensesDescription = createValueFromString(data.licenses ? data.licenses.licensesDescription : null);
       }
     }
 
-    this.setState({loading: false,data:data, membershipsDescription, compliancesDescription,licensesDescription})
-    this.updateprivateFields();
+    this.setState({ loading: false, data: data, membershipsDescription, compliancesDescription, licensesDescription }, () => {
+      if (privateAry.length) {
+        this.updateprivateFields(privateAry);
+      }else {
+        const MprivateKeys = responseM && responseM.memberships ? responseM.memberships.privateFields : [];
+        this.lockPrivateKeys('memberships', MprivateKeys);
+        const LprivateKeys = responseL && responseL.licenses ? responseL.licenses.privateFields : [];
+        this.lockPrivateKeys('licenses', LprivateKeys);
+        const CprivateKeys = responseC && responseC.compliances ? responseC.compliances.privateFields : [];
+        this.lockPrivateKeys('compliances', CprivateKeys);
+      } 
+    });
+  }
+
+   /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys(tabname, privateValues) {
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: tabname});
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: tabname})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   componentDidMount(){
@@ -129,24 +159,20 @@ export default class MlCompanyMCL extends Component{
     let details = this.state.data;
     let mcl = details[object];
     mcl = _.omit(details[object], keyName);
-    // let name  = e.target.name;
-    // let mcl = details[type];
-    if(details && mcl){
-      mcl[keyName] = value.toString('html');
-      details[object] = mcl;
-      // mcl[name] = e.target.value
-      // details[type] = mcl;
-    }else{
+
+    // if(details && mcl){
+    //   mcl[keyName] = value.toString('html');
+    //   details[object] = mcl;
+    // }else{
       details = _.extend(details, { [object]: { [keyName]: value.toString('html') } });
-      // details=_.extend(details,{[type]:{[name]:e.target.value}});
-    }
+    // }
     this.setState({data:details,[keyName]: value}, function () {
       this.sendDataToParent()
     })
   }
 
   onLockChange(fieldName, type, tabName, e){
-    var isPrivate = false;
+    let isPrivate = false;
     let details = this.state.data||{};
     let key = e.target.id;
     let className = e.target.className;
@@ -156,6 +182,7 @@ export default class MlCompanyMCL extends Component{
       if(className.indexOf("fa-lock") != -1){
         mcl[key] = true
         details[type] = mcl;
+        isPrivate = true;
       }else{
         mcl[key] = false
         details[type] = mcl;
@@ -229,7 +256,7 @@ export default class MlCompanyMCL extends Component{
                         handleOnChange={(value) => this.handleBlur(value, "membershipsDescription", "memberships")}
                       />
                       {/* <textarea placeholder="Describe..." name="membershipsDescription" className="form-control" id="cl_about" defaultValue={this.state.memberships&&this.state.memberships.membershipsDescription?this.state.memberships.membershipsDescription:""}  onBlur={this.handleBlur.bind(this, "memberships")}></textarea> */}
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMembershipsDescriptionPrivate"  onClick={this.onLockChange.bind(this, "isMembershipsDescriptionPrivate", "memberships", MEMBERKEY)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMembershipsDescriptionPrivate"  onClick={this.onLockChange.bind(this,"membershipsDescription", "isMembershipsDescriptionPrivate" , MEMBERKEY)}/>
                     </div>
                   </div>
                 </div>
@@ -245,7 +272,7 @@ export default class MlCompanyMCL extends Component{
                         handleOnChange={(value) => this.handleBlur(value, "compliancesDescription", "compliances")}
                       />
                       {/* <textarea placeholder="Describe..." name="compliancesDescription" className="form-control" id="cl_about" defaultValue={this.state.compliances&&this.state.compliances.compliancesDescription?this.state.compliances.compliancesDescription:""}  onBlur={this.handleBlur.bind(this, "compliances")}></textarea> */}
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompliancesDescriptionPrivate" onClick={this.onLockChange.bind(this, "isCompliancesDescriptionPrivate", "compliances", COMPLIANCEKEY)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompliancesDescriptionPrivate" onClick={this.onLockChange.bind(this, "compliancesDescription", "isCompliancesDescriptionPrivate", COMPLIANCEKEY)}/>
                     </div>
                   </div>
                 </div>
@@ -259,7 +286,7 @@ export default class MlCompanyMCL extends Component{
                         handleOnChange={(value) => this.handleBlur(value, "licensesDescription", "licenses")}
                       />
                       {/* <textarea placeholder="Describe..." name="licensesDescription" className="form-control" id="cl_about" defaultValue={this.state.licenses&&this.state.licenses.licensesDescription?this.state.licenses.licensesDescription:""}  onBlur={this.handleBlur.bind(this, "licenses")}></textarea> */}
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLicensesDescriptionPrivate" onClick={this.onLockChange.bind(this, "isLicensesDescriptionPrivate", "licenses", LICENSEKEY)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLicensesDescriptionPrivate" onClick={this.onLockChange.bind(this, "licensesDescription", "isLicensesDescriptionPrivate", LICENSEKEY)} />
                     </div>
                   </div>
                 </div>
@@ -274,4 +301,5 @@ export default class MlCompanyMCL extends Component{
 
 MlCompanyMCL.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

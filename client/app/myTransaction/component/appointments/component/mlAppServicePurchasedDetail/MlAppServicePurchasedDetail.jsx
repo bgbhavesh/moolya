@@ -10,6 +10,7 @@ import AppointmentModal from './../AppointmentModal';
 import { cancelUserServiceCardOrder } from './../../action/cancelUserServiceCardOrder';
 import { signOffUserServiceCardOrder } from './../../action/signOffUserServiceCardOrder';
 import {fetchServiceByServiceId} from '../../action/findServiceCardDetails';
+import moment from 'moment';
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
@@ -118,9 +119,11 @@ export default class MlAppServicePurchasedDetail extends React.Component {
 
     const { data } = this.state;
     let appointmentWith = data.owner;
+    let label = 'Purchased from';
     let currentUser = data.client;
     if(Meteor.userId()===data.owner.userId) {
       appointmentWith = data.client;
+      label = "Purchased By";
       currentUser = data.owner;
     }
     // console.log("This Props", this.props);
@@ -158,7 +161,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                   <input type="text" placeholder="User Id" value={currentUser.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Purchased Date & Time" value={moment(data.createdAt).format("DD-MMM-YYYY HH:MM:SS")} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name" value={currentUser.name} defaultValue="" className="form-control float-label" id="" />
@@ -210,13 +213,13 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                   <input type="text" placeholder="Appointment Id" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Purchased Date & Time" value={moment(data.createdAt).format("DD-MMM-YYYY HH:MM:SS")} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Transaction ID" value={data.orderId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment With" defaultValue="" className="form-control float-label" id=""
+                  <input type="text" placeholder={label} defaultValue="" className="form-control float-label" id=""
                          value={appointmentWith.name}/>
                 </div>
                 <div className="form-group">

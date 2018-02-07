@@ -38,6 +38,7 @@ MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) 
  * @Note [mlAuthorization] moved to generic layer
  */
 MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
+  //db.getCollection('users').find({"profile.isInternaluser":true, "profile.InternalUprofile.moolyaProfile.userProfiles.clusterId":"hwzPbwq5saa6LuhHD", "profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true})
     let cluster = args.cluster;
     // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
     // if (!isValidAuth) {
@@ -47,6 +48,20 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
     // }
 
     let country = mlDBController.findOne('MlCountries', {_id: args.countryId}, context)
+  let clusterData = mlDBController.findOne('MlClusters', {"countryId":args.countryId}, context)
+    let internalUsers;let externalUsers;
+    if((country && country.isActive) && (args && args.country && !args.country.isActive)){
+       internalUsers = mlDBController.find('users', {"$and": [{"profile.isInternaluser":true},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId": clusterData._id},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]}, context).count();
+       //externalUsers = mlDBController.find('users', {"$and": [{"profile.isInternaluser":true},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId": args.countryId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]}, context).count();
+       externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{'profile.externalUserProfiles.clusterId':clusterData._id},{'profile.externalUserProfiles.isActive':true}]}, context).count();
+    }
+
+    if(internalUsers>0 || externalUsers>0){
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("There are active users in this cluster", code);
+      return response;
+    }
+
     if(country){
         for( key in args.country){
             country[key] = args.country[key]

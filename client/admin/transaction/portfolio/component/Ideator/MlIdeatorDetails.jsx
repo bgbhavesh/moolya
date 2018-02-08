@@ -239,7 +239,7 @@ export default class MlIdeatorDetails extends Component{
     const response = await removePortfolioProfilePic(this.props.portfolioDetailsId);
     if(response){
       this.fetchPortfolioDetails();
-      this.setState({profilePic:this.state.defaultProfilePic});
+      this.setState({profilePic:''});
     }else{
       toastr.error("Error in deleting picture")
     }

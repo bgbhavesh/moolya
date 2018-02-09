@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from "react";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 import MlLoader from "../../../../../../commons/components/loader/loader";
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
 import {
   fetchServiceProviderMemberships,
@@ -9,6 +10,11 @@ import {
   fetchServiceProviderCompliances
 } from "../../../actions/findPortfolioServiceProviderDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
+
+const MEMBERKEY = 'memberships'
+const LICENSEKEY = 'licenses'
+const COMPLIANCEKEY = 'compliances'
+
 
 export default class MlServiceProviderMCL extends Component {
   constructor(props, context) {
@@ -24,8 +30,8 @@ export default class MlServiceProviderMCL extends Component {
     }
     this.onLockChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
-    this.updateprivateFields.bind(this)
-    // this.fetchPortfolioDetails.bind(this);
+    this.fetchPortfolioDetails.bind(this);
+    // this.updateprivateFields.bind(this)
   }
 
   componentWillMount() {
@@ -33,20 +39,28 @@ export default class MlServiceProviderMCL extends Component {
     return resp
   }
 
-  updateprivateFields(){
-    var that = this
-    let membershipsPrivateFields = this.state.memberships&&this.state.memberships.privateFields?this.state.memberships.privateFields:[]
-    let compliancesPrivateFields = this.state.compliances&&this.state.compliances.privateFields?this.state.compliances.privateFields:[]
-    let licensesPrivateFields = this.state.licenses&&this.state.licenses.privateFields?this.state.licenses.privateFields:[]
+  // updateprivateFields(){
+  //   var that = this
+  //   let membershipsPrivateFields = this.state.memberships&&this.state.memberships.privateFields?this.state.memberships.privateFields:[]
+  //   let compliancesPrivateFields = this.state.compliances&&this.state.compliances.privateFields?this.state.compliances.privateFields:[]
+  //   let licensesPrivateFields = this.state.licenses&&this.state.licenses.privateFields?this.state.licenses.privateFields:[]
+  //   setTimeout(function () {
+  //     _.each(membershipsPrivateFields, function (pf) {
+  //       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //     })
+  //     _.each(compliancesPrivateFields, function (pf) {
+  //       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //     })
+  //     _.each(licensesPrivateFields, function (pf) {
+  //       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //     })
+  //   }, 10)
+  // }
+  updateprivateFields(privateAry) {
+    // var that = this
     setTimeout(function () {
-      _.each(membershipsPrivateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-      _.each(compliancesPrivateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-      _.each(licensesPrivateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      _.each(privateAry, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
   }
@@ -72,7 +86,10 @@ export default class MlServiceProviderMCL extends Component {
     let compliancesDescription;
     let licensesDescription;
     const portfoliodetailsId = that.props.portfolioDetailsId;
-
+    let privateAry = [];
+    const responseM = await fetchServiceProviderMemberships(portfoliodetailsId,MEMBERKEY);
+    const responseC = await fetchServiceProviderCompliances(portfoliodetailsId,COMPLIANCEKEY);
+    const responseL = await fetchServiceProviderLicenses(portfoliodetailsId,LICENSEKEY);
     if (that.context.serviceProviderPortfolio && (that.context.serviceProviderPortfolio.memberships || that.context.serviceProviderPortfolio.compliances || that.context.serviceProviderPortfolio.licenses)) {
       // this.setState({
       //   memberships: that.context.serviceProviderPortfolio.memberships,
@@ -87,42 +104,42 @@ export default class MlServiceProviderMCL extends Component {
       membershipDescription = createValueFromString(that.context.serviceProviderPortfolio.memberships ? that.context.serviceProviderPortfolio.memberships.membershipDescription : null);
       compliancesDescription = createValueFromString(that.context.serviceProviderPortfolio.compliances ? that.context.serviceProviderPortfolio.compliances.compliancesDescription : null);
       licensesDescription = createValueFromString(that.context.serviceProviderPortfolio.licenses ? that.context.serviceProviderPortfolio.licenses.licensesDescription : null);
-    } else {
-      const responseM = await fetchServiceProviderMemberships(portfoliodetailsId);
+    } else {  
       if (responseM) {
         var object = responseM;
         object = _.omit(object, '__typename')
         data.memberships = object;
+        privateAry = object.privateFields;
         // this.setState({memberships: object});
-        this.setState({privateFields:object.privateFields});
+        // this.setState({privateFields:object.privateFields});
 
         membershipDescription = createValueFromString(data.memberships ? data.memberships.membershipDescription : null);
       }
-      const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
       if (responseC) {
         var object = responseC;
         object = _.omit(object, '__typename')
         data.compliances = object;
         // this.setState({compliances: object});
 
-        var pf = this.state.privateFields;
+        // var pf = this.state.privateFields;
         if(object.privateFields){
-          pf = pf.concat(object.privateFields)
-          this.setState({privateFields:pf});
+          privateAry = privateAry.concat(object.privateFields);
+          // pf = pf.concat(object.privateFields)
+          // this.setState({privateFields:pf});
         }
         compliancesDescription = createValueFromString(data.compliances ? data.compliances.compliancesDescription : null);
-      }
-      const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
+      } 
       if (responseL) {
         var object = responseL;
         object = _.omit(object, '__typename')
         data.licenses = object;
         // this.setState({licenses: object});
 
-        var pf = this.state.privateFields;
+        // var pf = this.state.privateFields;
         if(object.privateFields){
-          pf = pf.concat(object.privateFields)
-          this.setState({privateFields:pf});
+          privateAry = privateAry.concat(object.privateFields);
+          // pf = pf.concat(object.privateFields)
+          // this.setState({privateFields:pf});
         }
         licensesDescription = createValueFromString(data.licenses ? data.licenses.licensesDescription : null);
       }
@@ -133,8 +150,32 @@ export default class MlServiceProviderMCL extends Component {
       // }
     }
 
-    this.setState({ loading: false, data: data, licensesDescription, membershipDescription, compliancesDescription })
-    this.updateprivateFields();
+    this.setState({ loading: false, data: data, licensesDescription, membershipDescription, compliancesDescription },()=>{
+      if (privateAry.length) {
+        this.updateprivateFields(privateAry);
+      }else {
+        const MprivateKeys = responseM && responseM.privateFields ? responseM.privateFields : [];
+        this.lockPrivateKeys('memberships', MprivateKeys);
+        const LprivateKeys = responseC && responseC.privateFields ? responseC.privateFields : [];
+        this.lockPrivateKeys('licenses', LprivateKeys);
+        const CprivateKeys = responseL && responseL.privateFields ? responseL.privateFields : [];
+        this.lockPrivateKeys('compliances', CprivateKeys);
+      } 
+    })
+  }
+
+/**
+   * UI creating lock function
+   * */
+  lockPrivateKeys(tabname, privateValues) {
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: tabname});
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: tabname})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   componentDidMount() {
@@ -155,12 +196,12 @@ export default class MlServiceProviderMCL extends Component {
     let details = this.state.data;
     let mcl = details[object];
     mcl = _.omit(details[object], keyName);
-    if (details && mcl) {
-      mcl[keyName] = value.toString('html');
-      details[object] = mcl;
-    } else {
+    // if (details && mcl) {
+    //   mcl[keyName] = value.toString('html');
+    //   details[object] = mcl;
+    // } else {
       details = _.extend(details, { [object]: { [keyName]: value.toString('html') } });
-    }
+    // }
     this.setState({ data: details, [keyName]: value }, function () {
       this.sendDataToParent()
     })
@@ -244,7 +285,7 @@ export default class MlServiceProviderMCL extends Component {
                           />
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                        id="isMembershipPrivate"
-                                       onClick={this.onLockChange.bind(this, "membershipDescription", "isMembershipPrivate", "memberships")}/>
+                                       onClick={this.onLockChange.bind(this, "membershipDescription", "isMembershipPrivate", MEMBERKEY)}/>
                         </div>
                       </div>
                     </div>
@@ -264,7 +305,7 @@ export default class MlServiceProviderMCL extends Component {
                           />
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                        id="isCompliancesPrivate"
-                                       onClick={this.onLockChange.bind(this, "compliancesDescription", "isCompliancesPrivate", "compliances")}/>
+                                       onClick={this.onLockChange.bind(this, "compliancesDescription", "isCompliancesPrivate", COMPLIANCEKEY)}/>
                         </div>
                       </div>
                     </div>
@@ -282,7 +323,7 @@ export default class MlServiceProviderMCL extends Component {
                         />
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                        id="isLicensesPrivate"
-                                       onClick={this.onLockChange.bind(this, "licensesDescription", "isLicensesPrivate", "licenses")}/>
+                                       onClick={this.onLockChange.bind(this, "licensesDescription", "isLicensesPrivate", LICENSEKEY)}/>
                         </div>
                       </div>
                     </div>
@@ -297,4 +338,5 @@ export default class MlServiceProviderMCL extends Component {
 
 MlServiceProviderMCL.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

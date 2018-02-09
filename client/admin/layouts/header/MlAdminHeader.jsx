@@ -17,6 +17,19 @@ export default class MlAdminHeader extends Component {
     return this;
   }
 
+  /**
+   * @function to inisilize the tool-tip through out the admin modules
+   */
+  componentDidMount() {
+    $('body').tooltip({
+      selector: '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])',
+      trigger: 'hover',
+      container: 'body'
+    }).on('click mousedown mouseup', '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])', () => {
+      $('[data-toggle="tooltip"], [title]:not([data-toggle="popover"])').tooltip('destroy');
+    });
+  }
+
   render(){
     let subMenu = this.context.menu.menu||[];
     let tabsubMenu;

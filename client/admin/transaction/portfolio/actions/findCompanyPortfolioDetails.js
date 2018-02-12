@@ -38,7 +38,7 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       spDescription,
                       isSPDescriptionPrivate,
                       privateFields{
-                          keyName,
+                          keyName
                           booleanKey
                           index
                           tabName

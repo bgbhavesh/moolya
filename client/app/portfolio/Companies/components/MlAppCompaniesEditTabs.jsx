@@ -201,7 +201,7 @@ export default class MlAppCompaniesEditTabs extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', "privateFields"]);
     this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
@@ -342,7 +342,7 @@ export default class MlAppCompaniesEditTabs extends Component {
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
     let privateObject = this.state.portfolioKeys;
-    privateObject['privateKeys'] = privateKeys;
+const object = omitDeep(data, ['logo', "privateFields"]);privateObject['privateKeys'] = privateKeys;
     privateObject['removePrivateKeys'] = removePrivateKeys;
     this.setState({ portfolioKeys: privateObject });
   }

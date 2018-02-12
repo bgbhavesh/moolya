@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -34,27 +32,20 @@ export default class MlCompanyRating extends React.Component{
     }
   }
   onClick(fieldName, field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;  
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {
+    const privateKey = {
       keyName: fieldName,
       booleanKey: field,
       isPrivate: isPrivate,
       tabName: KEY
     }
-    this.setState({privateKey: privateKey})
 
-    this.setState({data:details}, function () {
+    this.setState({ privateKey: privateKey }, () => {
       this.sendDataToParent()
     })
   }
@@ -67,6 +58,7 @@ export default class MlCompanyRating extends React.Component{
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
     let data = this.state.data
     this.props.getRating(data, this.state.privateKey)

@@ -64,6 +64,8 @@ export function passwordVisibilityHandler(){
   });
 }
 export function dataVisibilityHandler(){
+  $('.fa-lock').attr('title','Click to make public');
+  $('.fa-unlock').attr('title','Click to make private');
   $('.input_icon').unbind().click(function(){
     if($(this).hasClass('un_lock')){
       // $(this).parents('.form-group').find('input').attr('type','text');

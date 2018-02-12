@@ -44,6 +44,7 @@ export default class MlFunderAboutView extends React.Component{
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
 
     initalizeFloatLabel();
+    $('.fa-lock').attr('title','Marked as Private');
   }
 
   async fetchPortfolioDetails() {

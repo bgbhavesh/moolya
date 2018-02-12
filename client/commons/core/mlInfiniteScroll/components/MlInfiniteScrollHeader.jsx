@@ -63,7 +63,7 @@ export default class MlInfiniteScrollHeader extends Component {
           : ""
         }
         { config.alphabeticSearch ?
-            <AlphaSearch onAlphaSearchChange={props.onAlphaSearchChange} />
+          <div className='list_view_block'><AlphaSearch onAlphaSearchChange={props.onAlphaSearchChange} /></div>
           : ""
         }
 

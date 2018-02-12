@@ -26,7 +26,7 @@ export const mlAppStartupConfig = new MlAppViewer({
     filterComponent: <MlAppFilterContainer type='STU' />,
     filterData: filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "aboutUs.startupDescription",
+    alphabeticSearchField: "firstName",
     search: true,
     searchFields: ["aboutUs.startupDescription","chapterName","accountType","communityType","firstName","lastName"]
   },

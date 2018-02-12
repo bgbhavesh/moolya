@@ -25,7 +25,7 @@ export const mlAppInstitutionConfig = new MlAppViewer({
     filterComponent: <MlAppFilterContainer type='INS'/>,
     filterData: filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "aboutUs.companyDescription",
+    alphabeticSearchField: "firstName",
     search: true,
     searchFields: ["aboutUs.companyDescription", "firstName", "lastName", "chapterName", "accountType", "communityType"]
   },

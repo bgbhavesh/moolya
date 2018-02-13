@@ -9,6 +9,7 @@ import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAppUserContext from '../../mlAuthorization/mlAppUserContext'
+import MlSubChapterAccessControl from '../../mlAuthorization/mlSubChapterAccessControl';
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 var request = require('request');
@@ -570,27 +571,35 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   let query={};
   let moduleContext = "";
   var chapterCount=0
-
   let userId = context.userId;
   let userProfile = new MlUserContext().userProfileDetails(userId);
   var userSubChapterId = userProfile.subChapterId;
   let userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
   var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
-
   if(!isDefaultSubChapter){
       var relatedSubChapterIds = [];
+      // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {$and:[{subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}, {$or:[{"externalUser.canSearch":true},{"externalUser.canTransact":true},{"externalUser.canView":true}]}]}).fetch()
       var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
       if(relatedSubChapters&&relatedSubChapters.length>0){
           _.each(relatedSubChapters, function(obj){
             let ids = _.map(obj.subChapters, "subChapterId");
             relatedSubChapterIds = _.concat(relatedSubChapterIds, ids)
           })
-
           relatedSubChapterIds = _.uniq(relatedSubChapterIds);
-
           var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedSubChapterIds}}).fetch()
           var relatedChapterId = _.map(relatedSC, "chapterId");
           relatedChapterId = _.uniq(relatedChapterId);
+
+          let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
+          mlSubChapterAccessControl = mlSubChapterAccessControl || {};
+          mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
+          if (mlSubChapterAccessControl.isInclusive) {
+          subChapterQuery = { $in: mlSubChapterAccessControl.subChapters };
+          chapterQuery = { $in: mlSubChapterAccessControl.chapters };
+          } else {
+          subChapterQuery = { $nin: mlSubChapterAccessControl.subChapters };
+          chapterQuery = { $nin: mlSubChapterAccessControl.chapters };
+          }
       }
   }
   switch(args.moduleName){
@@ -602,11 +611,10 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               let ids = _.map(sub, "chapterId");
               ids = _.uniq(ids)
               chapterCount = mlDBController.find('MlChapters', {_id:{$in:ids}, clusterId:args.id, isActive:true}, context).count();
-
               query={"clusterId":args.id, chapterId:{$in:ids}, subChapterId:{$in:subIds}, isActive:true};
           }else{
-              chapterCount = mlDBController.find('MlChapters', {clusterId:args.id, isActive:true, _id:{$in:relatedChapterId}}, context).count();
-              query={"clusterId":args.id, isActive:true, "chapterId":{$in:relatedChapterId}, "subChapterId":{$in:relatedSubChapterIds}};
+              chapterCount = mlDBController.find('MlChapters', {clusterId:args.id, isActive:true, _id:chapterQuery}, context).count();
+              query={"clusterId":args.id, isActive:true, "chapterId":chapterQuery, "subChapterId":subChapterQuery};
           }
           break;
       case "chapter":
@@ -621,12 +629,12 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
 
           }else{
               if(userSubChapter.moolyaSubChapterAccess.externalUser.canView || userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){
-                chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, _id:{$in:relatedSubChapterIds}}, context).count()
+                chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, _id:subChapterQuery}, context).count()
                               + mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, isDefaultSubChapter:true}, context).count();
               }else{
-                chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, _id:{$in:relatedSubChapterIds}}, context).count();
+                chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, _id:subChapterQuery}, context).count();
               }
-              query={$or:[{"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, "subChapterId":{$in:relatedSubChapterIds}}, {"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, isDefaultSubChapter:true}]};
+              query={$or:[{"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, "subChapterId":subChapterQuery}, {"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, isDefaultSubChapter:true}]};
           }
 
           break;

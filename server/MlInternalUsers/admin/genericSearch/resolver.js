@@ -1145,7 +1145,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             break;
           case 'onBoard':
             let stage = mlDBController.findOne('MlStage', activityDocId);
-            doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : 'Pending';
+            if(stage.transactionLogStatus) {
+              let _status =  stage.transactionLogStatus;
+              let _onBoardStatus = _status.filter(function(data){
+                if(data.transactionId === doc._id) return data.status;
+              })
+              doc.status = _onBoardStatus.length && _onBoardStatus[0].status ? _onBoardStatus[0].status.slice(0,1).toUpperCase()+_onBoardStatus[0].status.slice(1) : "Pending"
+            }else doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : 'Pending';
             break;
         }
       }

@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil';
@@ -32,7 +31,7 @@ export default class MlGenericRAndDView extends React.Component {
     initalizeFloatLabel();
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    const className = this.props.isAdmin ? "admin_header" : "app_header";
     $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
@@ -56,7 +55,7 @@ export default class MlGenericRAndDView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id ? id : 0,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -77,10 +76,10 @@ export default class MlGenericRAndDView extends React.Component {
     var getData = data[id]
     this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
-    $('#funding_show').slideDown()
-
+    $('#funding_show').slideDown() 
+    $(".input_icon").removeClass('un_lock fa-lock').addClass('fa-unlock');
     _.each(getData.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock');
     })
   }
 
@@ -124,8 +123,7 @@ export default class MlGenericRAndDView extends React.Component {
               </ScrollArea>
             </div>
 
-            <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
-
+            <div className="sub_wrap_scroll hide_unlock" id="details-div" style={{'display': 'none'}}>
               <div className="top_block_scroller" id="forcecentered">
                 <ul>
                   {arrayList && arrayList.map(function (details, idx) {
@@ -157,7 +155,7 @@ export default class MlGenericRAndDView extends React.Component {
                                          value={this.state.viewCurDetail.researchAndDevelopmentName ? this.state.viewCurDetail.researchAndDevelopmentName : ""}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isResearchAndDevelopmentNamePrivate" />
                                 </div>
                               </form>
                             </div>
@@ -170,7 +168,7 @@ export default class MlGenericRAndDView extends React.Component {
                                          value={this.state.viewCurDetail.researchAndDevelopmentDescription ? this.state.viewCurDetail.researchAndDevelopmentDescription : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isResearchAndDevelopmentDescriptionPrivate" />
                                 </div>
                               </form>
                             </div>

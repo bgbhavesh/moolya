@@ -16,13 +16,27 @@ let stage=`
     resourceStage: String
     createdAt: Date
     updatedAt: Date
+    transactionLogStatus: [TransactionStatus]
+    }
+    
+   type TransactionStatus {
+    transactionId: String
+    status: String
   }
+  
+  
   input stage {
     resourceId: String
     resourceType: String
     resourceStage: String
     hasInvested: Boolean
     onBoardRequest: Boolean
+    transactionLogStatus: [transactionStatus]
+  }
+  
+   input transactionStatus {
+    transactionId: String
+    status: String
   }
 
     type Query {

@@ -52,7 +52,7 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {tabClassName: 'tab', panelClassName: 'panel', title:"About Us",name:"About Us", component:<MlCompanyAboutUs client={client} isAdmin={true} key="1"  getAboutUs={this.getAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.aboutUs}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" ,name:"Rating" , component:<MlCompanyRating key="2" getRating={this.getRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.rating}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" ,name:"Rating" , component:<MlCompanyRating key="2" getRating={this.getRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.rating} tabName="rating"/>},
       {
         tabClassName: 'tab',
         panelClassName: 'panel',

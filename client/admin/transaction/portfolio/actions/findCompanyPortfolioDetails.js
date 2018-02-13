@@ -133,6 +133,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
                       }
                   },
                   serviceProducts{

@@ -32,7 +32,7 @@ export default class MlAppInvestment extends Component {
     const response = await fetchLikePortfolioActionHandler('portfolio');
     if(response){
       let result = JSON.parse(response);
-      // console.log(result);
+      console.log("result", result);
       this.setState({
         portfolio: result
       });
@@ -49,6 +49,7 @@ export default class MlAppInvestment extends Component {
     const that = this;
 
     let data = this.state.data && this.state.data.processSteps && this.state.data.processSteps.length > 0 ? this.state.data.processSteps : [];
+    console.log("this.state.data", this.state.data);
     const MlTabs = data.filter(function (stage) {
       return stage.isActive;
     }).map(function (stage, id) {
@@ -61,6 +62,7 @@ export default class MlAppInvestment extends Component {
     });
 
     function getTabs() {
+     // console.log("MlTabs", MlTabs);
       return MlTabs.map(MlTab => ({
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional

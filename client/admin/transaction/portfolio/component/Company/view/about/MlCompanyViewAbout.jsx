@@ -1,7 +1,8 @@
 /**
  * Created by Rajat on 21/8/17.
  */
-import React from 'react';
+import React, { Component } from 'react';
+const FontAwesome = require('react-fontawesome');
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
@@ -9,7 +10,8 @@ import {findAnnotations} from '../../../../../../../commons/annotator/findAnnota
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
-export default class MlCompanyViewAbout extends React.Component {
+
+export default class MlCompanyViewAbout extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -28,11 +30,21 @@ export default class MlCompanyViewAbout extends React.Component {
     $('.actions_switch').click();
     $('.appCommentBox').addClass('in');
     initalizeFloatLabel();
+    this.lockPrivateKeys();
   }
+
+  lockPrivateKeys() {
+    const { privateFields } = this.props.aboutUsDetails;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   componentWillMount(){
-    let resp = this.validateUserForAnnotation();
+    const resp = this.validateUserForAnnotation();
     return resp
   }
+
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
@@ -85,8 +97,6 @@ export default class MlCompanyViewAbout extends React.Component {
     return response;
   }
 
-
-
   async fetchAnnotations(isCreate){
     const response = await findAnnotations(this.props.portfolioDetailsId, "companyAboutUs");
     let resp = JSON.parse(response.result);
@@ -108,24 +118,32 @@ export default class MlCompanyViewAbout extends React.Component {
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
-
     return response;
   }
 
   render() {
     const { editorValue } = this.state;
     return (
-      <div className="col-lg-12 col-sm-12" id="annotatorContent">
-        <div className="row">
-          <h2>About Us</h2>
-          <div className="panel panel-default panel-form-view">
-            <div className="panel-body">
-            <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ?
+      <div className="requested_input">
+        <div className="col-lg-12 col-sm-12" id="annotatorContent">
+          <div className="row">
+            <div className="panel-form-view">
+              <div className="panel panel-default">
+                <div className="panel panel-default hide_unlock">
+                  <div className="panel-heading">
+                    About Us
+                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isCompanyDescriptionPrivate" />
+                  </div>
+                </div>
+                <div className="panel-body">
+                  <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}</div>
-              {/* <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription :(<NoData tabName={this.props.tabName}/>)}</p> */}
+                  {/* <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription :(<NoData tabName={this.props.tabName}/>)}</p> */}
+                </div>
+              </div>
             </div>
           </div>
         </div>

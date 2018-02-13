@@ -3,14 +3,11 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
 
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
 import generateAbsolutePath  from '../../../../../../lib/mlGenerateAbsolutePath';
-
-
 
 var FontAwesome = require('react-fontawesome');
 
@@ -37,7 +34,7 @@ export default class MlGenericAchievementsView extends React.Component {
     initalizeFloatLabel();
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    const className = this.props.isAdmin ? "admin_header" : "app_header";
     $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
@@ -61,7 +58,7 @@ export default class MlGenericAchievementsView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id ? id : 0,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -83,7 +80,7 @@ export default class MlGenericAchievementsView extends React.Component {
     this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
-
+    $(".input_icon").removeClass('un_lock fa-lock').addClass('fa-unlock');
     _.each(getData.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -151,7 +148,7 @@ export default class MlGenericAchievementsView extends React.Component {
               <div className="main_wrap_scroll">
                 <ScrollArea speed={0.8} className="main_wrap_scroll"smoothScrolling={true} default={true} >
                   <div className="col-lg-12" id="psContent">
-                    <div className="row">
+                    <div className="row hide_unlock">
                       <div className="investement-view-content">
                         <div className="funding-investers" id="funding_show">
                           <div className="col-md-6 nopadding-left">
@@ -162,7 +159,7 @@ export default class MlGenericAchievementsView extends React.Component {
                                          value={this.state.viewCurDetail.achievementName ? this.state.viewCurDetail.achievementName : ""}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isAchievementNamePrivate"/>
                                 </div>
                               </form>
                             </div>
@@ -175,7 +172,7 @@ export default class MlGenericAchievementsView extends React.Component {
                                          value={this.state.viewCurDetail.achievementDescription ? this.state.viewCurDetail.achievementDescription : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isAchievementDescriptionPrivate"/>
                                 </div>
                               </form>
                             </div>

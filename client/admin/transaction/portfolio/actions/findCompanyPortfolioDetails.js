@@ -38,7 +38,7 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       spDescription,
                       isSPDescriptionPrivate,
                       privateFields{
-                          keyName,
+                          keyName
                           booleanKey
                           index
                           tabName
@@ -133,6 +133,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
                       }
                   },
                   serviceProducts{

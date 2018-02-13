@@ -171,7 +171,11 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
 
     var infoObject = companyAboutUsArray["information"];
     var infoFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, infoObject, context, "information");
-    companyAboutUsArray["information"] = infoFilteredObject
+    companyAboutUsArray["information"] = infoFilteredObject;
+
+    object = companyAboutUsArray["rating"];
+    const ratingFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "rating")
+    companyAboutUsArray["rating"] = ratingFilteredObject
 
     if(companyAboutUsArray && companyAboutUsArray.clients){
       companyAboutUsArray.clients = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, companyAboutUsArray.clients, context, "clients");

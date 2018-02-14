@@ -32,6 +32,8 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     if((props.data||{}).userId){
       this.findProcessSetupDetails();
     }
+
+    this.removeStageComponent = this.removeStageComponent.bind(this);
     return this;
   }
 
@@ -57,6 +59,13 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
       stages: this.state.stages.concat([{stageId: "", isActive:false, stageActions: [{actionId: "",actionType:"",isActive:false}]}])
     })
   }
+
+  removeStageComponent(index){
+    let { stages } = this.state;
+    stages.splice(index, 1);
+    this.setState({stages});
+  }
+
   addActionComponent(sIdx, e){
     let stages = this.state.stages
     let action = stages[sIdx].stageActions.concat([{actionId: "",actionType:"",isActive:false}]);
@@ -277,76 +286,87 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
-            <div className="panel panel-default">
-              <div className="panel-heading">Add Stages<img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
-              <div className="panel-body">
-                {that.state.stages.map(function (stage, sIdx) {
-                   return(
-                     <div className="row" key={sIdx}>
-                       <div className="col-md-6">
-                         <div className="form-group">
-                           <MoolyaSelect multiSelect={false} className="form-control float-label"
-                                         valueKey={'value'}
-                                         labelKey={'label'} queryType={"graphql"} query={stageQuery} isDynamic={true}
-                                         onSelect={that.optionsBySelectStage.bind(that, sIdx)}
-                                         placeholder="Select Stage"
-                                         selectedValue={stage.stageId}/>
-                         </div>
-                       </div>
-                       <div className="col-md-6">
-                         <div className="form-group switch_wrap inline_switch small_sw">
-                           <label>Status</label>
-                           <label className="switch">
-                             <input type="checkbox" checked={stage.isActive} onChange={that.onStageStatusChange.bind(that, sIdx)}/>
-                             <div className="slider"></div>
-                           </label>
-                         </div>
-                       </div>
-                       <div className="col-md-12">
-                         {stage.stageActions.map(function (action, aIdx) {
-                           return(
-                             <div className="form_inner_block col-md-4" key={aIdx}>
-                               <div className="add_form_block">
-                                 {
-                                   aIdx == 0
-                                     ?
-                                       <img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/>
-                                     :
-                                       <img src="/images/remove.png" onClick={that.removeActionComponent.bind(that, sIdx, aIdx)}/>
-                                 }
 
-                               </div>
-                               <div className="form-group">
-                                 <MoolyaSelect multiSelect={false} className="form-control float-label"
-                                               valueKey={'value'}
-                                               labelKey={'label'} queryType={"graphql"} query={actionQuery} isDynamic={true}
-                                               onSelect={that.optionsBySelectAction.bind(that, sIdx, aIdx)}
-                                               placeholder="Select Action"
-                                               selectedValue={action.actionId}/>
-                               </div>
-                               <div className="form-group">
-                                 <input type="text" placeholder="Type" className="form-control float-label" />
-                               </div>
-                               <div className="form-group switch_wrap inline_switch small_sw">
-                                 <label>Status</label>
-                                 <label className="switch">
-                                   <input type="checkbox" checked={action.isActive} onChange={that.onActionStatusChange.bind(that, sIdx, aIdx)}/>
-                                   <div className="slider"></div>
-                                 </label>
-                               </div>
-                             </div>
-                           )
-                         })}
+          <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
+            {that.state.stages.map(function (stage, sIdx) {
+               return(
+                 <div className="panel panel-default">
+                   <div className="panel-heading">{sIdx===0?'Add Stages':' '}
+                     {
+                       sIdx===0?
+                         <img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/>
+                         :
+                         <img className="pull-right" src="/images/remove.png" onClick={e=>that.removeStageComponent(sIdx)}/>
+                     }
+                   </div>
+                   <div className="panel-body">
+                   <div className="row" key={sIdx}>
+                     <div className="col-md-6">
+                       <div className="form-group">
+                         <MoolyaSelect multiSelect={false} className="form-control float-label"
+                                       valueKey={'value'}
+                                       labelKey={'label'} queryType={"graphql"} query={stageQuery} isDynamic={true}
+                                       onSelect={that.optionsBySelectStage.bind(that, sIdx)}
+                                       placeholder="Select Stage"
+                                       selectedValue={stage.stageId}/>
                        </div>
                      </div>
-                   )
-                  })}
-                <hr/>
-              </div>
-            </div>
+                     <div className="col-md-6">
+                       <div className="form-group switch_wrap inline_switch small_sw">
+                         <label>Status</label>
+                         <label className="switch">
+                           <input type="checkbox" checked={stage.isActive} onChange={that.onStageStatusChange.bind(that, sIdx)}/>
+                           <div className="slider"></div>
+                         </label>
+                       </div>
+                     </div>
+                     <div className="col-md-12">
+                       {stage.stageActions.map(function (action, aIdx) {
+                         return(
+                           <div className="form_inner_block col-md-4" key={aIdx}>
+                             <div className="add_form_block">
+                               {
+                                 aIdx == 0
+                                   ?
+                                     <img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/>
+                                   :
+                                     <img src="/images/remove.png" onClick={that.removeActionComponent.bind(that, sIdx, aIdx)}/>
+                               }
+
+                             </div>
+                             <div className="form-group">
+                               <MoolyaSelect multiSelect={false} className="form-control float-label"
+                                             valueKey={'value'}
+                                             labelKey={'label'} queryType={"graphql"} query={actionQuery} isDynamic={true}
+                                             onSelect={that.optionsBySelectAction.bind(that, sIdx, aIdx)}
+                                             placeholder="Select Action"
+                                             selectedValue={action.actionId}/>
+                             </div>
+                             <div className="form-group">
+                               <input type="text" placeholder="Type" className="form-control float-label" />
+                             </div>
+                             <div className="form-group switch_wrap inline_switch small_sw">
+                               <label>Status</label>
+                               <label className="switch">
+                                 <input type="checkbox" checked={action.isActive} onChange={that.onActionStatusChange.bind(that, sIdx, aIdx)}/>
+                                 <div className="slider"></div>
+                               </label>
+                             </div>
+                           </div>
+                         )
+                       })}
+                     </div>
+                   </div>
+
+                     <hr/>
+                   </div>
+                 </div>
+               )
+            })}
             <a className="fileUpload mlUpload_btn" onClick={this.saveProcessSetup.bind(this)}>Save details</a>
           </div>
+
+
           <div className="tab-pane" id={`paymentDetails${that.props.data._id}`}>
             <div className="row">
               <div className="col-md-6">

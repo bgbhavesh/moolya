@@ -23,7 +23,7 @@ export const mlAppCompanyConfig = new MlAppViewer({
     filterComponent: <MlAppFilterContainer type="CMP"/>,
     filterData: filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "aboutUs.companyDescription",
+    alphabeticSearchField: "firstName",
     search: true,
     searchFields: ["aboutUs.companyDescription", "firstName", "lastName", "chapterName", "accountType", "communityType"]
   },

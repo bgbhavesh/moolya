@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
-import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
@@ -15,7 +15,7 @@ const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
 
-export default class MlCompanyViewMCL extends React.Component {
+export default class MlCompanyViewMCL extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -70,10 +70,11 @@ export default class MlCompanyViewMCL extends React.Component {
   async fetchPortfolioDetails() {
     let that = this;
     let data = {};
+    let privateFields = [];
     let membershipsDescription;
     let compliancesDescription;
     let licensesDescription;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     /*const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
       this.setState({memberships: responseM.memberships});
@@ -89,35 +90,48 @@ export default class MlCompanyViewMCL extends React.Component {
     this.setState({loading: false});*/
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
-      this.setState({memberships: responseM.memberships,loading: true},function () {
-        this.fetchAnnotations();
-        this.setState({loading: false})
-      });
+      data.memberships = responseM.memberships;
+      privateFields = responseM.memberships && responseM.memberships.privateFields && responseM.memberships.privateFields.length ? responseM.memberships.privateFields.concat(privateFields) : privateFields;
+      // this.setState({memberships: responseM.memberships,loading: true},function () {
+      //   this.fetchAnnotations();
+      //   this.setState({loading: false})
+      // });
     }
     const responseC = await fetchCompanyDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
-      this.setState({compliances: responseC.compliances,loading: true},function () {
-        this.fetchAnnotations();
-        this.setState({loading: false})
-      });
+      data.compliances = responseC.compliances;
+      privateFields = responseC.memberships && responseC.compliances.privateFields && responseC.compliances.privateFields.length ? responseC.compliances.privateFields.concat(privateFields) : privateFields;
+      // this.setState({compliances: responseC.compliances,loading: true},function () {
+      //   this.fetchAnnotations();
+      //   this.setState({loading: false})
+      // });
     }
     const responseL = await fetchCompanyDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
-      this.setState({licenses: responseL.licenses,loading: true},function () {
-        this.fetchAnnotations();
-        this.setState({loading: false})
-      });
+      data.licenses = responseL.licenses;
+      privateFields = responseL.licenses && responseL.licenses.privateFields && responseL.licenses.privateFields.length ? responseL.licenses.privateFields.concat(privateFields) : privateFields;
+      // this.setState({licenses: responseL.licenses,loading: true},function () {
+      //   this.fetchAnnotations();
+      //   this.setState({loading: false})
+      // });
     }
-    data = {
-      memberships:this.state.memberships,
-      licenses: this.state.licenses,
-      compliances:this.state.compliances
-    }
+    // data = {
+    //   memberships:this.state.memberships,
+    //   licenses: this.state.licenses,
+    //   compliances:this.state.compliances
+    // }
     membershipsDescription = createValueFromString(data.memberships ? data.memberships.membershipsDescription : null);
     compliancesDescription = createValueFromString(data.compliances ? data.compliances.compliancesDescription : null);
     licensesDescription = createValueFromString(data.licenses ? data.licenses.licensesDescription : null);
-    this.setState({ data: data, loading: false,membershipsDescription, compliancesDescription, licensesDescription })
+
+    this.setState({ data: data, loading: false, membershipsDescription, compliancesDescription, licensesDescription }, () => {
+      this.fetchAnnotations();
+      _.each(privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    })
   }
+
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -191,76 +205,81 @@ export default class MlCompanyViewMCL extends React.Component {
     const { membershipsDescription, compliancesDescription, licensesDescription } = this.state;
     return (
       <div>
-        <div className="main_wrap_scroll">
+        <div className="main_wrap_scroll hide_unlock">
               <div className="portfolio-main-wrap" id="annotatorContent">
                 <h2>MCL</h2>
 
                 <div className="col-md-6 col-sm-6 nopadding-left">
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Membership</div>
-                    <div className="panel-body ">
-{/* 
+                    <div className="panel-body">
+                      <div className="form-group nomargin-bottom panel_input">
+                        {/* 
                   {showLoader === true ? (<MlLoader />) : (
                     <div>{this.state.memberships && this.state.memberships.membershipsDescription ? <p>{this.state.memberships.membershipsDescription}</p> : (<div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName} />
                     </div>)}
                   </div>)} */}
-                  {this.state.data.memberships && this.state.data.memberships.membershipsDescription ?
-                        <MlTextEditor
-                          value={membershipsDescription}
-                          isReadOnly={true}
-                        /> :
-                        <div className="portfolio-main-wrap">
-                          <NoData tabName={this.props.tabName} />
-                        </div>}
-
+                        {this.state.data.memberships && this.state.data.memberships.membershipsDescription ?
+                          <MlTextEditor
+                            value={membershipsDescription}
+                            isReadOnly={true}
+                          /> :
+                          <div className="portfolio-main-wrap">
+                            <NoData tabName={this.props.tabName} />
+                          </div>}
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMembershipsDescriptionPrivate" />
+                      </div>
                     </div>
                   </div>
                   <div className="clearfix"></div>
-
-
                 </div>
+
                 <div className="col-md-6 col-sm-6 nopadding-right">
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Compliances</div>
-                    <div className="panel-body ">
-{/* 
+                    <div className="panel-body">
+                      <div className="form-group nomargin-bottom panel_input">
+                        {/* 
                       {showLoader === true ? ( <MlLoader/>) : (
                     <div>{this.state.compliances && this.state.compliances.compliancesDescription ? <p>{this.state.compliances.compliancesDescription}</p> : (<div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName} />
                     </div>)}</div>)} */}
-                     
-                     {this.state.data.compliances && this.state.data.compliances.compliancesDescription ? 
+                        {this.state.data.compliances && this.state.data.compliances.compliancesDescription ?
                           <MlTextEditor
                             value={compliancesDescription}
                             isReadOnly={true}
                           /> :
                           <div className="portfolio-main-wrap">
-                            <NoData tabName={this.props.tabName}/>
+                            <NoData tabName={this.props.tabName} />
                           </div>}
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompliancesDescriptionPrivate" />
+                      </div>
                     </div>
                   </div>
+
                   <div className="clearfix"></div>
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Licenses</div>
-                    <div className="panel-body ">
-{/* 
+                    <div className="panel-body">
+                    <div className="form-group nomargin-bottom panel_input">
+                      {/* 
                   {showLoader === true ? (<MlLoader />) : (
                     <div>
                       {this.state.licenses && this.state.licenses.licensesDescription ? <p>{this.state.licenses.licensesDescription}</p> : (<div className="portfolio-main-wrap">
                         <NoData tabName={this.props.tabName} />
                       </div>)}
                     </div>)} */}
-                     {this.state.data.licenses && this.state.data.licenses.licensesDescription ?     
-                          <MlTextEditor
-                            value={licensesDescription}
-                            isReadOnly={true}
-                          /> :
-                          <div className="portfolio-main-wrap">
-                            <NoData tabName={this.props.tabName}/>
-                          </div>}
-
-
+                      {this.state.data.licenses && this.state.data.licenses.licensesDescription ?
+                        <MlTextEditor
+                          value={licensesDescription}
+                          isReadOnly={true}
+                        /> :
+                        <div className="portfolio-main-wrap">
+                          <NoData tabName={this.props.tabName} />
+                        </div>}
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLicensesDescriptionPrivate" />
+                        </div>
                     </div>
                   </div>
                 </div>

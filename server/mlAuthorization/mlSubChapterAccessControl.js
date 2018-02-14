@@ -99,6 +99,7 @@ class MlSubChapterAccessControl {
     var isInternalUser = context.isInternalUser;
     var contextSubChapterId = context.contextSubChapterId;
     var requestSubChapterId = context.requestSubChapterId;
+    let contextChapterId= context.contextChapterId;
     var subChapter = mlDBController.findOne('MlSubChapters', {_id: contextSubChapterId}) || {};
     var ecoSystemAccessPermission = (subChapter.moolyaSubChapterAccess || {}).externalUser || {};
     /**check for ecosystem access permission for context user subChapter*/
@@ -112,17 +113,20 @@ class MlSubChapterAccessControl {
     var accessControl = {hasAccess: false, isInclusive: true, subChapters: null};
     /** check for  context user specific subChapter ['subChapterId']*/
     var allowedSubChapters = [contextSubChapterId];
+    let allowedChapters=[contextChapterId];
     /**get all related sub Chapters.*/
     var relatedObj = MlSubChapterAccessControl.getRelatedSubChapters(isInternalUser, contextSubChapterId, permission);
     allowedSubChapters = allowedSubChapters.concat(relatedObj.relatedSubChapters);
-
+    allowedChapters= allowedChapters.concat(relatedObj.relatedChapters);
+    allowedChapters = _.uniq(allowedChapters);
     switch (permission) {
       case 'SEARCH':
         if (canSearch) {
-          var privateSubChapters = MlSubChapterAccessControl.getNonRelatedPrivateEcoSystemSubChapters(permission, allowedSubChapters) || [];
-          accessControl = {hasAccess: true, isInclusive: false, subChapters: privateSubChapters};
+          const privateSubChapters = MlSubChapterAccessControl.getNonRelatedPrivateEcoSystemSubChapters(permission, allowedSubChapters) || [];
+          accessControl = {hasAccess: true, isInclusive: false, subChapters: privateSubChapters.subChapterAry, chapters:privateSubChapters.chapterAry};
+          // accessControl = {hasAccess: true, isInclusive: false, subChapters: privateSubChapters};
         } else {
-          accessControl = {hasAccess: true, isInclusive: true, subChapters: allowedSubChapters};
+          accessControl = {hasAccess: true, isInclusive: true, subChapters: allowedSubChapters, chapters: allowedChapters};
         }
         break;
       case 'VIEW':
@@ -246,8 +250,10 @@ class MlSubChapterAccessControl {
           'moolyaSubChapterAccess.externalUser.canSearch':false,'moolyaSubChapterAccess.externalUser.canView':false,'moolyaSubChapterAccess.externalUser.canTransact':false
         }).fetch();
     }
-    var privateSubChaptersList = _.map(privateSubChapters, '_id');
-    return privateSubChaptersList;
+    const privateSubChaptersList = _.map(privateSubChapters, '_id');
+    const privateChaptersList = _.map(privateSubChapters, "chapterId");
+    return { subChapterAry: privateSubChaptersList, chapterAry: privateChaptersList };
+    // return privateSubChaptersList;
   }
 
   /**check for view/transact access for nonMoolyaSubChapter Access*/

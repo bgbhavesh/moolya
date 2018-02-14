@@ -1,18 +1,19 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var Rating = require('react-rating');
+import _ from "lodash";
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 
 const KEY = 'rating'
 
-export default class MlCompanyRating extends React.Component{
+export default class MlCompanyRating extends Component{
   constructor(props, context){
     super(props);
     this.state={
+      loading: true,
       data:this.props.ratingDetails || {},
       privateKey: {}
     }
@@ -30,31 +31,43 @@ export default class MlCompanyRating extends React.Component{
   componentWillMount(){
     let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.rating)
     if(!empty){
-      this.setState({data: this.context.companyPortfolio.rating});
+      this.setState({loading: false,data: this.context.companyPortfolio.rating},()=>{
+        this.lockPrivateKeys();
+      });
+    }else{
+      this.setState({ loading: false },()=>{
+        this.lockPrivateKeys();
+      })
     }
   }
+
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   onClick(fieldName, field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;  
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {
+    const privateKey = {
       keyName: fieldName,
       booleanKey: field,
       isPrivate: isPrivate,
       tabName: KEY
     }
-    this.setState({privateKey: privateKey})
 
-    this.setState({data:details}, function () {
+    this.setState({ privateKey: privateKey }, () => {
       this.sendDataToParent()
     })
   }
@@ -73,8 +86,10 @@ export default class MlCompanyRating extends React.Component{
   }
   render(){
     let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:4);
+    const showLoader = this.state.loading;
     return (
     <div className="requested_input">
+    {showLoader === true ? ( <MlLoader/>) : (
       <div className="col-lg-12">
         <div className="row">
           <h2>Add Rating</h2>
@@ -95,13 +110,12 @@ export default class MlCompanyRating extends React.Component{
 
             </div>
           </div>
-
-
-        </div> </div>
+        </div> </div>)}
     </div>
     )
   }
 }
 MlCompanyRating.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

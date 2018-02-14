@@ -1,10 +1,10 @@
 import React from 'react';
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-import _ from 'lodash'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
@@ -48,13 +48,17 @@ export default class MlCompanyViewEvolution extends React.Component {
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (responseM) {
       const editorValue = createValueFromString(responseM.evolution.evolutionDescription);
-      this.setState({evolution: responseM.evolution,loading:false,editorValue: editorValue});
+      this.setState({ evolution: responseM.evolution, loading: false, editorValue: editorValue }, () => {
+        _.each(responseM.evolution.privateFields, function (pf) {
+          $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
+      });
     }
 
-    data = {
-      evolution:this.state.evolution,
-    }
-    this.setState({data:data})
+    // data = {
+    //   evolution:this.state.evolution,
+    // }
+    // this.setState({ data: data })
 
   }
   initalizeAnnotaor(){
@@ -143,7 +147,7 @@ export default class MlCompanyViewEvolution extends React.Component {
       return (
           <div className="portfolio-main-wrap" id="annotatorContent">
             <div className="col-lg-12 col-sm-12">
-              <div className="row">
+              <div className="row hide_unlock">
                 <h2>Evolution</h2>
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-body">
@@ -152,6 +156,7 @@ export default class MlCompanyViewEvolution extends React.Component {
                           value={editorValue}
                           isReadOnly={true}
                         /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isEvolutionDescriptionPrivate" />
                     {/* {loading === true ? ( <MlLoader/>) : (<p>{this.state.evolution && this.state.evolution.evolutionDescription ? this.state.evolution.evolutionDescription :  (<div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
                     </div>)}</p>)} */}

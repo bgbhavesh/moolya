@@ -294,8 +294,10 @@ export async function fetchServiceProviderMemberships(portfoliodetailsId) {
                 membershipDescription
                 isMembershipPrivate
                 privateFields{
-                  keyName,
+                  keyName
                   booleanKey
+                  tabName
+                  index
                 }
               }
             }
@@ -322,6 +324,8 @@ export async function fetchServiceProviderCompliances(portfoliodetailsId) {
                 privateFields{
                   keyName,
                   booleanKey
+                  tabName
+                  index
                 }
               }
             }
@@ -348,6 +352,8 @@ export async function fetchServiceProviderLicenses(portfoliodetailsId) {
                 privateFields{
                   keyName,
                   booleanKey
+                  tabName
+                  index
                 }
               }
             }
@@ -444,7 +450,8 @@ export async function findServiceProviderAboutActionHandler(portfoliodetailsId) 
                   }
                   privateFields{
                     keyName,
-                    booleanKey
+                    booleanKey,
+                    tabName
                   }
                 }
             }

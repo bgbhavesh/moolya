@@ -76,9 +76,9 @@ export default class MlInstitutionEditLookingFor extends Component {
         loading: false,
         institutionLookingFor: that.context.institutionPortfolio.lookingFor,
         institutionLookingForList: that.context.institutionPortfolio.lookingFor
-      });
+      })
     }
-    this.institutionLookingForServer = response ? response : [];
+    this.institutionLookingForServer = response && response.lookingFor && response.lookingFor.length ? response.lookingFor : [];
   }
 
   addLookingFor() {

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
-import AlphaSearch from "../../../commons/components/alphaSearch/AlphaSearch";
+import AlphaSearch from "../../../commons/components/alphaSearch/AlphaSearchWithAll";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import Pagination from "../../../commons/components/pagination/Pagination";
 import _ from "lodash";

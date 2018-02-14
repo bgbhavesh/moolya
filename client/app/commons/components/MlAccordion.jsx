@@ -16,10 +16,16 @@ export default class MlAccordion extends React.Component {
     }
     this.onTabClick.bind(this);
     //set action panel activation handler callback
-    if(_.isFunction(props.activateActionPanelHandler)){
-      props.activateActionPanelHandler(this.activateActionPanel.bind(this));
-    }
+    // if(_.isFunction(props.activateActionPanelHandler)){
+    //   props.activateActionPanelHandler(this.activateActionPanel.bind(this));
+    // }
     return this;
+  }
+
+  componentWillMount() {
+    if (_.isFunction(this.props.activateActionPanelHandler)) {
+      this.props.activateActionPanelHandler(this.activateActionPanel.bind(this));
+    }
   }
 
   activateActionPanel(){

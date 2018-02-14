@@ -84,10 +84,16 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
   if(stageDetails) {
       if (stageDetails && stageDetails.hasInvested &&  stageDetails.onBoardRequest) {
         stageDetails.onBoardStatus = args.status ;
+        let transactionLogStatus = {
+          transactionId: transactionLogDetails._id,
+          status: args.status
+        }
         if(stageDetails.onBoardStatus == "accept"){
           stageDetails.resourceStage = 'onboard';
         }
         stageDetails.onBoardRequest = false;
+        stageDetails.transactionLogStatus = stageDetails.transactionLogStatus ? stageDetails.transactionLogStatus : [];
+        stageDetails.transactionLogStatus.push(transactionLogStatus);
         result = mlDBController.update('MlStage', {_id:transactionLogDetails.activityDocId} , stageDetails, {$set:true}, context);
         // let user = mlDBController.findOne('MlPortfolioDetails', {_id: transactionLogDetails.docId}, context);
         // new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)

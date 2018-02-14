@@ -107,7 +107,7 @@ export default class MlInstitutionEditPartners extends React.Component {
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })*/
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
     // this.setState({privateKey:privateKey})
     this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()

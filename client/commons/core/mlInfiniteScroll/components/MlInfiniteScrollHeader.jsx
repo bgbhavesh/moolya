@@ -9,7 +9,7 @@
  * Imports libs and components
  */
 import React, {Component} from 'react';
-import AlphaSearch from "./../../../../commons/components/alphaSearch/AlphaSearch";
+import AlphaSearch from "./../../../../commons/components/alphaSearch/AlphaSearchWithAll";
 
 export default class MlInfiniteScrollHeader extends Component {
 

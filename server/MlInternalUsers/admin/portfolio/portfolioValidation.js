@@ -138,7 +138,7 @@ class portfolioValidation {
           as: 'user',
       }},
       {"$unwind": { path: '$user', preserveNullAndEmptyArrays: true}},
-      {"$match":{'user.profile.isExternaluser': true}},
+      {"$match":{'user.profile.isExternaluser': true, 'user.profile.isActive': true}},
       {
        "$unwind":{
           "path":"$user.profile.externalUserProfiles",

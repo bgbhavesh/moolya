@@ -252,8 +252,6 @@ export default class MlServiceManageSchedule extends Component {
         data.prevFinalAmount = service.finalAmount;
         this.setState({data: data});
       }
-      // const response = { result: "checking result" };,
-      console.log("this.props.loggedUserDetails", loggedUserDetails);
       this.showResponseMsg(response, type);
     } else {
       toastr.error(this.errorMsg);

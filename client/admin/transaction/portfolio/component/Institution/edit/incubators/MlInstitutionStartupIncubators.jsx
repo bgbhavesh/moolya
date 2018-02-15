@@ -134,7 +134,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
                       value={editorValue}
                       handleOnChange={(value) => this.handleBlur(value, "institutionIncubatorsDescription")}
                     />
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInstitutionIncubatorsPrivate" defaultValue={this.state.data&&this.state.data.isInstitutionIncubatorsPrivate} onClick={this.onLockChange.bind(this, "institutionIncubatorsDescription", "isInstitutionIncubatorsPrivate")}/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInstitutionIncubatorsPrivate" onClick={this.onLockChange.bind(this, "institutionIncubatorsDescription", "isInstitutionIncubatorsPrivate")}/>
                 </div>
               </div>
             </div>

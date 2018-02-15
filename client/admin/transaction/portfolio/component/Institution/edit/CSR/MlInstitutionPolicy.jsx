@@ -84,20 +84,13 @@ export default class MlInstitutionPolicy extends React.Component{
     this.props.getInstitutionPolicy(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    let isPrivate = false;
+    const className = e.target.className;
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: KEY }
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
   }

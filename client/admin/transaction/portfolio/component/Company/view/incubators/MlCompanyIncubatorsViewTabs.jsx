@@ -1,6 +1,5 @@
 
 import React from "react";
-import {render} from "react-dom";
 import MlCompanyViewStartupIncubators from "./MlCompanyViewStartupIncubators";
 import MlCompanyViewSectors from "./MlCompanyViewSectors";
 import MlCompanyViewListOfIncubators from "./MlCompanyViewListOfIncubators";

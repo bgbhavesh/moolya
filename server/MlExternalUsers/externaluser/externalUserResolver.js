@@ -634,7 +634,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               }else{
                 chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, _id:subChapterQuery}, context).count();
               }
-              query={$or:[{"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, "subChapterId":subChapterQuery}, {"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, isDefaultSubChapter:true}]};
+              query={"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, "$or":[{"subChapterId":subChapterQuery}, {isDefaultSubChapter:true}]};
           }
 
           break;
@@ -671,6 +671,10 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           if(query){
               if(query.clusterId && query.chapterId && query.subChapterId){
                   pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.chapterId":query.chapterId, "profile.externalUserProfiles.subChapterId":query.subChapterId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})
+              }
+              else if(query.clusterId && query.chapterId && query.$or && !_underscore.isEmpty(_underscore.filter(query.$or, "subChapterId"))){
+                  subChapId = _.find(query.$or, "subChapterId").subChapterId;
+                  pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.chapterId":query.chapterId, "profile.externalUserProfiles.subChapterId":subChapId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})
               }
               else if(query.clusterId && query.chapterId){
                   pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.chapterId":query.chapterId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})

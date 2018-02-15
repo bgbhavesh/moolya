@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
@@ -30,7 +31,7 @@ export default class MlInstitutionPolicy extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
   // componentWillMount(){
   //   let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts)
@@ -45,22 +46,26 @@ export default class MlInstitutionPolicy extends React.Component{
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.policy)
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.policy) {
         const editorValue = createValueFromString(response && response.policy && response.policy.institutionPolicyDescription ? response.policy.institutionPolicyDescription : null);
         var object = response.policy;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
+        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue}, () => {
+          this.lockPrivateKeys();
+        });
       }else{
         this.setState({loading:false})
       }
     }else{
       const editorValue = createValueFromString(that.context.institutionPortfolio.policy && that.context.institutionPortfolio.policy.institutionPolicyDescription ? that.context.institutionPortfolio.policy.institutionPolicyDescription : null);
-      this.setState({loading: false, data: that.context.institutionPortfolio.policy,editorValue});
+      this.setState({loading: false, data: that.context.institutionPortfolio.policy,editorValue}, () =>{
+        this.lockPrivateKeys();
+      });
     }
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
 
   handleBlur(value,keyName){
@@ -84,30 +89,45 @@ export default class MlInstitutionPolicy extends React.Component{
     this.props.getInstitutionPolicy(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    // let details = this.state.data||{};
+    // let key = e.target.id;
+    // details=_.omit(details,[key]);
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+      // details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    // else{
+    //   details=_.extend(details,{[key]:false});
+    // }
+    const privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate,tabName: this.props.tabName}
+    this.setState({privateKey:privateKey}, ()=>{
       this.sendDataToParent()
     })
+    // this.setState({data:details}, function () {
+     
+    // })
   }
 
-  updatePrivateKeys(){
-    let response = this.state.data
-    _.each(response.privateFields, function (pf) {
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
+
+  // updatePrivateKeys(){
+  //   let response = this.state.data
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
 
 
   render(){
@@ -136,8 +156,6 @@ export default class MlInstitutionPolicy extends React.Component{
 
                   </div>
                 </div>
-
-
               </div>
             </div>
           </div>)}
@@ -147,4 +165,5 @@ export default class MlInstitutionPolicy extends React.Component{
 }
 MlInstitutionPolicy.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

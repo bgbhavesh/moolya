@@ -344,7 +344,7 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
                         </div>
                         <div className="form-group">
                           <input type="text" name="intrapreneurDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.intrapreneurDescription}  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "intrapreneurDescription", "isDescriptionPrivate")}/>
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntrapreneurDescriptionPrivate" onClick={this.onLockChange.bind(this, "intrapreneurDescription", "isIntrapreneurDescriptionPrivate")}/>
                         </div>
                         {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">
@@ -374,3 +374,8 @@ MlInstitutionEditIntrapreneur.contextTypes = {
   institutionPortfolio: PropTypes.object,
   portfolioKeys :PropTypes.object
 };
+
+/**
+ * @note :: {*isDescriptionPrivate} updated to {*isIntrapreneurDescriptionPrivate}
+ *          to match it with the description in generic filter 
+ */

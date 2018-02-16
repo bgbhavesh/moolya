@@ -124,7 +124,9 @@ export default class MlServiceProviderEditTabs extends Component {
     }
     data['lookingFor'] = details;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({ serviceProviderPortfolio: object }, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
   }
   /**
    * getting all values from the child components and passing all to Main component through props
@@ -133,7 +135,9 @@ export default class MlServiceProviderEditTabs extends Component {
     let data = this.state.serviceProviderPortfolio;
     data['about'] = details;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey);
+    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
   getAwardsDetails(details, privateKey, requiredFields,) {
@@ -159,7 +163,9 @@ export default class MlServiceProviderEditTabs extends Component {
       data['licenses'] = details.licenses;
     }
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey);
+    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
   getServiceProviderServices(details, privateKey) {
@@ -181,7 +187,8 @@ export default class MlServiceProviderEditTabs extends Component {
       data['licenses'] = details.licenses;
     }
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, []);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, []);
   }
 
   getServiceProviderClients(details, privateKey, requiredFields) {

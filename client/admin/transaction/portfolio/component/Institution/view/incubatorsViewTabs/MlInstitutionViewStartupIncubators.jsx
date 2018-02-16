@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
@@ -15,7 +13,7 @@ import NoData from '../../../../../../../commons/components/noData/noData';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "institutionIncubators"
 
-export default class MlInstitutionStartupIncubators extends React.Component{
+export default class MlInstitutionStartupIncubators extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -123,21 +121,29 @@ export default class MlInstitutionStartupIncubators extends React.Component{
     if (response && response.institutionIncubators) {
       const editorValue = createValueFromString(response.institutionIncubators.institutionIncubatorsDescription);
       var object = response.institutionIncubators;
-      this.setState({loading: false,institutionIncubators: object,editorValue : editorValue});
+      this.setState({ loading: false, institutionIncubators: object, editorValue: editorValue }, () => {
+        this.lockPrivateKeys();
+      });
     }else{
-      this.setState({loading:false})
+      this.setState({ loading: false });
     }
+  }
+
+  lockPrivateKeys() {
+    const { privateFields } = this.state.institutionIncubators;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render(){
     const showLoader = this.state.loading;
     const { editorValue } = this.state;
     return (
-
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>Startup Incubators</h2>
-              <div className="panel panel-default panel-form-view" id="annotatorContent">
+              <div className="panel panel-default panel-form-view hide_unlock" id="annotatorContent">
                 <div className="panel-body">
                 {showLoader === true ? (<MlLoader />) : (<div>{this.state.institutionIncubators && this.state.institutionIncubators.institutionIncubatorsDescription ?
                         <MlTextEditor
@@ -149,11 +155,11 @@ export default class MlInstitutionStartupIncubators extends React.Component{
                       <NoData tabName={this.props.tabName}/>
                     </div>
                 }</p>)} */}
+                  <FontAwesome name='unlock' className="input_icon" id="isInstitutionIncubatorsPrivate" />
                 </div>
               </div>
             </div>
           </div>
-
     )
   }
 }

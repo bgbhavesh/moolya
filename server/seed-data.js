@@ -90,7 +90,7 @@ if(!platformrole){
                     {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
                     {moduleId:(_.find(mlModules, {code:"SHARE"}))._id, actions:readPermissions, isActive:true},
                     {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true},   /*adding office module*/
-                    {moduleId:(_.find(mlModules, {code:"SERVICECARD"}))._id, actions:readPermissions, isActive:true},
+                    { moduleId: (_.find(mlModules, { code: "SERVICECARD" }))._id, actions: permissions, isActive: true },
                   ]
     var role = {
       roleName:"clusteradmin",
@@ -125,7 +125,7 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"SHARE"}))._id, actions:readPermissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true},   /*adding office module*/
-    {moduleId:(_.find(mlModules, {code:"SERVICECARD"}))._id, actions:readPermissions, isActive:true}
+    { moduleId: (_.find(mlModules, { code: "SERVICECARD" }))._id, actions: permissions, isActive: true }
   ]
   let role = {
     roleName:"chapteradmin",
@@ -168,7 +168,7 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:readPermissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true},   /*adding office module*/
-    {moduleId:(_.find(mlModules, {code:"SERVICECARD"}))._id, actions:readPermissions, isActive:true},
+    { moduleId: (_.find(mlModules, { code: "SERVICECARD" }))._id, actions: permissions, isActive: true },
     {moduleId:(_.find(mlModules, {code:"SHARE"}))._id, actions:readPermissions, isActive:true},
   ]
   let role = {
@@ -207,7 +207,7 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"SHARE"}))._id, actions:readPermissions, isActive:true},
-    {moduleId:(_.find(mlModules, {code:"SERVICECARD"}))._id, actions:readPermissions, isActive:true},
+    { moduleId: (_.find(mlModules, { code: "SERVICECARD" }))._id, actions: permissions, isActive: true },
     {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {

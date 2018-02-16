@@ -2,12 +2,14 @@
  * Created by Birendra on 21/8/17.
  */
 import React from 'react';
+const FontAwesome = require('react-fontawesome');
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+
 export default class MlInstitutionViewInformation extends React.Component {
   constructor(props) {
     super(props)
@@ -21,11 +23,16 @@ export default class MlInstitutionViewInformation extends React.Component {
     this.annotatorEvents.bind(this);
   }
 
- /* componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+  componentDidMount() {
+    this.lockPrivateKeys();
   }
-*/
+  
+  lockPrivateKeys() {
+    const { privateFields } = this.props.informationDetails ;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
 
   componentWillMount(){
     const resp = this.validateUserForAnnotation();
@@ -118,13 +125,14 @@ export default class MlInstitutionViewInformation extends React.Component {
       <div className="col-lg-12 col-sm-12">
         <div className="row">
           <h2>Information</h2>
-          <div className="panel panel-default panel-form-view">
+          <div className="panel panel-default panel-form-view hide_unlock">
             <div className="panel-body" id="annotatorContent">
             {this.props.informationDetails && this.props.informationDetails.informationDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}
+            <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate" />
               {/* <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
             </div>
           </div>

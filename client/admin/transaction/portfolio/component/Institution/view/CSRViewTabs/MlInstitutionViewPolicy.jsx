@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'react-dom';
+const FontAwesome = require('react-fontawesome');
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
@@ -7,6 +7,7 @@ import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeato
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+
 const KEY = "policy"
 export default class MlInstitutionViewPolicy extends React.Component {
   constructor(props) {
@@ -124,12 +125,19 @@ export default class MlInstitutionViewPolicy extends React.Component {
       const editorValue = createValueFromString(response.policy.institutionPolicyDescription);
       var object = response.policy;
       object = _.omit(object, '__typename')
-      // this.setState({data: object});
-      this.setState({loading: false,data: object,editorValue: editorValue});
+      this.setState({ loading: false, data: object, editorValue: editorValue }, () => {
+        this.lockPrivateKeys();
+      });
     }else{
       this.setState({loading:false})
     }
+  }
 
+  lockPrivateKeys() {
+    const { privateFields } = this.state.data;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render() {
@@ -139,7 +147,7 @@ export default class MlInstitutionViewPolicy extends React.Component {
       <div className="col-lg-12 col-sm-12" >
         <div className="row" id="annotatorContent">
           <h2>Policy</h2>
-          <div className="panel panel-default panel-form-view">
+          <div className="panel panel-default panel-form-view hide_unlock">
 
             <div className="panel-body">
             {showLoader === true ? (<MlLoader />) : (<div>{this.state.data && this.state.data.institutionPolicyDescription ?
@@ -147,6 +155,7 @@ export default class MlInstitutionViewPolicy extends React.Component {
                           value={editorValue}
                           isReadOnly={true}
                         /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+            <FontAwesome name='unlock' className="input_icon" id="institutionPolicyDescriptionPrivate" />
               {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.data && this.state.data.institutionPolicyDescription ? this.state.data.institutionPolicyDescription : (<NoData tabName={this.props.tabName}/>)}</p>)} */}
 
             </div>
@@ -157,3 +166,7 @@ export default class MlInstitutionViewPolicy extends React.Component {
     )
   }
 };
+
+/**
+ * @todo: {institutionPolicyDescriptionPrivate} need to replace with {isInstitutionPolicyDescriptionPrivate}
+ */

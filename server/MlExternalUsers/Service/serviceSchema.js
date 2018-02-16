@@ -395,7 +395,7 @@ let service=`
         updateServiceGoLive(serviceId:String!):response
         updateServiceSendReview(serviceId:String!):response
         updateService(serviceId:String,Services:service):response
-        updateServiceAdmin(serviceId:String,Services:service):response
+        updateServiceAdmin(serviceId:String,Services:service, clusterId: String, chapterId: String, subChapterId: String, communityId: String ):response
         createServiceCardOrder(serviceId: String!, taskDetails: [tasks]):response
         updateServiceCardOrder(userServiceCardPaymentInfo: userServiceCardPaymentInfo):response
         checkServiceSubChapterAccessControl(serviceId:String!):response

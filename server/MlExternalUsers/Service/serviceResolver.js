@@ -194,8 +194,9 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
         }
         args.Services.isCurrentVersion = false;
       }
-
+    
       let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
+      
       if(result){
         let serviceInfo = args.Services;
         serviceInfo.userId = service.userId;

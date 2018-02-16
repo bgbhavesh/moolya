@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
@@ -23,7 +21,6 @@ export default class MlInstitutionSectors extends React.Component{
       content:{},
       loading: true
     }
-    this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -89,8 +86,6 @@ export default class MlInstitutionSectors extends React.Component{
     return response;
   }
 
-
-
   async fetchAnnotations(isCreate){
     const response = await findAnnotations(this.props.portfolioDetailsId, "institutionSectors");
     let resp = JSON.parse(response.result);
@@ -122,11 +117,20 @@ export default class MlInstitutionSectors extends React.Component{
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.sectorsAndServices) {
         const editorValue = createValueFromString(response.sectorsAndServices.sectorsAndServicesDescription);
-        var object = response.sectorsAndServices;
-        this.setState({loading: false,sectorsAndServices: object,editorValue : editorValue});
+        const object = response.sectorsAndServices;
+        this.setState({ loading: false, sectorsAndServices: object, editorValue: editorValue }, () => {
+          this.lockPrivateKeys();
+        });
       }else{
         this.setState({loading:false})
       }
+  }
+
+  lockPrivateKeys() {
+    const { privateFields } = this.state.sectorsAndServices;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render(){
@@ -138,7 +142,7 @@ export default class MlInstitutionSectors extends React.Component{
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>Sectors And Services</h2>
-              <div className="panel panel-default panel-form-view" id="annotatorContent">
+              <div className="panel panel-default panel-form-view hide_unlock" id="annotatorContent">
 
                 <div className="panel-body">
                 {showLoader === true ? (<MlLoader />) : (<div>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ?
@@ -151,7 +155,7 @@ export default class MlInstitutionSectors extends React.Component{
                       <NoData tabName={this.props.tabName}/>
                     </div>
                 }</p>)} */}
-
+                <FontAwesome name='unlock' className="input_icon" id="isSectorsAndServicesPrivate" />
                 </div>
               </div>
             </div>

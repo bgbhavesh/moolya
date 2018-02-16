@@ -339,7 +339,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
                         </div>
                         <div className="form-group">
                           <input type="text" name="intrapreneurDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.intrapreneurDescription}  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntrapreneurDescriptionPrivate" defaultValue={this.state.data.isIntrapreneurDescriptionPrivate}  onClick={this.onLockChange.bind(this, "intrapreneurDescription", "isIntrapreneurDescriptionPrivate")}/>
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntrapreneurDescriptionPrivate" onClick={this.onLockChange.bind(this, "intrapreneurDescription", "isIntrapreneurDescriptionPrivate")}/>
                         </div>
                         {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">

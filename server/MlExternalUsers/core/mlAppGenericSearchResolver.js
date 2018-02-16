@@ -174,6 +174,28 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
       },
       { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
       {
+         $unwind:{
+            "path":"$user.profile.externalUserProfiles",
+            "preserveNullAndEmptyArrays":true
+         }
+      },
+      { 
+        $redact: { 
+          $cond: [
+            {
+              $and: [
+                { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.isActive", true ] }
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
+      },
+      {
         $project: {
           portfolioDetailsId: 1,
           funderAbout: 1,
@@ -202,6 +224,21 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
     const pipleline = [
       {
         $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+         $unwind:{
+            "path":"$user.profile.externalUserProfiles",
+            "preserveNullAndEmptyArrays":true
+         }
+      },
+      {
+        $lookup: {
           from: 'mlPortfolioDetails',
           localField: 'portfolioDetailsId',
           foreignField: '_id',
@@ -219,15 +256,22 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       { $unwind: { path: '$subChapter', preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'userId',
-          foreignField: '_id',
-          as: 'user',
-        },
+      { 
+        $redact: { 
+          $cond: [
+            {
+              $and: [
+                { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.isActive", true ] }
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
       },
-      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
       {
         $project: {
           portfolioDetailsId: 1,
@@ -274,6 +318,28 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+         $unwind:{
+            "path":"$user.profile.externalUserProfiles",
+            "preserveNullAndEmptyArrays":true
+         }
+      },
+      { 
+        $redact: { 
+          $cond: [
+            {
+              $and: [
+                { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.isActive", true ] }
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
+      },
       {
         $lookup: {
           from: 'mlSubChapters',
@@ -493,6 +559,28 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
       },
       { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
       {
+         $unwind:{
+            "path":"$user.profile.externalUserProfiles",
+            "preserveNullAndEmptyArrays":true
+         }
+      },
+      { 
+        $redact: { 
+          $cond: [
+            {
+              $and: [
+                { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.isActive", true ] }
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
+      },
+      {
         $project: {
           userId: '$userId',
           ideas: [{
@@ -541,6 +629,28 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+         $unwind:{
+            "path":"$user.profile.externalUserProfiles",
+            "preserveNullAndEmptyArrays":true
+         }
+      },
+      { 
+        $redact: { 
+          $cond: [
+            {
+              $and: [
+                { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.isActive", true ] }
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
+      },
       {
         $lookup: {
           from: 'mlSubChapters',
@@ -678,6 +788,28 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+         $unwind:{
+            "path":"$user.profile.externalUserProfiles",
+            "preserveNullAndEmptyArrays":true
+         }
+      },
+      { 
+        $redact: { 
+          $cond: [
+            {
+              $and: [
+                { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.isActive", true ] }
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
+      },
       {
         $lookup: {
           from: 'mlSubChapters',

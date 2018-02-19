@@ -2,7 +2,7 @@
  * Created by Birendra on 21/8/17.
  */
 import React, {Component}  from "react";
-import {render} from 'react-dom';
+const FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 
 export default class MlInstitutionViewRating extends Component {
@@ -11,6 +11,17 @@ export default class MlInstitutionViewRating extends Component {
     this.state = {
       privateKey: {}
     }
+  }
+
+  componentDidMount() {
+    this.lockPrivateKeys();
+  }
+  
+  lockPrivateKeys() {
+    const { privateFields } = this.props.ratingDetails;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render() {
@@ -22,7 +33,7 @@ export default class MlInstitutionViewRating extends Component {
           <div className="row">
             <h2>Add Rating</h2>
             <div className="panel panel-default panel-form">
-              <div className="panel-body">
+              <div className="panel-body hide_unlock">
                 <div className="form-group nomargin-bottom">
                   <div className="star_ratings">
                     <Rating
@@ -33,6 +44,7 @@ export default class MlInstitutionViewRating extends Component {
                       readonly={true}
                     />
                   </div>
+                  <FontAwesome name='unlock' className="input_icon" id="isRatingPrivate" />
                 </div>
 
               </div>

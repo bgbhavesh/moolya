@@ -91,7 +91,7 @@ export default class MlServiceProviderAwards extends Component {
         serviceProviderAwardsList: that.context.serviceProviderPortfolio.awardsRecognition
       });
     }
-    this.serviceProviderAwardServer = response &&response.awardsRecognition?response.awardsRecognition:[]
+    this.serviceProviderAwardServer = response && response.length ? response : [];
   }
 
   addAward() {

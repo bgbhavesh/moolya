@@ -2,7 +2,7 @@ import React from 'react';
 import ScrollArea from 'react-scrollbar';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
+import { initalizeLockTitle, initalizeFloatLabel } from '../../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
@@ -44,9 +44,8 @@ export default class MlFunderAboutView extends React.Component{
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
 
     initalizeFloatLabel();
-    $('.fa-lock').attr('title','Marked as Private');
   }
-
+ 
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -60,6 +59,7 @@ export default class MlFunderAboutView extends React.Component{
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }else{
       this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
     }

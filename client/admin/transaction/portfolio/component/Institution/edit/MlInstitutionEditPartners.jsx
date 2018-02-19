@@ -384,7 +384,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                     {that.state.partnersList.map(function (principal, idx) {
                       return (
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="" id={"create_clientP" + idx}>
+                          <div href="" id={"create_clientP" + idx}>
                             <div className="list_block notrans funding_list"
                                  onClick={that.onPartnerTileClick.bind(that,principal.index, idx)}>
                               <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
@@ -398,7 +398,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                                 <a href="" className="save_btn"><FontAwesome name='linkedin'/></a>
                               </div>
                             </div>
-                          </a>
+                          </div>
                         </div>
                       )
                     })}

@@ -2,8 +2,7 @@
  * Created by vishwadeep on 11/9/17.
  */
 
-import React from 'react';
-import {render} from 'react-dom';
+import React, { Component } from 'react';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'

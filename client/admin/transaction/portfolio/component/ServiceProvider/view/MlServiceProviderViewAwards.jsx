@@ -1,5 +1,4 @@
 import React from "react";
-import {render} from "react-dom";
 import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfolioServiceProviderDetails";
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";

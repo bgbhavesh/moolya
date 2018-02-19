@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
+import { initalizeLockTitle, initalizeFloatLabel } from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
@@ -61,6 +61,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     _.each(response.privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle();
   }
 
   render(){

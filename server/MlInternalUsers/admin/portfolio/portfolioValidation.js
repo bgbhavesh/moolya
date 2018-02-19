@@ -131,6 +131,36 @@ class portfolioValidation {
 
   getLivePortfolioCount(clusterId, chapterId, subChapterId) {
     return mlDBController.aggregate('MlPortfolioDetails', [
+      {"$lookup":{
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+      }},
+      {"$unwind": { path: '$user', preserveNullAndEmptyArrays: true}},
+      {"$match":{'user.profile.isExternaluser': true, 'user.profile.isActive': true}},
+      {
+       "$unwind":{
+          "path":"$user.profile.externalUserProfiles",
+          "preserveNullAndEmptyArrays":true
+       }
+      },
+      { 
+        "$redact": { 
+          "$cond": [
+            {
+              "$and": [
+                { "$eq": [ "$user.profile.externalUserProfiles.communityDefCode", "$communityCode" ] },
+                { "$eq": [ "$user.profile.externalUserProfiles.profileId", "$profileId" ] },
+                { "$eq": [ "$user.profile.externalUserProfiles.isApprove", true ] },
+                { "$eq": [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+              ]
+            },
+            "$$KEEP", 
+            "$$PRUNE"
+          ]
+        }
+      },
       {
         "$group": {
           _id: "$communityCode",

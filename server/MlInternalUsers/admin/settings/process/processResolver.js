@@ -562,7 +562,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
                   if(isNonMoolyaSubChapterSpecific && subChapterSame){
                     countryBasedDoc.push(doc)
                   }else{
-                    countryBasedDoc = countryBasedDoc
+                    countryBasedDoc.push(doc)
                   }
                 }
               }else{

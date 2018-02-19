@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
@@ -15,7 +13,7 @@ import NoData from '../../../../../../../commons/components/noData/noData';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "listOfIncubators"
 
-export default class MlInstitutionListOfIncubators extends React.Component{
+export default class MlInstitutionListOfIncubators extends Component{
   constructor(props, context){
     super(props);
     this.state= {
@@ -120,11 +118,20 @@ export default class MlInstitutionListOfIncubators extends React.Component{
     const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if (response && response.listOfIncubators) {
       const editorValue = createValueFromString(response.listOfIncubators.listOfIncubatorsDescription);
-      var object = response.listOfIncubators;
-      this.setState({loading: false,listOfIncubators: object,editorValue: editorValue});
+      const object = response.listOfIncubators;
+      this.setState({ loading: false, listOfIncubators: object, editorValue: editorValue }, () => {
+        this.lockPrivateKeys();
+      });
     }else{
       this.setState({loading:false})
     }
+  }
+
+  lockPrivateKeys() {
+    const { privateFields } = this.state.listOfIncubators;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render(){
@@ -132,11 +139,10 @@ export default class MlInstitutionListOfIncubators extends React.Component{
     const { editorValue } = this.state;
     return (
       <div>
-
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>List Of Incubators</h2>
-              <div className="panel panel-default panel-form-view" id="annotatorContent">
+              <div className="panel panel-default panel-form-view hide_unlock" id="annotatorContent">
 
                 <div className="panel-body">
                 {showLoader === true ? (<MlLoader />) : (<div>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ?
@@ -150,6 +156,7 @@ export default class MlInstitutionListOfIncubators extends React.Component{
                       <NoData tabName={this.props.tabName}/>
                     </div>
                 }</p>)} */}
+                  <FontAwesome name='unlock' className="input_icon" id="isListOfIncubatorsPrivate" />
 
                 </div>
               </div>

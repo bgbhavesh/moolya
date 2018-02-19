@@ -17,7 +17,7 @@ import MlServiceCardStep3 from './MlServiceCardStep3';
 import MlServiceCardStep4 from './MlServiceCardStep4';
 import {client} from '../../../core/apolloConnection';
 import {updateServiceActionHandler} from '../actions/mlFindService';
-import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
+// import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 
 
 export default class MlServiceManageSchedule extends Component {
@@ -246,7 +246,8 @@ export default class MlServiceManageSchedule extends Component {
       service.payment = servicePayment;
       service.finalAmount = finalAmount || 0;
       service.facilitationCharge = facilitationCharge;
-      const response = await updateServiceActionHandler(this.props.serviceId, service);
+      const { loggedUserDetails } = this.props;
+      const response = await updateServiceActionHandler(this.props.serviceId, service, loggedUserDetails);
       if (response.success) {
         data.prevFinalAmount = service.finalAmount;
         this.setState({data: data});

@@ -97,6 +97,9 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
         mlInteractionService.createTransactionRequest(toUser._id,'favorite', args.resourceId, connectionData._id, fromuser._id, fromUserType , context);
         favouriteRequest = MlAlertNotification.onFavouriteRequestMsg(toUser&&toUser._id?toUser._id:"");
         return new MlRespPayload().successPayload(favouriteRequest,200);
+      }else{
+        let favError = MlAlertNotification.onFavouriteRequestErrorConnectionRequired();
+        return new MlRespPayload().errorPayload(favError, 400);
       };
 
       //todo: if user is not in his connection, return valud error message

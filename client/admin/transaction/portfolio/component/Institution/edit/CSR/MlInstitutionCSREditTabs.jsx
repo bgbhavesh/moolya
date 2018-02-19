@@ -73,7 +73,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
                                                  portfolioDetailsId={this.props.portfolioDetailsId} tabName={"achievements"}/>
       },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports" , component:<MlInstitutionCSRReports key="3" client={client} getInstitutionReports={this.getInstitutionReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlInstitutionPolicy client={client} isAdmin={true} key="4" getInstitutionPolicy={this.getInstitutionPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlInstitutionPolicy client={client} isAdmin={true} key="4" getInstitutionPolicy={this.getInstitutionPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="policy" />},
     ]
     return tabs;
   }

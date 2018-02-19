@@ -1,7 +1,7 @@
 import React, { Component, PropTypes }  from "react";
 import _ from 'lodash'
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
+import { initalizeLockTitle, initalizeFloatLabel } from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
@@ -158,7 +158,7 @@ export default class MlAudienceView extends Component{
   //   this.props.getAudience(data, this.state.privateKey)
   // }
   async fetchPortfolioInfo() {
-    let that = this;
+    const that = this;
     let portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
     if (response) {
@@ -167,6 +167,7 @@ export default class MlAudienceView extends Component{
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }
   }
 

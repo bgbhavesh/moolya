@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
-import {initalizeFloatLabel} from "../../../../utils/formElemUtil";
+import { initalizeFloatLabel, initalizeLockTitle } from "../../../../utils/formElemUtil";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
@@ -134,7 +134,7 @@ export default class MlIdeaView extends React.Component {
       _.each(currentIdea.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-
+      initalizeLockTitle();
     }
   }
 

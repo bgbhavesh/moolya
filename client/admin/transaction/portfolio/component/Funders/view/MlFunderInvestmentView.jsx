@@ -8,7 +8,7 @@ import {findAnnotations} from "../../../../../../commons/annotator/findAnnotatio
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import NoData from '../../../../../../commons/components/noData/noData';
-import { OnLockSwitch, dataVisibilityHandler } from "../../../../../utils/formElemUtil";
+import { initalizeLockTitle, dataVisibilityHandler } from "../../../../../utils/formElemUtil";
 
 export default class MlFunderInvestmentView extends Component {
   constructor(props, context) {
@@ -130,8 +130,8 @@ export default class MlFunderInvestmentView extends Component {
   }
 
   componentDidUpdate(){
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
   }
 
   componentWillMount() {
@@ -173,6 +173,7 @@ export default class MlFunderInvestmentView extends Component {
       _.each(getData.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     });
     if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor();

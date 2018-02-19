@@ -80,8 +80,8 @@ export function dataVisibilityHandler(){
     }
   });
 }
-export function OnLockSwitch(){
 
+export function OnLockSwitch(){
   $('.lock_input[type=checkbox]').each(function () {
     if ($(this).is(':checked')) {
       $(this).prev('span').addClass('fa-lock').removeClass('un_lock').removeClass('fa-unlock');
@@ -91,5 +91,14 @@ export function OnLockSwitch(){
       // $(this).parent('.switch').removeClass('on');
     }
   });
+}
 
+/**
+ * @func {*} to be used always after the lockPrivateKeys @callback
+ * @see {*} 1) all the view files of the portfolio
+ *          2) all the unlock {*FontAwesome} is been hidden with @class {*hide_unlock} used at the parent <div> 
+ * @todo {*} need to remove @this @func from all files and move to the {commons} path {./commons/utils/formElemUtil}
+ */
+export function initalizeLockTitle() {
+  $('.fa-lock').attr('title', 'Marked as Private');
 }

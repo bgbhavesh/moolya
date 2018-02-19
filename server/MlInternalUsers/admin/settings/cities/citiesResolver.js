@@ -24,8 +24,22 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
       return response;
     }
 
+
+  let city = mlDBController.findOne('MlCities', {_id: args.cityId}, context);
+  let chapterData = mlDBController.findOne('MlChapters', {"cityId":args.cityId}, context)
+  let internalUsers;let externalUsers;
+  if((city && city.isActive) && (args && args.city && !args.city.isActive)){
+    internalUsers = mlDBController.find('users', {"$and": [{"profile.isInternaluser":true},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId": chapterData._id},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]}, context).count();
+    externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{'profile.externalUserProfiles.chapterId':chapterData._id},{'profile.externalUserProfiles.isActive':true}]}, context).count();
+  }
+
+  if(internalUsers>0 || externalUsers>0){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("There are active users in this city", code);
+    return response;
+  }
   // let city = MlCities.findOne({_id: args.cityId});
-  let city = mlDBController.findOne('MlCities', {_id: args.cityId}, context)
+
     if(city){
         // let state = MlStates.findOne({_id:city.stateId})
       let state = mlDBController.findOne('MlStates', {_id: city.stateId}, context)

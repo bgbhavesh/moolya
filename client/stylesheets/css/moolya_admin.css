@@ -284,7 +284,9 @@ table{background: #fff;}
 .scrollarea .scrollbar-container.vertical .scrollbar{width: 4px !important;margin-left: 6px !important;background: #ef4647 !important;}
 .scrollarea .scrollbar-container.active, .scrollarea .scrollbar-container:hover{background: transparent !important;}
 .vTimeline{border-left: 2px solid #67cbe5;position: absolute;top: 9px;left: 51px; z-index:999; }
-.vTimeline ul{margin: -7px 0px 0px -6px;}
+.vTimeline ul{margin: -7px 0px 0px -6px;    max-height: 70px;
+  overflow-y: auto;
+  padding-bottom: 6px;}
 /*.moolya_app .vTimeline ul{height: 62px;overflow: auto;}*/
 .vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 11px; line-height: 17px;}
 
@@ -341,6 +343,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .input_types.label_name{margin-right: 5px;}
 .input_types input[type=checkbox]:not(old),.input_types input[type=radio]:not(old){width:2em;margin:0;padding:0;font-size:1em;opacity:0}
 .input_types input[type=checkbox]:not(old)+label,.input_types input[type=radio]:not(old)+label{display:inline-block;margin-left:-2em;line-height:30px;cursor:pointer;font-weight: normal;}
+.panel .panel-heading .input_types input[type=checkbox]:not(old)+label{ vertical-align: top;}
 .input_types input[type=checkbox]:not(old)+label>span{display:inline-block;width:20px;height:20px;margin:.25em .5em .25em .25em;border-radius:100%;background:#d7dcde;vertical-align:bottom}
 .input_types input[type=radio]:not(old)+label>span{display:inline-block;width:20px;height:20px;margin:.25em .5em .25em .25em;border-radius:50%;background:#fff;border:5px solid #d7dcde;vertical-align:bottom}
 .input_types input[type=checkbox]:not(old):checked+label>span{background:#ef4647}

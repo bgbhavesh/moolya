@@ -46,13 +46,13 @@ export default class AlphaSearch extends Component {
     var that=this;
     let alphabetsList = this.state.currentData.map(function(alpha) {
       // if(that.state.currentAlpha!==alpha)
-        return ( <li key={alpha||'empty'} id={alpha||'empty'} onClick={e=>alpha && that.onAlphaSearchChange(alpha)}><a href="">{alpha}</a></li>)
+        return ( <li key={alpha||'empty'} id={alpha||'empty'} className={(that.state.currentAlpha === alpha?'active':'')} onClick={e=>alpha && that.onAlphaSearchChange(alpha)}><a href="">{alpha}</a></li>)
     });
 
     return (
       <div className="alfa_pagination">
         <div className="filter alfa_filter">
-          <span className="filt_text">
+          <span className={that.state.currentAlpha==='All'?"filt_text":"filt_text active"}>
             {that.state.currentAlpha==='All'?'A-Z':(that.state.currentAlpha).toUpperCase()}
             </span>
         </div>

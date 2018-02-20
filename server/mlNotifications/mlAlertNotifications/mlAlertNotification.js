@@ -157,5 +157,10 @@ static  onPortfolioUpdates(){
      return likerequest.content
    }
  }
+
+ static onFavouriteRequestErrorConnectionRequired(){
+   let alertData = NotificationTemplateEngine.fetchTemplateContent("ALT_favourite_request_connection_required","alert",null);
+     return alertData&&alertData.content?alertData.content:"Please connect with the user to add this portfolio to your ‘Favourite’ list";
+ }
 }
 export default MlAlertNotification;

@@ -5,6 +5,8 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
+import { initalizeLockTitle } from '../../../../../../../commons/utils/formElemUtil.js';
+const FontAwesome = require('react-fontawesome');
 
 export default class MlStartupViewLegalIssues extends React.Component {
   constructor(props) {
@@ -23,10 +25,15 @@ export default class MlStartupViewLegalIssues extends React.Component {
     return resp
   }
 
-   componentWillMount(){
-     this.setState({loading: false});
-   }
-
+  componentWillMount() {
+    const { privateFields } = this.props.legalIssueDetails;
+    this.setState({ loading: false }, () => {
+      _.each(privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock');
+      })
+      initalizeLockTitle();
+    });
+  }
 
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
@@ -113,13 +120,14 @@ export default class MlStartupViewLegalIssues extends React.Component {
       <div className="col-lg-12 col-sm-12">
         <div className="row">
           <h2>Legal Issue</h2>
-          <div className="panel panel-default panel-form-view">
+          <div className="panel panel-default panel-form-view hide_unlock">
             <div className="panel-body">
                   <div id="annotatorContent">{this.props.legalIssueDetails && this.props.legalIssueDetails.legalDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}</div>
+                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isDescriptionPrivate" />
             </div>
           </div>
         </div>

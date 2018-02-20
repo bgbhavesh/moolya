@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import ScrollArea from "react-scrollbar";
 import gql from 'graphql-tag'
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import { initalizeFloatLabel, initalizeLockTitle } from '../../../../../commons/utils/formElemUtil';
 import Moolyaselect from '../../../../commons/components/MlAdminSelectWrapper'
 import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
@@ -93,6 +93,7 @@ export default class MlGenericManagementView extends Component {
       _.each(getData.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }, 10)
   }
 

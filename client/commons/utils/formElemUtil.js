@@ -90,3 +90,11 @@ export function OnLockSwitch(){
   });
 }
 
+/**
+ * @func {*} to be used always after the lockPrivateKeys @callback
+ * @see {*} 1) all the view files of the portfolio
+ *          2) all the unlock {*FontAwesome} is been hidden with @class {*hide_unlock} used at the parent <div> 
+ */
+export function initalizeLockTitle() {
+  $('.fa-lock').attr('title', 'Marked as Private');
+}

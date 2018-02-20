@@ -18,7 +18,6 @@ import {client} from '../../../core/apolloConnection';
 
 
 function createdateFormatter (data){
-  console.log(data)
   let createdAt=data&&data.data&&data.data.updatedAt;
   if(createdAt){
     return <div>{moment(createdAt).format('DD-MM-YYYY HH:mm:ss')}</div>;

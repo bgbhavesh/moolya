@@ -4,7 +4,7 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlGenericPartnersView from '../../commons/MlGenericIntrapreneurView';
+import MlGenericIntrapreneurView from '../../commons/MlGenericIntrapreneurView';
 
 const KEY = 'intrapreneurRecognition'
 
@@ -117,7 +117,7 @@ export default class MlInstitutionViewIntrapreneur extends React.Component {
         <div id="annotatorContent">
           <h2>Intrapreneur</h2>
           <div className="col-lg-12">
-            <MlGenericPartnersView intrapreneurList={intrapreneurArray} isAdmin={this.props.isAdmin}/>
+            <MlGenericIntrapreneurView intrapreneurList={intrapreneurArray} isAdmin={this.props.isAdmin}/>
           </div>
         </div>
       )

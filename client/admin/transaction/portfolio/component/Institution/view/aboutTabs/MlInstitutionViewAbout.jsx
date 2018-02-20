@@ -2,6 +2,7 @@
  * Created by Birendra on 21/8/17.
  */
 import React from 'react';
+const FontAwesome = require('react-fontawesome');
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
@@ -22,7 +23,7 @@ export default class MlInstitutionViewAbout extends React.Component {
   }
 
   componentWillMount(){
-    let resp = this.validateUserForAnnotation();
+    const resp = this.validateUserForAnnotation();
     return resp
   }
 
@@ -37,6 +38,17 @@ export default class MlInstitutionViewAbout extends React.Component {
 
       this.fetchAnnotations();
     }
+  }
+
+  componentDidMount() {
+    this.lockPrivateKeys();
+  }
+  
+  lockPrivateKeys() {
+    const { privateFields } = this.props.aboutUsDetails;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   initalizeAnnotaor(){
@@ -113,13 +125,14 @@ export default class MlInstitutionViewAbout extends React.Component {
       <div className="col-lg-12 col-sm-12">
         <div className="row"  id="annotatorContent">
           <h2>About Us</h2>
-          <div className="panel panel-default panel-form-view">
+          <div className="panel panel-default panel-form-view hide_unlock">
             <div className="panel-body">
             <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.institutionDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}</div>
+            <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate" />
               {/* <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.institutionDescription ? this.props.aboutUsDetails.institutionDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
             </div>
           </div>

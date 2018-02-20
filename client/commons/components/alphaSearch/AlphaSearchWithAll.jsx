@@ -8,7 +8,7 @@ export default class AlphaSearch extends Component {
     super(props);
     this.state={
       alphabets : ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
-      alphabetsWithAll : ['All','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
+      alphabetsWithAll : ['All','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',''],
       currentData:[],
       currentAlpha:'All'
     };

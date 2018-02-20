@@ -2,13 +2,13 @@
  * Created by vishwadeep on 21/8/17.
  */
 import React from 'react';
-import { render } from 'react-dom';
 // import {fetchDetailsStartupActionHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlStartupViewTechnologies extends React.Component {
   constructor(props) {
     super(props);

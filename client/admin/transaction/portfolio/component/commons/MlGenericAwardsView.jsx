@@ -5,13 +5,13 @@
 import React, { Component } from 'react';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import { initalizeFloatLabel, initalizeLockTitle } from '../../../../../commons/utils/formElemUtil';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 
 var FontAwesome = require('react-fontawesome');
 
-export default class MlGenericAwardsView extends React.Component {
+export default class MlGenericAwardsView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,6 +85,7 @@ export default class MlGenericAwardsView extends React.Component {
     _.each(getData.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle();
   }
 
   handleChange() {

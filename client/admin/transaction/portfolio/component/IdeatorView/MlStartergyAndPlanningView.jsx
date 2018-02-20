@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
+import { initalizeLockTitle, initalizeFloatLabel } from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
@@ -134,6 +134,7 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }
   }
 

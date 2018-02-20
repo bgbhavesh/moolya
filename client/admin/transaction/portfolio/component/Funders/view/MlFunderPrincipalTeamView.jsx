@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../../actions/findPortfolioFunderDetails";
 import NoData from '../../../../../../commons/components/noData/noData';
-import { initalizeFloatLabel, OnLockSwitch, dataVisibilityHandler } from "../../../../../utils/formElemUtil";
+import { initalizeFloatLabel, initalizeLockTitle } from "../../../../../utils/formElemUtil";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 // var options = [
@@ -121,7 +121,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
     }
     // initalizeFloatLabel();
-    OnLockSwitch();
+    // OnLockSwitch();
     // dataVisibilityHandler();
   }
 
@@ -153,6 +153,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     _.each(this.state.funderPrincipalList[index].privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle();
   }
   
   onSelectTeam(index, e){
@@ -165,6 +166,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     _.each(this.state.funderTeamList[index].privateFields, function (pf) {
       $("#team"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle()
   }
 
   render() {

@@ -125,6 +125,22 @@ $menuTrans:all 0.5s linear;
       display: block; margin-top: 4px; font-size: 22px;font-weight:bold;color:$mlBlue;
     }
   }
+
+  /*css code for breadcrumb scrollbar*/
+  .scroll-1::-webkit-scrollbar {
+    width: 2px;
+    height: 6px;
+    background-color: #F5F5F5;
+  }
+  .scroll-1::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: yellow;
+  }
+  .scroll-1::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: red;
+  }
+
   .ml_app_profile>ol>li, nav>ol>li>a { /* So the first tier sits on top of the second tier disk */z-index: 10;}
   .ml_app_profile li:active a, .ml_app_profile li:focus a, .ml_app_profile li.focus a {background-color: #fff;box-shadow: 0 0 10px rgba(0, 0, 0, 1);outline: none;position: relative;left: 0;top: auto;/*z-index: 25;*/}
   .ml_app_profile>ol>li:active, nav>ol>li:focus, .ml_app_profile>ol>li.focus { /* Keep this to make sure only the current item appears above the disc. */z-index: 25;}
@@ -566,6 +582,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
 #nav-icon2.open span:nth-child(6) {left: calc(50% - 5px); top: 16px; }
 .mCSB_scrollTools{width: 4px;}
 .mCSB_scrollTools.mCSB_scrollTools_horizontal{height:10px;}
+.breadcrumbScroll {}
 /*#react-root{overflow: hidden;}*/
 .ideators_list .ideators_list_block{height: 200px; background-color: #273545; box-shadow: 0px 0px 5px #888; border-radius: 10px; text-align: center; position: relative; margin-bottom: 15px; text-shadow: none;}
 .ideators_list .ideators_list_block .premium { position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right; }

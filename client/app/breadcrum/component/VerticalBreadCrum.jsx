@@ -351,7 +351,7 @@ export default class VerticalBreadCrum extends Component {
     if (list.length > 0) { mlist.push(<li key={'last'} className='timelineLast'></li>); }
     return (
       <div className="vTimeline">
-        <ul>
+        <ul className='scroll-1'>
           {mlist}
         </ul>
       </div>

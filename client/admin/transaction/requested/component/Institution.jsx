@@ -94,7 +94,7 @@ export default class institution extends React.Component{
       staffCount          : existingObject.staffCount?existingObject.staffCount:null,
       chairman            : existingObject.chairman?existingObject.chairman:null,
       dean                : existingObject.dean?existingObject.dean:null,
-      headQuarterLocation:  existingObject.headQuarterLocation?this.state.headQuarterLocation:null,
+      headQuarterLocation:  existingObject.headQuarterLocation?existingObject.headQuarterLocation:null,
       branchLocations:  existingObject.branchLocations?existingObject.branchLocations:null
     }
     let newObject = {

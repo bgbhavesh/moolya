@@ -1,8 +1,7 @@
 /**
  * Created by vishwadeep on 21/8/17.
  */
-import React from "react";
-import {render} from "react-dom";
+import React, { Component } from "react";
 import MlStartupViewAbout from "./MlStartupViewAbout"
 import MlStartupViewRating from "./MlStartupViewRating"
 import MlStartupViewServicesAndProducts from "./MlStartupViewServicesAndProducts";
@@ -17,7 +16,7 @@ import MlTabComponent from "../../../../../../../commons/components/tabcomponent
 import {client} from '../../../../../../../admin/core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
 
-export default class MlStartupViewAboutusTabs extends React.Component {
+export default class MlStartupViewAboutusTabs extends Component {
   constructor(props) {
     super(props)
     this.state = {

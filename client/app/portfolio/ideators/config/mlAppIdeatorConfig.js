@@ -33,7 +33,7 @@ export const
     filterComponent: <MlAppFilterContainer type='IDE' />,
     filterData: filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "ideas.title",
+    alphabeticSearchField: "name",
     search: true,
     searchFields: ["ideas.title", "accountType", "name", "accountType"]
   },

@@ -2,13 +2,14 @@
  * Created by Birendra on 21/8/17.
  */
 import React from 'react';
-import {render} from 'react-dom';
+const FontAwesome = require('react-fontawesome');
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+
 export default class MlInstitutionViewServicesAndProducts extends React.Component {
   constructor(props) {
     super(props)
@@ -22,7 +23,16 @@ export default class MlInstitutionViewServicesAndProducts extends React.Componen
     this.annotatorEvents.bind(this);
   }
 
-
+  componentDidMount() {
+    this.lockPrivateKeys();
+  }
+  
+  lockPrivateKeys() {
+    const { privateFields } = this.props.serviceProductsDetails;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
 
   componentWillMount(){
     let resp = this.validateUserForAnnotation();
@@ -117,7 +127,7 @@ export default class MlInstitutionViewServicesAndProducts extends React.Componen
       <div className="col-lg-12 col-sm-12">
         <div className="row"  id="annotatorContent">
           <h2>Service & Products</h2>
-          <div className="panel panel-default panel-form-view">
+          <div className="panel panel-default panel-form-view hide_unlock">
 
             <div className="panel-body">
             <div>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
@@ -125,6 +135,7 @@ export default class MlInstitutionViewServicesAndProducts extends React.Componen
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}</div>
+            <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate" />
               {/* <p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
 
             </div>

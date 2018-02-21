@@ -2,6 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
@@ -26,13 +27,20 @@ export default class MlCompanySP extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts)
     if(!empty){
       const editorValue = createValueFromString(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts ? this.context.companyPortfolio.serviceProducts.spDescription : null);
-      this.setState({loading: false, data: this.context.companyPortfolio.serviceProducts,editorValue});
+      this.setState({ loading: false, data: this.context.companyPortfolio.serviceProducts, editorValue }, () => {
+        this.lockPrivateKeys();
+      });
+    }
+     else {
+      this.setState({ loading: false }, () => {
+        this.lockPrivateKeys();
+      })
     }
   }
 
@@ -57,31 +65,37 @@ export default class MlCompanySP extends React.Component{
     this.props.getServiceProducts(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    // else{
+    //   details=_.extend(details,{[key]:false});
+    // }
+    const privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate,tabName: this.props.tabName}
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
   }
 
-  updatePrivateKeys(){
-    let response = this.props.serviceProductsDetails
-    _.each(response.privateFields, function (pf) {
+  // updatePrivateKeys(){
+  //   let response = this.props.serviceProductsDetails
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
-
 
   render(){
     const { editorValue } = this.state;
@@ -103,8 +117,6 @@ export default class MlCompanySP extends React.Component{
 
               </div>
             </div>
-
-
           </div> </div>
       </div>
 
@@ -113,4 +125,5 @@ export default class MlCompanySP extends React.Component{
 }
 MlCompanySP.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

@@ -8,6 +8,44 @@ $menuTrans:all 0.5s linear;
 @media only screen and ( min-width: 768px )  and ( max-width:1024px ) {
 .img_block{width:24%;margin-right:1%;float:left;}.img_block img{ width: 100%; }
 .moolya_app .list_style li{width: 15%;}
+.provide-wrap-main .list_block {
+	height: 143px !important;}
+.provide-wrap-main .provider_mask {
+    position: relative;
+    width: 105px;
+    height: 80px;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ddd;
+}
+.provide-wrap-main .provider_block img {
+	border: 0px;
+	top: 0px;
+	left: 0px;
+	width: 105px;
+	height: 108px;
+	z-index: 2;
+}
+.list_block {
+	height: 143px !important;}
+.provider_mask {
+    position: relative;
+    width: 105px;
+    height: 80px;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ddd;
+}
+.provider_block img {
+	border: 0px;
+	top: 0px;
+	left: 0px;
+	width: 105px;
+	height: 108px;
+	z-index: 2;
+}
 }
 @media only screen and ( min-width: 768px )  and ( max-width: 900px ) {
 	.app_header{
@@ -92,7 +130,7 @@ $menuTrans:all 0.5s linear;
   }
   .moolya_app .startup-logo{top:45%; transform: translateY(-45%); box-shadow: none !important;}
   .moolya_app .startup-logo img{ width: auto !important;}
-  .horizon-swiper .horizon-inner{padding-left:0}
+  .horizon-swiper .horizon-inner{padding-left:15px}
   .horizon-swiper .horizon-item {font-size: 13px; padding:12px 6px;}
   .bottom-buttons .action_buttons ul{text-align: center; padding-left:0px;}
   .ideas_swiper .swiper-wrapper{z-index: 0;}

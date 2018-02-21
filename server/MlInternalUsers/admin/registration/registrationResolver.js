@@ -932,7 +932,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       MlNotificationController.onUserApproval(regRecord);
       MlSMSNotification.sendSMSonKYCApproved(regRecord)
       // mlSmsController
-     
+
       let portfolioDetails = {
         "transactionType": "portfolio",
         "communityType": regRecord.registrationInfo.communityDefName,
@@ -982,10 +982,11 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.gender = regRecord.registrationDetails.gender;
       registrationData.employmentStatus = regRecord.registrationDetails.employmentStatus;
       try {
-        MlResolver.MlMutationResolver['createPortfolioRequest'](obj, {
+        const portRequest = MlResolver.MlMutationResolver['createPortfolioRequest'](obj, {
           'portfoliodetails': portfolioDetails,
           'registrationInfo': registrationData
         }, context, info); //portfolio request
+        console.log("new portfolio request response..........", portRequest);
       } catch (e) {
         console.log(e);
         //send error response;

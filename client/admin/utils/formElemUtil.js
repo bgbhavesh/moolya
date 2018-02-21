@@ -64,20 +64,24 @@ export function passwordVisibilityHandler(){
   });
 }
 export function dataVisibilityHandler(){
+  $('.fa-lock').attr('title','Click to make public');
+  $('.fa-unlock').attr('title','Click to make private');
   $('.input_icon').unbind().click(function(){
     if($(this).hasClass('un_lock')){
       // $(this).parents('.form-group').find('input').attr('type','text');
       $(this).removeClass('un_lock').removeClass('fa-unlock').addClass('fa-lock');
       $(this).parents('.form-group').find('#makePrivate').prop('checked',true);
+      $('.fa-lock').attr('title','Click to make public');
     }else{
       // $(this).parents('.form-group').find('input').attr('type','text');
       $(this).addClass('un_lock').removeClass('fa-lock').addClass('fa-unlock');
       $(this).parents('.form-group').find('#makePrivate').prop('checked',false);
+      $('.fa-unlock').attr('title','Click to make private');
     }
   });
 }
-export function OnLockSwitch(){
 
+export function OnLockSwitch(){
   $('.lock_input[type=checkbox]').each(function () {
     if ($(this).is(':checked')) {
       $(this).prev('span').addClass('fa-lock').removeClass('un_lock').removeClass('fa-unlock');
@@ -87,5 +91,14 @@ export function OnLockSwitch(){
       // $(this).parent('.switch').removeClass('on');
     }
   });
+}
 
+/**
+ * @func {*} to be used always after the lockPrivateKeys @callback
+ * @see {*} 1) all the view files of the portfolio
+ *          2) all the unlock {*FontAwesome} is been hidden with @class {*hide_unlock} used at the parent <div> 
+ * @todo {*} need to remove @this @func from all files and move to the {commons} path {./commons/utils/formElemUtil}
+ */
+export function initalizeLockTitle() {
+  $('.fa-lock').attr('title', 'Marked as Private');
 }

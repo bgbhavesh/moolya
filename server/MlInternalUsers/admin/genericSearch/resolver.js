@@ -968,6 +968,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
       {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'fromUserId', as:'transactionLogs'}},
 
       {'$project':{"registration":{
         '$map':
@@ -1056,7 +1057,32 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
                 "docId": "$$trans.docId"
               }
             }
-        }
+        },
+        "transactionLogs": {
+          '$map':
+            {
+              "input": "$transactionLogs",
+              "as": "trans",
+              'in': {
+                "_id": "$$trans._id",
+                "transactionId": "$$trans.transactionId",
+                "cluster": "$$trans.clusterName",
+                "chapter": "$$trans.chapterName",
+                "subChapter": "$$trans.subChapterName",
+                "community": "$$trans.communityName",
+                "transactionType": "$$trans.transactionTypeName",
+                "createdby": "$$trans.userName",
+                "email": "$$trans.emailId",
+                "createdAt": "$$trans.createdAt",
+                "userId": '$_id',
+                "status": "$$trans.status",
+                "activity": "$$trans.activity",
+                "activityDocId": "$$trans.activityDocId",
+                "registrationId": "$$trans.registrationId",
+                "docId": "$$trans.docId"
+              }
+            }
+          }
       }},
 
       // {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'fromUserId', as:'investerTransactionLog'}},
@@ -1080,10 +1106,17 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
               as: "transaction",
               cond: { $ne: [ "$$transaction.transactionType", 'system' ] }
             }
+          },
+          'transactionLogs': {
+            $filter: {
+              input: "$transactionLogs",
+              as: "transaction",
+              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] }
+            }
           }
         }
       },
-      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$transactionLogs" ] } }},
       // {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$investerTransactionLog" ] } }},
       {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
       {"$unwind" : "$data"},
@@ -1145,7 +1178,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             break;
           case 'onBoard':
             let stage = mlDBController.findOne('MlStage', activityDocId);
-            doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : 'Pending';
+            if(stage.transactionLogStatus) {
+              let _status =  stage.transactionLogStatus;
+              let _onBoardStatus = _status.filter(function(data){
+                if(data.transactionId === doc._id) return data.status;
+              })
+              doc.status = _onBoardStatus.length && _onBoardStatus[0].status ? _onBoardStatus[0].status.slice(0,1).toUpperCase()+_onBoardStatus[0].status.slice(1) : "Pending"
+            }else doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : 'Pending';
             break;
         }
       }

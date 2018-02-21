@@ -1,5 +1,5 @@
 import React, { Component, PropTypes }  from "react";
-import { render } from 'react-dom';
+const FontAwesome = require('react-fontawesome');
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
@@ -11,7 +11,7 @@ import MlLoader from "../../../../../../../commons/components/loader/loader";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "listOfIncubators"
 
-export default class MlCompanyViewListOfIncubators extends React.Component{
+export default class MlCompanyViewListOfIncubators extends Component{
   constructor(props, context){
     super(props);
     this.state= {
@@ -45,8 +45,12 @@ export default class MlCompanyViewListOfIncubators extends React.Component{
     const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if (response && response.listOfIncubators) {
       const editorValue = createValueFromString(response.listOfIncubators.listOfIncubatorsDescription);
-      var object = response.listOfIncubators;
-      this.setState({loading: false,listOfIncubators: object,editorValue: editorValue});
+      const object = response.listOfIncubators;
+      this.setState({ loading: false, listOfIncubators: object, editorValue: editorValue }, () => {
+        _.each(object.privateFields, function (pf) {
+          $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
+      });
     }else{
       this.setState({loading:false})
     }
@@ -134,27 +138,33 @@ export default class MlCompanyViewListOfIncubators extends React.Component{
     const showLoader = this.state.loading;
     const { editorValue } = this.state;
     return (
+      <div className="requested_input">
      <div className="col-lg-12 col-sm-12" id="annotatorContent">
-            <div className="row">
+            <div className="row hide_unlock">
               <h2>List Of Incubators</h2>
-              <div className="panel panel-default panel-form-view">
-
+              <div className="panel-form-view">
+              <div className="panel panel-default">
+              <div className="panel-heading">
+                List Of Incubators
+                <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isListOfIncubatorsPrivate" />
+              </div>
                 <div className="panel-body">
                 {showLoader === true ? (<MlLoader />) : (<div>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ?
                         <MlTextEditor
                           value={editorValue}
                           isReadOnly={true}
                         /> : (<NoData tabName={this.props.tabName} />)}</div>)}
-
+                        
                   {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription
                     : <div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
                     </div>}</p>)} */}
-
+                    </div>
                 </div>
               </div>
             </div>
           </div>
+       </div>
        
     )
   }

@@ -61,6 +61,7 @@ export default class MlServiceProviderViewMCL extends Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let data = {};
+    let privateFields = [];
     let membershipDescription;
     let compliancesDescription;
     let licensesDescription;
@@ -68,14 +69,17 @@ export default class MlServiceProviderViewMCL extends Component {
     const responseM = await fetchServiceProviderMemberships(portfoliodetailsId);
     if (responseM) {
       data.memberships = responseM;
+      privateFields = responseM.memberships && responseM.memberships.privateFields && responseM.memberships.privateFields.length ? responseM.memberships.privateFields.concat(privateFields) : privateFields;
     }
     const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
     if (responseC) {
       data.compliances = responseC;
+      privateFields = responseC.memberships && responseC.compliances.privateFields && responseC.compliances.privateFields.length ? responseC.compliances.privateFields.concat(privateFields) : privateFields; 
     }
     const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
     if (responseL) {
       data.licenses = responseL;
+      privateFields = responseL.licenses && responseL.licenses.privateFields && responseL.licenses.privateFields.length ? responseL.licenses.privateFields.concat(privateFields) : privateFields;
     }
     // data = {
     //   memberships: this.state.memberships,
@@ -87,6 +91,9 @@ export default class MlServiceProviderViewMCL extends Component {
     licensesDescription = createValueFromString(data.licenses ? data.licenses.licensesDescription : null);
     this.setState({ loading: false, data: data, membershipDescription, compliancesDescription, licensesDescription }, function () {
       this.fetchAnnotations();
+      _.each(privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     })
   }
 
@@ -181,21 +188,22 @@ export default class MlServiceProviderViewMCL extends Component {
           {showLoader === true ? ( <MlLoader/>) : (
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
-              <div className="main_wrap_scroll">
+              <div className="main_wrap_scroll hide_unlock">
                   <div className="col-md-6 col-sm-6 nopadding-left">
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Memberships</div>
                       <div className="panel-body ">
-
-                      {this.state.data.memberships && this.state.data.memberships.membershipDescription ?
-                        <MlTextEditor
-                          value={membershipDescription}
-                          isReadOnly={true}
-                        /> :
-                        <div className="portfolio-main-wrap">
-                          <NoData tabName={this.props.tabName} />
-                        </div>}
-
+                        <div className="form-group nomargin-bottom panel_input">
+                          {this.state.data.memberships && this.state.data.memberships.membershipDescription ?
+                            <MlTextEditor
+                              value={membershipDescription}
+                              isReadOnly={true}
+                            /> :
+                            <div className="portfolio-main-wrap">
+                              <NoData tabName={this.props.tabName} />
+                            </div>}
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMembershipPrivate" />
+                        </div>
                       </div>
                     </div>
                     <div className="clearfix"></div>
@@ -204,40 +212,44 @@ export default class MlServiceProviderViewMCL extends Component {
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Compliances</div>
                       <div className="panel-body ">
-
-                        {this.state.data.compliances && this.state.data.compliances.compliancesDescription ? 
-                          <MlTextEditor
-                            value={compliancesDescription}
-                            isReadOnly={true}
-                          /> :
-                          <div className="portfolio-main-wrap">
-                            <NoData tabName={this.props.tabName}/>
-                          </div>}
-
+                        <div className="form-group nomargin-bottom panel_input">
+                          {this.state.data.compliances && this.state.data.compliances.compliancesDescription ?
+                            <MlTextEditor
+                              value={compliancesDescription}
+                              isReadOnly={true}
+                            /> :
+                            <div className="portfolio-main-wrap">
+                              <NoData tabName={this.props.tabName} />
+                            </div>}
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompliancesPrivate" />
+                        </div>
                       </div>
                     </div>
                     <div className="clearfix"></div>
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Licenses</div>
                       <div className="panel-body ">
-
-                        {this.state.data.licenses && this.state.data.licenses.licensesDescription ?     
-                          <MlTextEditor
-                            value={licensesDescription}
-                            isReadOnly={true}
-                          /> :
-                          <div className="portfolio-main-wrap">
-                            <NoData tabName={this.props.tabName}/>
-                          </div>}
-
+                        <div className="form-group nomargin-bottom panel_input">
+                          {this.state.data.licenses && this.state.data.licenses.licensesDescription ?
+                            <MlTextEditor
+                              value={licensesDescription}
+                              isReadOnly={true}
+                            /> :
+                            <div className="portfolio-main-wrap">
+                              <NoData tabName={this.props.tabName} />
+                            </div>}
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLicensesPrivate" />
+                        </div>
                       </div>
                     </div>
                   </div>
               </div>
             </div>
           )
-      }
-        </div>
+        }
+      </div>
     )
   }
 }
+
+// view_req_textarea_icon

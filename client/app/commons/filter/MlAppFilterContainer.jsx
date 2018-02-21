@@ -55,7 +55,7 @@ export default class MlAppFilterContainer extends Component {
   }
 
   updateFilterQuery(value, filter,type){
-  
+
       let filterQuery = this.state.filterQuery;
       let selectedList =  this.state.selectedList
       if(value && !(type == "MULTISELECT")){
@@ -85,7 +85,8 @@ export default class MlAppFilterContainer extends Component {
   onCancelFilter() {
     $('.filter_table').addClass('filter_hide');
     this.setState({
-      filterQuery: {}
+      filterQuery: {},
+      selectedList : {}
     },function () {
       this.props.submit({});
     });

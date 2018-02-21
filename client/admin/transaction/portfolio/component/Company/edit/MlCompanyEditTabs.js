@@ -191,7 +191,7 @@ export default class MlCompanyEditTabs extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', "privateFields"]);
     this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 

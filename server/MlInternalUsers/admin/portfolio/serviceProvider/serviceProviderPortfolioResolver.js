@@ -57,9 +57,9 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
 
         let ret = mlDBController.update('MlServiceProviderPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, serviceProviderPortfolio, {$set: true}, context)
         if (ret) {
-          let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
-          MlEmailNotification.onPortfolioUpdate(details);
-          MlNotificationController.onPotfolioUpdate(details);
+          // let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
+          // MlEmailNotification.onPortfolioUpdate(details);
+          // MlNotificationController.onPotfolioUpdate(details);
           let serviceprovideralert =  MlAlertNotification.onPortfolioUpdates()
           let code = 200;
           let response = new MlRespPayload().successPayload(serviceprovideralert, code);

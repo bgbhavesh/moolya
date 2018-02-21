@@ -1,6 +1,4 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import React, { Component } from 'react';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
@@ -11,12 +9,13 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
+import { initalizeLockTitle } from '../../../../../../commons/utils/formElemUtil.js';
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
 
-export default class MlStartupViewMCL extends React.Component {
+export default class MlStartupViewMCL extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -39,7 +38,7 @@ export default class MlStartupViewMCL extends React.Component {
     this.fetchAnnotations();
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    var className = this.props.isAdmin?"admin_header":"app_header"
+    const className = this.props.isAdmin ? "admin_header" : "app_header";
     // $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
     $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
@@ -58,29 +57,32 @@ export default class MlStartupViewMCL extends React.Component {
     let membershipDescription;
     let complianceDescription;
     let licenseDescription;
-
+    let privateFields = [];
     let portfoliodetailsId = that.props.portfolioDetailsId;
     const responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
       data.memberships = responseM.memberships;
+      privateFields = responseM.memberships && responseM.memberships.privateFields && responseM.memberships.privateFields.length ? responseM.memberships.privateFields.concat(privateFields) : privateFields;
     }
     const responseC = await fetchStartupDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
       data.compliances = responseC.compliances;
+      privateFields = responseC.memberships && responseC.compliances.privateFields && responseC.compliances.privateFields.length ? responseC.compliances.privateFields.concat(privateFields) : privateFields;
     }
     const responseL = await fetchStartupDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
       data.licenses = responseL.licenses;
+      privateFields = responseL.licenses && responseL.licenses.privateFields && responseL.licenses.privateFields.length ? responseL.licenses.privateFields.concat(privateFields) : privateFields;
     }
-    // data = {
-    //   memberships:this.state.memberships,
-    //   licenses: this.state.licenses,
-    //   compliances:this.state.compliances
-    // }
     membershipDescription = createValueFromString(data.memberships ? data.memberships.membershipDescription : null);
     complianceDescription = createValueFromString(data.compliances ? data.compliances.complianceDescription : null);
     licenseDescription = createValueFromString(data.licenses ? data.licenses.licenseDescription : null);
-    this.setState({ loading: false, data: data, membershipDescription, complianceDescription, licenseDescription })
+    this.setState({ loading: false, data: data, membershipDescription, complianceDescription, licenseDescription }, () => {
+      _.each(privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+      initalizeLockTitle();
+    })
   }
 
   initalizeAnnotaor(){
@@ -153,7 +155,7 @@ export default class MlStartupViewMCL extends React.Component {
     const { membershipDescription, complianceDescription, licenseDescription } = this.state;
     return (
       <div>
-        <div className="tab_wrap_scroll">
+        <div className="tab_wrap_scroll hide_unlock">
           <ScrollArea
             speed={0.8}
             className="tab_wrap_scroll"
@@ -164,19 +166,21 @@ export default class MlStartupViewMCL extends React.Component {
 
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
-
-              <div className="col-md-6 col-sm-6 nopadding-left">
+               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Membership</div>
-                  <div className="panel-body ">
-                    {this.state.data.memberships && this.state.data.memberships.membershipDescription ?
-                      <MlTextEditor
-                        value={membershipDescription}
-                        isReadOnly={true}
-                      /> :
-                      <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName} />
-                      </div>}
+                  <div className="panel-body">
+                    <div className="form-group nomargin-bottom panel_input">
+                      {this.state.data.memberships && this.state.data.memberships.membershipDescription ?
+                        <MlTextEditor
+                          value={membershipDescription}
+                          isReadOnly={true}
+                        /> :
+                        <div className="portfolio-main-wrap">
+                          <NoData tabName={this.props.tabName} />
+                        </div>}
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMDPrivate" />
+                    </div>
                   </div>
                 </div>
                 <div className="clearfix"></div>
@@ -185,33 +189,38 @@ export default class MlStartupViewMCL extends React.Component {
               <div className="col-md-6 col-sm-6 nopadding-right">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Compliances</div>
-                  <div className="panel-body ">
-                    {this.state.data.compliances && this.state.data.compliances.complianceDescription ?
-                      <MlTextEditor
-                        value={complianceDescription}
-                        isReadOnly={true}
-                      /> :
-                      <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName} />
-                      </div>}
+                  <div className="panel-body">
+                    <div className="form-group nomargin-bottom panel_input">
+                      {this.state.data.compliances && this.state.data.compliances.complianceDescription ?
+                        <MlTextEditor
+                          value={complianceDescription}
+                          isReadOnly={true}
+                        /> :
+                        <div className="portfolio-main-wrap">
+                          <NoData tabName={this.props.tabName} />
+                        </div>}
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCDPrivate" />
+                    </div>
                   </div>
                 </div>
                 <div className="clearfix"></div>
 
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Licenses</div>
-                  <div className="panel-body ">
-                    {this.state.data.licenses && this.state.data.licenses.licenseDescription ?
-                      <MlTextEditor
-                        value={licenseDescription}
-                        isReadOnly={true}
-                      /> :
-                      <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName} />
-                      </div>}
+                  <div className="panel-body">
+                    <div className="form-group nomargin-bottom panel_input">
+                      {this.state.data.licenses && this.state.data.licenses.licenseDescription ?
+                        <MlTextEditor
+                          value={licenseDescription}
+                          isReadOnly={true}
+                        /> :
+                        <div className="portfolio-main-wrap">
+                          <NoData tabName={this.props.tabName} />
+                        </div>}
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLDPrivate" />
+                    </div>
                   </div>
                 </div>
-
               </div>
           </div>
           {/* )

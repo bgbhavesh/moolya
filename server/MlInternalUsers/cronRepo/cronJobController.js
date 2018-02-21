@@ -518,7 +518,7 @@ class MlCronJobControllerClass {
         Meteor.setTimeout(function () {
           mlEmail.sendHtml({
             from: fromEmail,
-            to: "rudra.pratap@raksan.in",
+            to: "qateam@qa.moolya.global",
             cc: "vishwadeep.kapoor@raksan.in",
             subject: "moolya daily monitoring report instance "+(Meteor.settings.public.instance),
             html: emailObject.html

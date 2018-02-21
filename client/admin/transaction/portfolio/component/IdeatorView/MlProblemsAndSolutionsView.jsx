@@ -1,13 +1,11 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import 'react-responsive-tabs/styles.css'
 import _ from 'lodash'
 var Select = require('react-select');
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
+import { initalizeLockTitle, initalizeFloatLabel } from '../../../../utils/formElemUtil';
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
@@ -160,6 +158,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     _.each(response.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle();
   }
 
   render() {

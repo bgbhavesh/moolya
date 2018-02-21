@@ -99,14 +99,12 @@ export default class MlFunderAbout extends React.Component {
     } else {
       details = _.extend(details, { [key]: false });
     }
-    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, objectName: "investmentBudget", tabName: "funderAbout" }
-    this.setState({ privateKey: privateKey })
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, objectName: "investmentBudget", tabName: "funderAbout" }
     let data = this.state.data;
     data['investmentBudget'] = details
-    this.setState({ data: data }, function () {
+    this.setState({ privateKey: privateKey, data: data }, () => {
       this.sendDataToParent()
     })
-
   }
 
   handleYearsOfExperience(value) {
@@ -177,7 +175,7 @@ export default class MlFunderAbout extends React.Component {
 
   async deleteProfilePic() {
     let that = this;
-    this.setState({ profilePic: ' /images/def_profile.png' })
+    this.setState({ profilePic: '' })
     const response = await fetchfunderPortfolioAbout(that.props.portfolioDetailsId);
     if (response) {
       let dataDetails = response
@@ -254,7 +252,7 @@ export default class MlFunderAbout extends React.Component {
   onFileUploadCallBack(file, resp) {
     if (resp) {
       let result = JSON.parse(resp);
-      
+
       Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
@@ -361,7 +359,7 @@ export default class MlFunderAbout extends React.Component {
           <div>
             <h2>About Us</h2>
             <div className="main_wrap_scroll">
-              
+
                 <div className="col-md-6 nopadding-left">
 
                   <div className="form_bg">
@@ -530,7 +528,7 @@ export default class MlFunderAbout extends React.Component {
 
                 </div>
                 <br className="brclear" />
-              
+
             </div>
           </div>
         )}

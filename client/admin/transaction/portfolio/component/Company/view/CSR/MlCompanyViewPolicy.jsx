@@ -49,7 +49,12 @@ export default class MlCompanyViewPolicy extends React.Component {
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (responseM) {
       const editorValue = createValueFromString(responseM.policy.policyDescription);
-      this.setState({policy: responseM.policy,loading:false,editorValue: editorValue});
+      this.setState({ policy: responseM.policy, loading: false, editorValue: editorValue }, () => {
+        const privateFields = responseM.policy && responseM.policy.privateFields.length ? responseM.policy.privateFields : [];
+        _.each(privateFields, function (pf) {
+          $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
+      });
     }
 
     data = {
@@ -144,7 +149,7 @@ export default class MlCompanyViewPolicy extends React.Component {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
-            <div className="row">
+            <div className="row hide_unlock">
               <h2>Policy</h2>
               <div className="panel panel-default panel-form-view">
                 <div className="panel-body">
@@ -156,6 +161,7 @@ export default class MlCompanyViewPolicy extends React.Component {
                   {/* {loading === true ? ( <MlLoader/>) : (<p>{this.state.policy && this.state.policy.policyDescription ? this.state.policy.policyDescription :  (<div className="portfolio-main-wrap">
                     <NoData tabName={this.props.tabName}/>
                   </div>)}</p>)} */}
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isPolicyDescriptionPrivate" />
                 </div>
               </div>
             </div>

@@ -38,7 +38,7 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       spDescription,
                       isSPDescriptionPrivate,
                       privateFields{
-                          keyName,
+                          keyName
                           booleanKey
                           index
                           tabName
@@ -123,16 +123,20 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       isLogoPrivate,
                       isCompanyDescriptionPrivate,
                       privateFields{
-                          keyName,
-                          booleanKey
+                        keyName
+                        booleanKey
+                        tabName
+                        index
                       }
                   },
                   rating{
                       rating,
                       isRatingPrivate,
                       privateFields{
-                          keyName,
-                          booleanKey
+                        keyName,
+                        booleanKey
+                        tabName
+                        index
                       }
                   },
                   serviceProducts{
@@ -140,7 +144,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       isSPDescriptionPrivate,
                       privateFields{
                           keyName,
-                          booleanKey
+                          booleanKey,
+                          tabName
                       }
                   },
                   information{
@@ -148,7 +153,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       isInformationDescriptionPrivate,
                       privateFields{
                           keyName,
-                          booleanKey
+                          booleanKey,
+                          tabName
                       }
                   },
                   clients{
@@ -210,6 +216,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   },
                   awardsRecognition{
@@ -239,6 +247,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                     privateFields{
                         keyName,
                         booleanKey
+                        tabName
+                        index
                     }
                   },
                   
@@ -248,6 +258,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      privateFields{
                         keyName,
                         booleanKey
+                        tabName
+                        index
                      }
                   },
                   
@@ -256,7 +268,9 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      isLicensesDescriptionPrivate,
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        tabName
+                        index
                      }
                   }
                   startupIncubators{
@@ -265,6 +279,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      privateFields{
                         keyName,
                         booleanKey
+                        tabName
+                        index
                      }
                   }
                   sectorsAndServices{
@@ -293,6 +309,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      privateFields{
                         keyName,
                         booleanKey
+                        tabName
+                        index
                      }
                   }
                   partners {
@@ -326,8 +344,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                     privateFields{
                       keyName,
                       booleanKey
-                        index
-                        tabName
+                      index
+                      tabName
                     }
                     makePrivate
                   }
@@ -344,6 +362,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                       makePrivate
                   }
@@ -354,6 +374,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   }
                   evolution{
@@ -362,9 +384,10 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
-                  },
-                  
+                  }
                    researchAndDevelopment{
                       researchAndDevelopmentName
                       isResearchAndDevelopmentNamePrivate
@@ -376,8 +399,10 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                         }
                       index
                       privateFields{
-                          keyName,
+                          keyName
                           booleanKey
+                          tabName
+                          index
                       }
                       makePrivate
                   }

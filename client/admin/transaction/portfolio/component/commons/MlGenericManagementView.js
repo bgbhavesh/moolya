@@ -2,18 +2,18 @@
  * Created by vishwadeep on 11/9/17.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import ScrollArea from "react-scrollbar";
 import gql from 'graphql-tag'
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import { initalizeFloatLabel, initalizeLockTitle } from '../../../../../commons/utils/formElemUtil';
 import Moolyaselect from '../../../../commons/components/MlAdminSelectWrapper'
 import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 var FontAwesome = require('react-fontawesome');
 
-export default class MlGenericManagementView extends React.Component {
+export default class MlGenericManagementView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ export default class MlGenericManagementView extends React.Component {
     initalizeFloatLabel();
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    var className = this.props.isAdmin ? "admin_header" : "app_header";
     $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
@@ -59,7 +59,7 @@ export default class MlGenericManagementView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id ? id : 0,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -93,6 +93,7 @@ export default class MlGenericManagementView extends React.Component {
       _.each(getData.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }, 10)
   }
 
@@ -174,7 +175,7 @@ export default class MlGenericManagementView extends React.Component {
 
                   {/*centered data*/}
                   <div className="main_wrap_scroll">
-                    
+
                       <div className="col-lg-12" id="psContent">
                         <div className="row">
                           <div className="investement-view-content">

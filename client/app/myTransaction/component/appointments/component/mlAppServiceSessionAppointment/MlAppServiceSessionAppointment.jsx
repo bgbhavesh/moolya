@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { fetchAppAppointmentByTransactionId } from '../../action/fetchAppointment';
 import MlAppSelectedTaskMyAppointment from '../../../../../calendar/myAppointments/components/mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
+import MlAppCalendarServiceAppointment from '../../../../../calendar/common/components/mlAppServiceTaskAppointment/MlAppCalendarServiceAppointment';
 import { getSessionDayAvailable } from './../../action/getSessionDayAvailable';
 import FontAwesome from 'react-fontawesome';
 import Datetime from "react-datetime";
@@ -311,12 +312,14 @@ export default class MlAppServiceSessionAppointment extends Component {
                   appointmentId: this.state.orderId,
                   resourceId: this.state.data.appointmentInfo.taskId,
                   sessionId: this.state.data.appointmentInfo.sessionId
-                }} 
+                }}
                 data = {{
                   client: this.state.clientName,
                   endDate: this.state.endDate,
                   startDate:this.state.startDate
-                }} 
+                }}
+                service={this.state.data.service||{}}
+                 showCancelAndRescheduleInfo={true}
                 />
               </div>
               <div className="tab-pane" id={`${this.state.orderId}4a`}>

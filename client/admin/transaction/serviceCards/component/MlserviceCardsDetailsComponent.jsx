@@ -296,7 +296,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
             <div className="panel panel-default">
               <MlServiceManageSchedule data={this.state.data}
                                        profileId={this.profileId} userId={this.props.data.userId}
-                                       serviceId={this.serviceId}/>
+                                       serviceId={this.serviceId} 
+                                       loggedUserDetails={this.loggedUserDetails} />
             </div>
           </div>
           <div className="tab-pane" id={`deviceDetails${that.props.data._id}`}>

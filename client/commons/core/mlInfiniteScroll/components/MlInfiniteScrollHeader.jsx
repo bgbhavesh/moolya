@@ -9,7 +9,7 @@
  * Imports libs and components
  */
 import React, {Component} from 'react';
-import AlphaSearch from "./../../../../commons/components/alphaSearch/AlphaSearch";
+import AlphaSearch from "./../../../../commons/components/alphaSearch/AlphaSearchWithAll";
 
 export default class MlInfiniteScrollHeader extends Component {
 
@@ -63,7 +63,7 @@ export default class MlInfiniteScrollHeader extends Component {
           : ""
         }
         { config.alphabeticSearch ?
-            <AlphaSearch onAlphaSearchChange={props.onAlphaSearchChange} />
+          <div className='list_view_block'><AlphaSearch onAlphaSearchChange={props.onAlphaSearchChange} /></div>
           : ""
         }
 

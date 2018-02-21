@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../../actions/findPortfolioFunderDetails";
 import NoData from '../../../../../../commons/components/noData/noData';
-import { initalizeFloatLabel, OnLockSwitch, dataVisibilityHandler } from "../../../../../utils/formElemUtil";
+import { initalizeFloatLabel, initalizeLockTitle } from "../../../../../utils/formElemUtil";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 // var options = [
@@ -121,7 +121,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
     }
     // initalizeFloatLabel();
-    OnLockSwitch();
+    // OnLockSwitch();
     // dataVisibilityHandler();
   }
 
@@ -153,6 +153,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     _.each(this.state.funderPrincipalList[index].privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle();
   }
   
   onSelectTeam(index, e){
@@ -165,6 +166,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     _.each(this.state.funderTeamList[index].privateFields, function (pf) {
       $("#team"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+    initalizeLockTitle()
   }
 
   render() {
@@ -260,29 +262,29 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="col-lg-8 col-md-8 col-sm-8">
+                                <div className="col-lg-8 col-md-8 col-sm-8 hide_unlock">
                                   <div className="form_bg col-md-12">
                                       <dl>
                                         <dt>Name</dt>
-                                        <dd>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</dd>
+                                        <dd>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</dd> <br/>
 
                                         <dt>Company</dt>
-                                        <dd>{selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}</dd>
+                                        <dd>{selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="isCompanyNamePrivate" /> </dd> <br />
 
                                         <dt>Year of Experience</dt>
-                                        <dd>{selectedPrincipal.yearsOfExperience ? selectedPrincipal.yearsOfExperience : ""}</dd>
+                                        <dd>{selectedPrincipal.yearsOfExperience ? selectedPrincipal.yearsOfExperience : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="isYearsOfExperiencePrivate"/></dd> <br/>
 
                                         <dt>Designation</dt>
-                                        <dd>{selectedPrincipal.designation ? selectedPrincipal.designation : ""}</dd>
+                                        <dd>{selectedPrincipal.designation ? selectedPrincipal.designation : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="isDesignationPrivate"/></dd> <br/>
 
                                         <dt>Duration</dt>
-                                        <dd>{selectedPrincipal.duration ? selectedPrincipal.duration : ""}</dd>
+                                        <dd>{selectedPrincipal.duration ? selectedPrincipal.duration : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="isDurationPrivate"/></dd> <br/>
 
                                         <dt>Qualification</dt>
-                                        <dd>{selectedPrincipal.qualification ? selectedPrincipal.qualification : ""}</dd>
+                                        <dd>{selectedPrincipal.qualification ? selectedPrincipal.qualification : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="isQualificationPrivate"/></dd> <br/>
 
                                         <dt>About</dt>
-                                        <dd>{selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""}</dd>
+                                        <dd>{selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="isAboutPrincipalPrivate"/></dd> <br/>
                                       </dl>
                                   </div>
                                 </div>
@@ -368,29 +370,29 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="col-lg-8 col-md-8 col-sm-8">
+                                <div className="col-lg-8 col-md-8 col-sm-8 hide_unlock">
                                   <div className="form_bg col-md-12">
                                     <dl>
                                       <dt>Name</dt>
-                                      <dd>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</dd>
+                                      <dd>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</dd> <br/>
 
                                       <dt>Company</dt>
-                                      <dd>{selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}</dd>
+                                      <dd>{selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="teamisCompanyNamePrivate"/></dd> <br/>
 
                                       <dt>Year of Experience</dt>
-                                      <dd>{selectedTeam.yearsOfExperience ? selectedTeam.yearsOfExperience : ""}</dd>
+                                      <dd>{selectedTeam.yearsOfExperience ? selectedTeam.yearsOfExperience : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="teamisYearsOfExperiencePrivate"/></dd> <br/>
 
                                       <dt>Designation</dt>
-                                      <dd>{selectedTeam.designation ? selectedTeam.designation : ""}</dd>
+                                      <dd>{selectedTeam.designation ? selectedTeam.designation : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="teamisDesignationPrivate"/></dd> <br/>
 
                                       <dt>Duration</dt>
-                                      <dd>{selectedTeam.duration ? selectedTeam.duration : ""}</dd>
+                                      <dd>{selectedTeam.duration ? selectedTeam.duration : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="teamisDurationPrivate"/> </dd> <br/>
 
                                       <dt>Qualification</dt>
-                                      <dd>{selectedTeam.qualification ? selectedTeam.qualification : ""}</dd>
+                                      <dd>{selectedTeam.qualification ? selectedTeam.qualification : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="teamisQualificationPrivate"/></dd> <br/>
 
                                       <dt>About</dt>
-                                      <dd>{selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}</dd>
+                                      <dd>{selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""} <FontAwesome name='unlock' className="un_lock pull-right" id="teamisAboutTeamPrivate"/></dd> <br/>
                                     </dl>
                                   </div>
                                 </div>

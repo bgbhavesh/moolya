@@ -26,6 +26,8 @@ export async function favouriteActionHandler(details) {
   if (resp.success) {
     toastr.success(resp.result);
     return resp;
+  }else if(!resp.success){
+    toastr.error(resp.result);
   }
   return null;
 }

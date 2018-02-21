@@ -262,22 +262,32 @@ export async function getTaskFromService (serviceId) {
  * @params :: serviceId : type :: String
  * @params :: Services  : type :: Object
  * returns ::  response : type :: Object
+ * @return {*response} from server
  **/
 
-export async function updateServiceActionHandler(serviceId,Services) {
+export async function updateServiceActionHandler(serviceId, Services, loggedUserDetails) {
+  const { clusterId, chapterId, subChapterId, communityId } = loggedUserDetails;
   const result = await client.mutate({
     mutation: gql`
-    mutation($serviceId:String, $Services:service){
-        updateServiceAdmin(serviceId:$serviceId,Services:$Services){
-        success
-        code
-        result
-      }
+    mutation($serviceId:String, $Services:service, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
+        updateServiceAdmin(serviceId:$serviceId,Services:$Services,
+          clusterId: $clusterId,
+          chapterId: $chapterId,
+          subChapterId: $subChapterId,
+          communityId: $communityId){
+            success
+            code
+            result
+          }
       }
     `,
     variables: {
       serviceId,
-      Services
+      Services,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     }
   });
   const response = result.data.updateServiceAdmin;

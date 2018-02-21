@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'react-dom';
+const FontAwesome = require('react-fontawesome');
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
@@ -7,6 +7,7 @@ import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeato
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+
 const KEY = "evolution"
 export default class MlInstitutionViewEvolution extends React.Component {
   constructor(props) {
@@ -120,22 +121,30 @@ export default class MlInstitutionViewEvolution extends React.Component {
         const editorValue = createValueFromString(response.evolution.institutionEvolutionDescription);
         var object = response.evolution;
         object = _.omit(object, '__typename')
-        // this.setState({data: object});
-        this.setState({loading: false,data: object,editorValue: editorValue});
+        this.setState({ loading: false, data: object, editorValue: editorValue }, () => {
+          this.lockPrivateKeys();
+        });
       }else{
         this.setState({loading:false})
       }
 
   }
 
+  lockPrivateKeys() {
+    const { privateFields } = this.state.data;
+    _.each(privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   render() {
-    let showLoader=this.state.loading?this.state.loading:false;
+    const showLoader=this.state.loading?this.state.loading:false;
     const { editorValue } = this.state;
     return (
       <div className="col-lg-12 col-sm-12" >
         <div className="row" id="annotatorContent">
           <h2>Evolution</h2>
-          <div className="panel panel-default panel-form-view">
+          <div className="panel panel-default panel-form-view hide_unlock">
 
             <div className="panel-body">
             {showLoader === true ? (<MlLoader />) : (<div>{this.state.data && this.state.data.institutionEvolutionDescription ?
@@ -143,6 +152,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
                           value={editorValue}
                           isReadOnly={true}
                         /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+            <FontAwesome name='unlock' className="input_icon" id="institutionEvolutionDescriptionPrivate" />
               {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.data && this.state.data.institutionEvolutionDescription ? this.state.data.institutionEvolutionDescription : (<NoData tabName={this.props.tabName}/>)}</p>)} */}
 
             </div>
@@ -153,3 +163,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
     )
   }
 };
+
+/**
+ * @todo: {institutionEvolutionDescriptionPrivate} need to replace with {isInstitutionEvolutionDescriptionPrivate}
+ */

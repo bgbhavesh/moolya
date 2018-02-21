@@ -293,7 +293,7 @@ export default class MlAppActionComponent extends React.Component {
       }
     })
     return (
-        <div className="action_buttons" style={{'max-width':'1000px','margin':'0px auto'}}>
+        <div className="action_buttons" style={{'maxWidth':'1000px','margin':'0px auto'}}>
                 <ul>
                   {actionView}
                 </ul>

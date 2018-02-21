@@ -1,16 +1,14 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import _ from 'lodash';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
-import _ from 'lodash';
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "startupIncubators"
 
-export default class MlCompanyStartupIncubators extends React.Component{
+export default class MlCompanyStartupIncubators extends Component{
   constructor(props, context){
     super(props);
     this.state={

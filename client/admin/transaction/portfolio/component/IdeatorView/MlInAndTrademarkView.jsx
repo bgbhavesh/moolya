@@ -3,7 +3,7 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
+import {initalizeLockTitle,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
@@ -141,6 +141,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }
   }
 

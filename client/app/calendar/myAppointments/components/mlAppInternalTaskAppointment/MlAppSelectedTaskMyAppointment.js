@@ -65,7 +65,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
    * Desc :: Sets components steps for stepzila to create and update task data
    */
   setTaskSteps() {
-    const { appointment, data } = this.props;
+    const { appointment, data, showCancelAndRescheduleInfo, service } = this.props;
     const { task, slotInfo } = this.state;
     const steps = [
       {
@@ -88,7 +88,9 @@ class MlAppSelectedTaskMyAppointment extends Component {
         name: 'Info',
         component: <MlAppTaskMyAppointmentTermAndCondition
           task={task}
-          appointment={appointment} />,
+          showCancelAndRescheduleInfo={showCancelAndRescheduleInfo}
+          appointment={appointment}
+          service={service}/>,
         icon: <span className="ml my-ml-info"></span>
       }
 

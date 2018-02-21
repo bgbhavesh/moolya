@@ -2,8 +2,7 @@
  * Created by vishwadeep on 11/9/17.
  */
 
-import React from 'react';
-import {render} from 'react-dom';
+import React, { Component } from 'react';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil';
@@ -11,7 +10,7 @@ import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 var FontAwesome = require('react-fontawesome');
 
-export default class MlGenericPartnersView extends React.Component {
+export default class MlGenericPartnersView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,7 +55,7 @@ export default class MlGenericPartnersView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id ? id : 0,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -78,7 +77,7 @@ export default class MlGenericPartnersView extends React.Component {
     this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
-
+    $(".input_icon").removeClass('un_lock fa-lock').addClass('fa-unlock');
     _.each(getData.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -89,7 +88,7 @@ export default class MlGenericPartnersView extends React.Component {
   }
 
   render() {
-    var _this = this
+    const _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
     var arrayList = _this.props.partnersList ? _this.props.partnersList : []
@@ -124,7 +123,7 @@ export default class MlGenericPartnersView extends React.Component {
               </ScrollArea>
             </div>
 
-            <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
+            <div className="sub_wrap_scroll hide_unlock" id="details-div" style={{'display': 'none'}}>
 
               <div className="top_block_scroller" id="forcecentered">
                 <ul>
@@ -159,14 +158,14 @@ export default class MlGenericPartnersView extends React.Component {
                                                 {/*selectedValue={this.state.viewCurDetail.title} queryType={"graphql"}*/}
                                                 {/*query={titleQuery} queryOptions={titleOption}*/}
                                                 {/*onSelect={function () {}} isDynamic={true} isDisabled={true}/>*/}
-                                  {/*<FontAwesome name='unlock' className="password_icon"/>*/}
+                                  {/*<FontAwesome name='unlock' className="input_icon"/>*/}
                                 {/*</div>*/}
 
                                 <div className="form-group">
                                   <input type="text" placeholder="First name"
                                          value={this.state.viewCurDetail.firstName ? this.state.viewCurDetail.firstName : ''}
                                          className="form-control float-label" onChange={_this.handleChange}/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isFirstNamePrivate"/>
                                 </div>
 
                                 <div className="form-group">
@@ -174,7 +173,7 @@ export default class MlGenericPartnersView extends React.Component {
                                          value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isLastNamePrivate"/>
                                 </div>
 
                                 <div className="form-group">
@@ -182,7 +181,7 @@ export default class MlGenericPartnersView extends React.Component {
                                          value={this.state.viewCurDetail.designation ? this.state.viewCurDetail.designation : ""}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="designation"/>
                                 </div>
 
                                 <div className="form-group">
@@ -190,7 +189,7 @@ export default class MlGenericPartnersView extends React.Component {
                                          value={this.state.viewCurDetail.partnerCompanyName ?this.state.viewCurDetail.partnerCompanyName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate" />
                                 </div>
                               </form>
                             </div>
@@ -204,7 +203,7 @@ export default class MlGenericPartnersView extends React.Component {
                                          value={this.state.viewCurDetail.yearsOfExperience ? this.state.viewCurDetail.yearsOfExperience : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"/>
                                 </div>
 
                                 <div className="form-group">
@@ -212,14 +211,14 @@ export default class MlGenericPartnersView extends React.Component {
                                          value={this.state.viewCurDetail.qualification ? this.state.viewCurDetail.qualification : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"/>
                                 </div>
 
                                 <div className="form-group">
                                   <input type="text" placeholder="About" className="form-control float-label"
                                          value={this.state.viewCurDetail.aboutPartner ? this.state.viewCurDetail.aboutPartner : ''}
                                          onChange={_this.handleChange}/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
+                                  <FontAwesome name='unlock' className="input_icon" id="isAboutPartnerPrivate" />
                                 </div>
                               </form>
                             </div>

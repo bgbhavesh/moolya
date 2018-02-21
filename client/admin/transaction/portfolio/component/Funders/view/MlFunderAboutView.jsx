@@ -1,10 +1,8 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
+import { initalizeLockTitle, initalizeFloatLabel } from '../../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
@@ -37,7 +35,7 @@ export default class MlFunderAboutView extends React.Component{
    * inializing float label
    * */
   componentDidUpdate(){
-    var className = this.props.isAdmin?"admin_header":"app_header"
+    const className = this.props.isAdmin ? "admin_header" : "app_header";
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
@@ -47,7 +45,7 @@ export default class MlFunderAboutView extends React.Component{
 
     initalizeFloatLabel();
   }
-
+ 
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -61,6 +59,7 @@ export default class MlFunderAboutView extends React.Component{
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     }else{
       this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
     }
@@ -104,12 +103,12 @@ export default class MlFunderAboutView extends React.Component{
 
                           <div className="form-group">
                             <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFirstNamePrivate}/>
+                            {/* <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFirstNamePrivate}/> */}
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLastNamePrivate}/>
+                            {/* <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLastNamePrivate}/> */}
                           </div>
 
                           {/*<div className="form-group">*/}
@@ -118,44 +117,44 @@ export default class MlFunderAboutView extends React.Component{
                           {/*</div>*/}
                           <div className="form-group">
                             <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} disabled={true} className="float-label" />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/>
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="User Category" name="category" defaultValue={this.state.data.category} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isCategoryPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isCategoryPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isCategoryPrivate"/>
                           </div>
 
                           <div className="form-group">
                             {/*<input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>*/}
                             {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>*/}
                             <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" />
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmploymentStatusPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate" />
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="Professional Tag" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionalTagPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate"/>
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="Years of Experience" name="yearsOfExperience" defaultValue={this.state.data.yearsOfExperience} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isYearsOfExperiencePrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate" />
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" />
                           </div>
 
                           <div className="form-group">
                             <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionPrivate}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionPrivate" />
                           </div>
                         </form>
                       </div>
@@ -180,11 +179,11 @@ export default class MlFunderAboutView extends React.Component{
                             <div className="panel-body">
                               <div className="form-group col-md-6 nomargin-bottom nopadding-left">
                                 <input type="text" placeholder="From" name="from" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.from?this.state.data.investmentBudget.from:""} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                                <FontAwesome name='unlock' className="input_icon un_lock" id="isFromPrivate" /><input type="checkbox" className="lock_input" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isFromPrivate?this.state.data.investmentBudget.isFromPrivate:""}/>
+                                <FontAwesome name='unlock' className="input_icon un_lock" id="isFromPrivate" />
                               </div>
                               <div className="form-group col-md-6 nomargin-bottom nopadding-right">
                                 <input type="text" placeholder="To" name="to" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.to?this.state.data.investmentBudget.to:""} className="form-control float-label" id="cluster_name" disabled='disabled'/>
-                                <FontAwesome name='unlock' className="input_icon un_lock" id="isToPrivate" /><input type="checkbox" className="lock_input" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isToPrivate?this.state.data.investmentBudget.isToPrivate:""}/>
+                                <FontAwesome name='unlock' className="input_icon un_lock" id="isToPrivate" />
                               </div>
                             </div>
                           </div>

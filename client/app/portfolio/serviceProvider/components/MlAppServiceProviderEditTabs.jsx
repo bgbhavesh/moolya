@@ -127,7 +127,6 @@ export default class MlAppServiceProviderEditTabs extends Component {
       let portfolioId = details.portfolioId;
       this.saveDataToServices(portfolioId)
     }
-    // console.log(details)
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio: data})
@@ -147,7 +146,8 @@ export default class MlAppServiceProviderEditTabs extends Component {
     }
     data['lookingFor'] = details;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privatekey, requiredFields);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privatekey, requiredFields);
   }
   /**
    * getting all values from the child components and passing all to Main component through props
@@ -156,7 +156,8 @@ export default class MlAppServiceProviderEditTabs extends Component {
     let data = this.state.serviceProviderPortfolio;
     data['about'] = details;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey);
   }
 
   getAwardsDetails(details, privateKey, requiredFields) {
@@ -166,7 +167,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
     }
     data['awardsRecognition'] = details;
     this.setState({serviceProviderPortfolio: data})
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, 'logo');
     this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey, requiredFields);
   }
 
@@ -182,7 +183,8 @@ export default class MlAppServiceProviderEditTabs extends Component {
       data['licenses'] = details.licenses;
     }
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey);
   }
 
   // getServiceProviderServices(details, privateKey) {
@@ -214,7 +216,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
     var data = this.state.serviceProviderPortfolio;
     data['clients'] = details;
     this.setState({serviceProviderPortfolio: data})
-    var object = omitDeep(data, 'logo')
+    const object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey, requiredFields);
   }
 

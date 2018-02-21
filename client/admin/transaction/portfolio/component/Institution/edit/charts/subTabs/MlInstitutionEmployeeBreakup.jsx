@@ -209,12 +209,12 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
 
                       </div>
                       <div className="form-group col-lg-6">
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padl0">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}}
                                     closeOnSelect={true} ref={"ebdFromYear"+defaultIndex} onChange={this.handleFromYearChange.bind(this,defaultIndex)}/>
                         </div>
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padr0">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                     inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}}
                                     closeOnSelect={true} ref={"ebdFromMonth"+defaultIndex} onChange={this.handleFromMonthChange.bind(this,defaultIndex)}/>
@@ -223,12 +223,12 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
                       </div>
 
                       <div className="form-group col-lg-6">
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padl0">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true}}
                                     closeOnSelect={true} ref={"ebdToYear"+defaultIndex} onChange={this.handleToYearChange.bind(this,defaultIndex)}/>
                         </div>
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padr0">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                     inputProps={{placeholder: "Select To Month", className:"float-label form-control",readOnly:true}}
                                     closeOnSelect={true} ref={"ebdToMonth"+defaultIndex} onChange={this.handleToMonthChange.bind(this,defaultIndex)}/>
@@ -264,13 +264,13 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
 
                         </div>
                         <div className="form-group col-lg-6">
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padl0">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years" defaultValue={details.ebdFromYear}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
 
                                       closeOnSelect={true} ref={"ebdFromYear"+idx} onChange={that.handleFromYearChange.bind(that, idx)}/>
                           </div>
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padr0">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months" defaultValue={details.ebdFromMonth}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
 
@@ -281,13 +281,13 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
 
 
                         <div className="form-group col-lg-6">
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padl0">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years" defaultValue={details.ebdToYear}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
 
                                       closeOnSelect={true} ref={"ebdToYear"+idx} onChange={that.handleToYearChange.bind(that, idx)}/>
                           </div>
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padr0">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months" defaultValue={details.ebdToMonth}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
 

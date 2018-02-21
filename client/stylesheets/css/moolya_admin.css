@@ -302,7 +302,7 @@ table{background: #fff;}
 .fileUpload .ml{font-size: 18px; background: #273545; border-radius: 5px; padding: 3px 4px; text-shadow: none; color: #fff; line-height: 30px; cursor: pointer;}
 .single_icon.ml{font-size: 18px; background: #ffe144; border-radius: 5px; padding: 4px; text-shadow: none; color: #273545; cursor: pointer;margin-right: 10px;}
 .fileUpload input.upload {position: absolute;top: 0;right: 0;margin: 0;padding: 0;font-size: 20px;cursor: pointer;opacity: 0;filter: alpha(opacity=0);width: 107px;cursor: pointer; overflow: hidden; }
-.mlUpload_btn{background: #273545;padding: 0px 8px;display: block;color: #fff;text-shadow: 0px 1px 1px #333;width: 108px;    position: relative;margin-left: 15px;height: 36px;line-height: 33px;float: left;text-align: center; cursor: pointer;}
+.mlUpload_btn{z-index:99; background: #273545;padding: 0px 8px;display: block;color: #fff;text-shadow: 0px 1px 1px #333;width: 108px;    position: relative;margin-left: 15px;height: 36px;line-height: 33px;float: left;text-align: center; cursor: pointer;}
 .mlUpload_btn span{cursor: pointer;}
 a.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
 a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
@@ -312,7 +312,7 @@ a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .previewImg.ProfileImg{margin-left: 50px;}
 .ProfileImg img{width: 100%;border:1px solid #273545;width: 80px;height: 80px;border-radius: 4px;}
 .steps_pic_upload .ProfileImg{float: none;width: 200px;height: 200px;margin: 0px auto;position: relative; }
-.steps_pic_upload .ProfileImg img{width: 200px;height: 200px;border:2px solid #273545;}
+.steps_pic_upload .ProfileImg img{width: 200px;height:190px;border:2px solid #273545;}
 .steps_pic_upload .mlUpload_btn{float: none;margin: 15px auto;}
 .jvFloat {position: relative;}
 .placeHolder {position: absolute;top: 6px;left: 0;color: #ef4647;font-size: .8em;font-weight: bold;-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);-o-transform: translate(0, 0);-ms-transform: translate(0, 0);transform: translate(0, 0);-webkit-transition: -webkit-transform 150ms, opacity 120s;transition: transform 150ms, opacity 120s;opacity: 0;visibility: hidden;font-family: Arial;text-shadow: none;}
@@ -724,7 +724,10 @@ button:focus{outline: 0;}
 .ml_icon_btn .cancel_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #273545;top: 0px;}
 .ml_icon_btn .cancel_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 
-.react-bs-table-tool-bar{margin-top: -30px !important}
+.react-bs-table-tool-bar{margin-top:0px !important}
+/* p.showTotal.small {
+  position: absolute;
+} */
 .react-bs-table-search-form input[type="text"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */color: transparent;}
 .react-bs-table-search-form input[type="text"]::-moz-placeholder { /* Firefox 19+ */color: transparent;}
 .react-bs-table-search-form input[type="text"]:-ms-input-placeholder { /* IE 10+ */color: transparent;}
@@ -1209,7 +1212,18 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .ellipsis-menu:focus, .ellipsis-menu:hover{color: #fff;}
 
 .management-form-wrap {background: #fff; padding: 5px 10px; }
-.triangle-topright {width: 0; height: 0; border-top: 30px solid #273545; border-left: 30px solid transparent; color: #fff; float: right; margin: -6px -16px 0 0; position: relative; cursor: pointer; }
+.triangle-topright {
+  width: 0;
+  height: 0;
+  border-top: 30px solid #273545;
+  border-left: 30px solid transparent;
+  color: #fff;
+  float: right;
+  margin: 0;
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+}
 .triangle-topright .fa {position: absolute; top: -27px; left: -14px; font-size: 12px; }
 .team-block{background:#273545;border-radius:8px;text-align:center;margin-bottom:10px;}
 .team-block.active{background:#ef4647;}
@@ -1710,3 +1724,5 @@ margin: 0px;
 
 .medium-popover .form-group .input_types input{position: relative; z-index: 9999 !important;}
 .panel-header input{ height: 23px;}
+.padl0{ padding-left:0}
+.padr0{ padding-right: 0;}

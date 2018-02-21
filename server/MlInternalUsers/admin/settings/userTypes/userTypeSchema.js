@@ -32,7 +32,7 @@ let UserTypesSchema = `
     
    type Mutation 
     {
-        UpdateUserType(_id:String, displayName:String, userTypeDesc:String, communityCode :String, communityName :String, isActive:Boolean , moduleName:String, actionName:String):response
+        UpdateUserType(_id:String, userTypeName:String, displayName:String, userTypeDesc:String, communityCode :String, communityName :String, isActive:Boolean , moduleName:String, actionName:String):response
         createUserType(userType:userTypeObject, moduleName:String, actionName:String):response
     }
     type Query{

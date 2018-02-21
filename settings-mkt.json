@@ -50,7 +50,8 @@
       "isEmailDomainCheckEnabled":true,
       "isAuditEnabled":true,
       "isProdENV":false,
-      "conversationsBaseURL":"https://qarkc.moolya.global"
+      "conversationsBaseURL":"https://qarkc.moolya.global",
+      "notificationEngineURL":"http://qanf.moolya.global/api/random-project1515670241308",
+      "notificationEngineAccessKey":"4a4fc754-dad3-4b14-88f5-7bf83a5de80a"
     }
   }
-  

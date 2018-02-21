@@ -5,7 +5,7 @@ var diff = require('deep-diff').diff;
 
 import './mlModuleCollectionMap.js';
 import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
-
+import {pushlogsByKafka} from '../commons/mlKafkaProducer'
 //TODO: Drive the Audit Log through Audit Definition and configuration
 var isAuditEnabled=Meteor.settings.private.isAuditEnabled;
 class MlAuditLog {
@@ -141,10 +141,13 @@ class MlAuditLog {
           toInsert.previousValue=JSON.stringify(say.lhs)
           toInsert.currentValue=JSON.stringify(say.rhs)
           MlAudit.insert(toInsert);
+
+          pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
         })
       }catch (err){
 
-        toInsert.errorReason=JSON.stringify("Error: " + err + ".")
+        toInsert.errorReason=JSON.stringify("Error: " + err + ".");
+        pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
         MlAudit.insert(toInsert)
       }
       return true;
@@ -220,10 +223,12 @@ class MlAuditLog {
           }
         }
         MlAudit.insert(toInsert);
+        pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
       })
     }catch(err){
       toInsert.errorReason=JSON.stringify("Error: " + err + ".")
       MlAudit.insert(toInsert)
+      pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
     }
 
     return true;

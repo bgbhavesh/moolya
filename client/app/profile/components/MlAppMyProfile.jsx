@@ -19,6 +19,7 @@ import {appClient} from '../../core/appConnection';
 import {smsUserOtpHandler, verifyUserMobileNumberHandler, resendUserSmsOtpHandler} from '../../../commons/verificationActionHandler';
 import _ from "lodash";
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
+let Select = require('react-select');
 
 class MlAppMyProfile extends Component {
   constructor(props) {
@@ -35,7 +36,14 @@ class MlAppMyProfile extends Component {
       showProfileModal: false,
       uploadingAvatar: false,
       getOTPClicked:false,
-      mobileNumber : ""
+      mobileNumber : "",
+      selectOptions : [
+      { value: 'Never', label: 'Never' },
+      { value: 'Once a day', label: 'Once a day' },
+      { value: 'Alternate Days', label: 'Alternate Days' },
+      { value: 'Once a Week', label: 'Once a Week' }
+    ],
+      frequency: "Once a day"
     };
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
@@ -95,7 +103,8 @@ class MlAppMyProfile extends Component {
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,
         userId:response._id,
-        mobileNumber:externalProfile&&externalProfile.mobileNumber?externalProfile.mobileNumber:""
+        mobileNumber:externalProfile&&externalProfile.mobileNumber?externalProfile.mobileNumber:"",
+        frequency: response.profile.firebaseInfo?response.profile.firebaseInfo.frequency:"Once a day"
       });
       this.genderSelect()
     }else {
@@ -119,7 +128,8 @@ class MlAppMyProfile extends Component {
       lastName: this.state.lastName,
       // userName: this.state.username,
       genderType: this.state.gender,
-      dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null
+      dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null,
+      frequency: this.state.frequency
     }
     const dataresponse = await updateDataEntry(Details);
     console.log('--dataresponse--',dataresponse);
@@ -203,6 +213,12 @@ class MlAppMyProfile extends Component {
 
   openDatePickerDateOfBirth() {
     $('#date-of-birth').toggleClass('rdtOpen')
+  }
+
+  notificationHandler(event) {
+    this.setState({
+      frequency: event.value
+    })
   }
 
   onCheckPassword() {
@@ -546,6 +562,15 @@ class MlAppMyProfile extends Component {
                     <div className="form-group mandatory" id="date-of-birth">
                       <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, "DD-MMM-YYYY").format("DD-MM-YYYY"): ""} className="form-control float-label" readOnly="true" disabled="disabled" />
                       <FontAwesome name="calendar" placeholder="Date of Birth" className="password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
+                    </div>
+
+                    <div className="form-group mandatory" id="notification-frequency">
+                    <Select
+                      name="form-field-name"
+                      value={this.state.frequency}
+                      options={this.state.selectOptions}
+                      onChange={this.notificationHandler.bind(this)}
+                    />
                     </div>
 
                     {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}

@@ -2,17 +2,52 @@ import _ from "lodash";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import MlAdminContextQueryConstructor from "./mlAdminContextQueryConstructor";
 import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
+
 MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
-let mergeQueries=function(userFilter,serverFilter)
-{
-  let query=userFilter||{};
-    if (_.isEmpty(query)) {
-      query = serverFilter||{};
-    } else {
-      query = {$and: [userFilter,serverFilter]};
-    }
-    return query;
+
+function doRequest() {
+  return new Promise(function (resolve, reject) {
+
+    var request = require("request");
+
+    var options = {
+      method: 'POST',
+      url: 'http://localhost:3010/getAuditLogs',
+      headers:
+        {
+          'cache-control': 'no-cache',
+          'content-type': 'application/json'
+        },
+      body: {skip: 1, limit: 10},
+      json: true
+    };
+
+    request(options ,function (error, res, body) {
+      if (!error){
+        resolve(body);
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+async function getAuditRecords() {
+
+  let result = await doRequest();
+  return result.rows;
+
+
+}
+
+let mergeQueries = function (userFilter, serverFilter) {
+  let query = userFilter || {};
+  if (_.isEmpty(query)) {
+    query = serverFilter || {};
+  } else {
+    query = {$and: [userFilter, serverFilter]};
+  }
+  return query;
 }
 let CoreModules = {
   MlClusterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
@@ -145,8 +180,8 @@ let CoreModules = {
    * @Note 1) sending registrationId from client need to update it as docId from the client.
    *       2) if(1) changes to be made in users about transaction also, using registrationId there.
    * */
-  MlAuditLogRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context,userSpecificSearch) => {
-    var data=[],totalRecords=0;
+  MlAuditLogRepo: async (requestParams, userFilterQuery, contextQuery, fieldsProj, context, userSpecificSearch) => {
+    var data = [], totalRecords = 0;
     if (!fieldsProj.sort) {
       fieldsProj.sort = {timeStamp: -1}
     }
@@ -163,17 +198,19 @@ let CoreModules = {
       }
     });
     //FIX for Issue: MOOLYA=2361
-    var serverFilterQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(resultantQuery,serverQuery), '$and');
+    var serverFilterQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(resultantQuery, serverQuery), '$and');
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
-    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery,serverQuery), '$and');
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
 
     //Fix for Issue: MOOLYA-2361
-    var result=CoreModules.MlAuditHistorySearchResult(requestParams.moduleName,resultantQuery,serverFilterQuery,userFilterQuery,fieldsProj,context,userSpecificSearch);
-    if(result.resultsFetched){
-         data=result.data||[];totalRecords=result.totalRecords||0;
-    }else{
-      data = MlAudit.find(resultantQuery,fieldsProj).fetch();
+    var result = CoreModules.MlAuditHistorySearchResult(requestParams.moduleName, resultantQuery, serverFilterQuery, userFilterQuery, fieldsProj, context, userSpecificSearch);
+    if (result.resultsFetched) {
+      data = result.data || [];
+      totalRecords = result.totalRecords || 0;
+    } else {
+      data= MlAudit.find(resultantQuery, fieldsProj).fetch();
+      //data = await getAuditRecords();
       totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
     }
     data.map(function (doc, index) {
@@ -196,7 +233,7 @@ let CoreModules = {
     var processedData = []
     //User selection filter.
     var userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-    if(userProfile.hierarchyLevel == 4){
+    if (userProfile.hierarchyLevel == 4) {
       let clusterId = requestParams && requestParams.clusterId ? requestParams.clusterId : null;
       if (clusterId) {
         nonMoolyaQuery = {"clusterId": clusterId, isDefaultSubChapter: false};
@@ -215,13 +252,13 @@ let CoreModules = {
       data = processedData
       var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
       return {totalRecords: totalRecords + 1, data: data};
-    }else{
+    } else {
       let subChapters = userProfile.defaultSubChapters
       let clusterId = requestParams && requestParams.clusterId ? requestParams.clusterId : null;
-      nonMoolyaQuery = {"clusterId": clusterId,"_id":{'$in':subChapters}, isDefaultSubChapter: false};
+      nonMoolyaQuery = {"clusterId": clusterId, "_id": {'$in': subChapters}, isDefaultSubChapter: false};
       var data = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).fetch();
       var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
-      return {totalRecords: totalRecords , data: data};
+      return {totalRecords: totalRecords, data: data};
     }
   },
   MlInternalRequestRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
@@ -292,11 +329,12 @@ let CoreModules = {
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery), '$and');
     //var data = MlTemplateAssignment.find(resultantQuery, fieldsProj).fetch();
-    var pipeline=[];
+    var pipeline = [];
     if (Object.keys(resultantQuery).length) {
       pipeline.push({'$match': resultantQuery});
-    };
-    pipeline= pipeline.concat([{
+    }
+    ;
+    pipeline = pipeline.concat([{
       '$lookup': {
         from: "mlUserTypes",
         localField: "templateuserType",
@@ -326,7 +364,7 @@ let CoreModules = {
           "createdDate": 1,
           "createdBy": 1
         }
-      }, {'$sort': fieldsProj.sort}, {'$skip': parseInt(fieldsProj.skip||0)}, {'$limit': parseInt(fieldsProj.limit)}]);
+      }, {'$sort': fieldsProj.sort}, {'$skip': parseInt(fieldsProj.skip || 0)}, {'$limit': parseInt(fieldsProj.limit)}]);
     var data = mlDBController.aggregate('MlTemplateAssignment', pipeline, context);
     var totalRecords = MlTemplateAssignment.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
@@ -347,7 +385,7 @@ let CoreModules = {
     switch (type) {
       //custom restriction for registration
       case 'requested':
-        serverQuery = {'status': {'$nin': ['REG_USER_APR', 'REG_ADM_REJ','REG_USER_REJ']}};
+        serverQuery = {'status': {'$nin': ['REG_USER_APR', 'REG_ADM_REJ', 'REG_USER_REJ']}};
         break;
       case 'approved':
         serverQuery = {'status': "REG_USER_APR"};
@@ -376,8 +414,8 @@ let CoreModules = {
       object.registrationStatus = doc.status;
       if (doc.allocation && doc.allocation.assigneeId) {
         // object.assignedUser = doc.allocation.assignee
-        let user = mlDBController.findOne('users', {_id:doc.allocation.assigneeId});
-        object.assignedUser = user.profile.firstName+" "+user.profile.lastName
+        let user = mlDBController.findOne('users', {_id: doc.allocation.assigneeId});
+        object.assignedUser = user.profile.firstName + " " + user.profile.lastName
         object.assignedUserId = doc.allocation.assigneeId
         object.allocationStatus = doc.allocation.allocationStatus
       }
@@ -419,8 +457,8 @@ let CoreModules = {
     data.map(function (doc, index) {
       if (doc.allocation && doc.allocation.assigneeId) {
         // doc.assignedUser = doc.allocation.assignee
-        let user = mlDBController.findOne('users', {_id:doc.allocation.assigneeId});
-        doc.assignedUser = user.profile.firstName+" "+user.profile.lastName
+        let user = mlDBController.findOne('users', {_id: doc.allocation.assigneeId});
+        doc.assignedUser = user.profile.firstName + " " + user.profile.lastName
         doc.assignedUserId = doc.allocation.assigneeId
         doc.allocationStatus = doc.allocation.allocationStatus
       }
@@ -505,34 +543,35 @@ let CoreModules = {
 
         "$group": {
           _id: "$sharedId",
-          userId: { "$first": "$owner.userId" },
-          profileId: { "$first": "$owner.profileId" },
-          createdAt: { "$first": "$createdAt"},
-          totalRecords: { "$sum":1 }
+          userId: {"$first": "$owner.userId"},
+          profileId: {"$first": "$owner.profileId"},
+          createdAt: {"$first": "$createdAt"},
+          totalRecords: {"$sum": 1}
         }
       },
-      { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
-      { "$unwind" : "$contactInfo" },
-      { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
-      { "$addFields": {
-        "userProfiles": {
-          "$filter": {
-            input: "$userProfiles",
-            as: "userProfile",
-            cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+      {"$lookup": {from: "users", localField: "userId", foreignField: "_id", as: "contactInfo"}},
+      {"$unwind": "$contactInfo"},
+      {"$addFields": {"userProfiles": {"$cond": [{"$isArray": "$contactInfo.profile.externalUserProfiles"}, "$contactInfo.profile.externalUserProfiles", [{}]]}}},
+      {
+        "$addFields": {
+          "userProfiles": {
+            "$filter": {
+              input: "$userProfiles",
+              as: "userProfile",
+              cond: {$eq: ["$$userProfile.profileId", "$profileId"]}
+            }
           }
         }
-      }
       },
-      { "$unwind" : "$userProfiles" },
+      {"$unwind": "$userProfiles"},
       {
         "$project": {
           _id: 1,
-          createdAt:1,
+          createdAt: 1,
           createdBy: "$contactInfo.profile.displayName",
           userId: "$userId",
           profileId: "$profileId",
-          email : "$contactInfo.profile.email",
+          email: "$contactInfo.profile.email",
           mobileNumber: "$contactInfo.profile.mobileNumber",
           cluster: "$userProfiles.clusterName",
           chapter: "$userProfiles.chapterName",
@@ -545,8 +584,8 @@ let CoreModules = {
 
     if (fieldsProj.sort) {
       pipeline.push({'$sort': fieldsProj.sort});
-    }else{
-      pipeline.push({'$sort': {'createdAt':-1}});
+    } else {
+      pipeline.push({'$sort': {'createdAt': -1}});
     }
 
     if (fieldsProj.skip) {
@@ -589,8 +628,8 @@ let CoreModules = {
     }
     pipleline.push({'$lookup': {from: 'users', localField: 'userId', 'foreignField': '_id', as: 'user'}},
       {'$unwind': '$user'},
-      {'$lookup':{ from: 'mlOffice', localField: 'officeId', foreignField: '_id', as: 'office'}},
-      {'$unwind':'$office'},
+      {'$lookup': {from: 'mlOffice', localField: 'officeId', foreignField: '_id', as: 'office'}},
+      {'$unwind': '$office'},
       {
         '$project': {
           'userName': '$user.profile.displayName',
@@ -759,13 +798,13 @@ let CoreModules = {
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
     var service = MlServiceCardDefinition.find(resultantQuery, fieldsProj).fetch();
     var data = [];
-    service.map(function(details, index) {
+    service.map(function (details, index) {
       data.push(details)
       var userData = mlDBController.find('users', {'profile.externalUserProfiles.profileId': details.profileId}).fetch();
       userData.map(function (list) {
         data[index].email = list.username;
         list.profile.externalUserProfiles.map(function (user) {
-          if(details.profileId ===  user.profileId)
+          if (details.profileId === user.profileId)
             data[index].userDetails = user;
         });
       });
@@ -778,7 +817,7 @@ let CoreModules = {
     var countriesId = [];
     var activeCluster = [];
     var userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-    if(userProfile.hierarchyLevel == 4){
+    if (userProfile.hierarchyLevel == 4) {
       let activeCountries = mlDBController.find('MlCountries', {isActive: true}, context, {sort: {country: 1}}).fetch();
       activeCountries.map(function (country) {
         countriesId.push(country._id);
@@ -793,13 +832,13 @@ let CoreModules = {
       })
       const data = activeCluster;
       const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-      return {totalRecords: totalRecords+1, data: data};
-    }else{
+      return {totalRecords: totalRecords + 1, data: data};
+    } else {
       let clusterIds = userProfile && userProfile.defaultCluster ? userProfile.defaultCluster : [];
       resultantQuery = {_id: {$in: [clusterIds]}}
       var data = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
       var totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-      return {totalRecords: totalRecords , data: data};
+      return {totalRecords: totalRecords, data: data};
     }
   },
 
@@ -857,7 +896,7 @@ let CoreModules = {
       },
       {
         $project: {
-          "departmentId":1,
+          "departmentId": 1,
           "departmentName": 1,
           "subDepartmentId": 1,
           "subDepartmentName": 1,
@@ -915,12 +954,12 @@ let CoreModules = {
    * */
   MlUsersRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     var contextFieldMap = {
-        'clusterId': 'registrationInfo.clusterId',
-        'chapterId': 'registrationInfo.chapterId',
-        'subChapterId': 'registrationInfo.subChapterId',
-        'communityId': 'registrationInfo.communityId',
-        'communityCode': 'registrationInfo.registrationType'
-      };
+      'clusterId': 'registrationInfo.clusterId',
+      'chapterId': 'registrationInfo.chapterId',
+      'subChapterId': 'registrationInfo.subChapterId',
+      'communityId': 'registrationInfo.communityId',
+      'communityCode': 'registrationInfo.registrationType'
+    };
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
     /**construct context query with $in operator for each fields*/
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
@@ -989,36 +1028,74 @@ let CoreModules = {
   MlUsersTransaction: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
 
     var result = [];
-    var reg = mlDBController.findOne('MlRegistration', {'_id':requestParams.registrationId} , context)
+    var reg = mlDBController.findOne('MlRegistration', {'_id': requestParams.registrationId}, context)
 
     let pipeline = [{
-      '$match': {_id: reg.registrationInfo.userId}},
-      {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
-      {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
-      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
-      {'$project':{"registration":{
-        '$map':
-          { "input":"$registration", "as":"reg", 'in':
-            { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg.transactionId" ,"transactionType":"$$reg.registrationInfo.transactionType", "cluster":'$$reg.registrationInfo.clusterName', "chapter":'$$reg.registrationInfo.chapterName', "community":'$$reg.registrationInfo.communityName', "status":'$$reg.status'}
-          }
+      '$match': {_id: reg.registrationInfo.userId}
+    },
+      {
+        '$lookup': {
+          from: 'mlRegistration',
+          localField: '_id',
+          foreignField: 'registrationInfo.userId',
+          as: 'registration'
+        }
       },
-        "portfolio":{
-          '$map':
-            { "input":"$portfolio", "as":"port", 'in':
-              { "createdAt" :"$$port.createdAt", "transactionId":"$$port.transactionId" ,"transactionType":"$$port.transactionType", "cluster":'$$port.clusterName', "chapter":'$$port.chapterName', "community":'$$port.communityName', "status":'$$port.status'}
-            }
-        },
-        "transactionLog":{
-          '$map':
-            { "input":"$transactionLog", "as":"trans", 'in':
-              { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", "cluster":'$$trans.clusterName', "chapter":'$$trans.chapterName', "community":'$$trans.communityName', "status":'$$trans.activity'}
-            }
-        },
-      }},
-      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$transactionLog" ] } }},
+      {'$lookup': {from: 'mlPortfolioDetails', localField: '_id', foreignField: 'userId', as: 'portfolio'}},
+      {'$lookup': {from: 'mlTransactionsLog', localField: '_id', foreignField: 'userId', as: 'transactionLog'}},
+      {
+        '$project': {
+          "registration": {
+            '$map':
+              {
+                "input": "$registration", "as": "reg", 'in':
+                {
+                  "createdAt": "$$reg.registrationInfo.registrationDate",
+                  "transactionId": "$$reg.transactionId",
+                  "transactionType": "$$reg.registrationInfo.transactionType",
+                  "cluster": '$$reg.registrationInfo.clusterName',
+                  "chapter": '$$reg.registrationInfo.chapterName',
+                  "community": '$$reg.registrationInfo.communityName',
+                  "status": '$$reg.status'
+                }
+              }
+          },
+          "portfolio": {
+            '$map':
+              {
+                "input": "$portfolio", "as": "port", 'in':
+                {
+                  "createdAt": "$$port.createdAt",
+                  "transactionId": "$$port.transactionId",
+                  "transactionType": "$$port.transactionType",
+                  "cluster": '$$port.clusterName',
+                  "chapter": '$$port.chapterName',
+                  "community": '$$port.communityName',
+                  "status": '$$port.status'
+                }
+              }
+          },
+          "transactionLog": {
+            '$map':
+              {
+                "input": "$transactionLog", "as": "trans", 'in':
+                {
+                  "createdAt": "$$trans.createdAt",
+                  "transactionId": "$$trans._id",
+                  "transactionType": "$$trans.transactionTypeName",
+                  "cluster": '$$trans.clusterName',
+                  "chapter": '$$trans.chapterName',
+                  "community": '$$trans.communityName',
+                  "status": '$$trans.activity'
+                }
+              }
+          },
+        }
+      },
+      {'$project': {data: {"$concatArrays": ["$registration", "$portfolio", "$transactionLog"]}}},
       // {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
-      {"$unwind" : "$data"},
-      {"$replaceRoot": { newRoot: "$data"}}
+      {"$unwind": "$data"},
+      {"$replaceRoot": {newRoot: "$data"}}
     ];
 
     result = mlDBController.aggregate('users', pipeline, context);
@@ -1029,17 +1106,18 @@ let CoreModules = {
     return {totalRecords: totalRecords, data: data};
   },
 
-  MlAppointmentsRepo : function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+  MlAppointmentsRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
 
 
     let piplelineQuery = [
       {'$match': userFilterQuery},
-      { "$match": {"transactionTypeId":"appointment"} },
-      { "$lookup": {
-        from: "mlAppointments",
-        localField: "docId",
-        foreignField: "appointmentId",
-        as: "scAppointment"
+      {"$match": {"transactionTypeId": "appointment"}},
+      {
+        "$lookup": {
+          from: "mlAppointments",
+          localField: "docId",
+          foreignField: "appointmentId",
+          as: "scAppointment"
         }
       },
       {
@@ -1048,12 +1126,13 @@ let CoreModules = {
           preserveNullAndEmptyArrays: true
         }
       },
-      { "$lookup": {
-        from: "mlPayment",
-        localField: "docId",
-        foreignField: "resourceId",
-        as: "scOrder"
-      }
+      {
+        "$lookup": {
+          from: "mlPayment",
+          localField: "docId",
+          foreignField: "resourceId",
+          as: "scOrder"
+        }
       },
       {
         "$unwind": {
@@ -1061,27 +1140,29 @@ let CoreModules = {
           preserveNullAndEmptyArrays: true
         }
       },
-      { "$project" : {
-        "_id": "$_id",
-        "appointmentId": "$docId",
-        "createdBy": "$userName",
-        "emailId": "$emailId",
-        "source": "",
-        "transactionType": "$activity",
-        "cluster": "$clusterName",
-        "chapter": "$chapterName",
-        "subChapter": "$subChapterName",
-        "community": "$communityName",
-        "createdAt": "$createdAt",
-        "status":  { "$ifNull" :  ["$scOrder.status", "$scAppointment.status"] }
-      } }
+      {
+        "$project": {
+          "_id": "$_id",
+          "appointmentId": "$docId",
+          "createdBy": "$userName",
+          "emailId": "$emailId",
+          "source": "",
+          "transactionType": "$activity",
+          "cluster": "$clusterName",
+          "chapter": "$chapterName",
+          "subChapter": "$subChapterName",
+          "community": "$communityName",
+          "createdAt": "$createdAt",
+          "status": {"$ifNull": ["$scOrder.status", "$scAppointment.status"]}
+        }
+      }
     ];
 
 
     if (fieldsProj.sort) {
       piplelineQuery.push({'$sort': fieldsProj.sort});
-    }else{
-      piplelineQuery.push({'$sort':{'createdAt':-1}});
+    } else {
+      piplelineQuery.push({'$sort': {'createdAt': -1}});
     }
     if (fieldsProj.skip) {
       piplelineQuery.push({'$skip': parseInt(fieldsProj.skip)});
@@ -1091,7 +1172,7 @@ let CoreModules = {
     }
     let data = mlDBController.aggregate('MlTransactionsLog', piplelineQuery);
 
-    let totalRecords = mlDBController.find('MlTransactionsLog', {"transactionTypeId":"appointment"} ).count();
+    let totalRecords = mlDBController.find('MlTransactionsLog', {"transactionTypeId": "appointment"}).count();
 
     return {totalRecords: totalRecords, data: data};
   },
@@ -1104,42 +1185,72 @@ let CoreModules = {
    * @param userSpecificSearch true if user has searched/filtered the records.
    * returns result Object containing history records for modules by aggregation (lookup with related collections).
    */
-  MlAuditHistorySearchResult:function(module,resultantQuery,serverQuery,userFilter,fieldsProj,context,userSpecificSearch){
-    var result={resultsFetched:false,data:[],totalRecords:0};
-    var pipeline=[],foreignKeySearch=userSpecificSearch||false;
-    var limitskipsort=[{'$sort':fieldsProj.sort},{'$skip':fieldsProj.skip||0},{'$limit':fieldsProj.limit}];
-    var searchQueryParam={foriegnKeys:['docRef'],
-                          lookupQuery:{'$lookup':{from:'mlRegistration',localField: 'docId',foreignField:'_id',as:'refRecord'}},
-                          unwindQuery:{'$unwind':{path:"$refRecord",preserveNullAndEmptyArrays:true }},
-                          projectQuery:{$project:{clusterId:1,chapterId:1,subChapterId:1,communityId:1,communityCode:1,moduleName:1,userAgent:1,userId:1,userName:1,docId:1,fieldName:1,field:1,currentValue:1,previousValue:1,timeStamp:1,docRef:'$refRecord.transactionId'}}};
-    switch(module){
-          case 'REGISTRATION':
-            result.resultsFetched=true;
-            break;
-          case 'PORTFOLIO,PORTFOLIOLIBRARY':
-            result.resultsFetched=true;searchQueryParam.lookupQuery={$lookup: {from:'mlPortfolioDetails',localField: 'docId',foreignField: '_id',as: 'refRecord'}};
-            break;
+  MlAuditHistorySearchResult: function (module, resultantQuery, serverQuery, userFilter, fieldsProj, context, userSpecificSearch) {
+    var result = {resultsFetched: false, data: [], totalRecords: 0};
+    var pipeline = [], foreignKeySearch = userSpecificSearch || false;
+    var limitskipsort = [{'$sort': fieldsProj.sort}, {'$skip': fieldsProj.skip || 0}, {'$limit': fieldsProj.limit}];
+    var searchQueryParam = {
+      foriegnKeys: ['docRef'],
+      lookupQuery: {'$lookup': {from: 'mlRegistration', localField: 'docId', foreignField: '_id', as: 'refRecord'}},
+      unwindQuery: {'$unwind': {path: "$refRecord", preserveNullAndEmptyArrays: true}},
+      projectQuery: {
+        $project: {
+          clusterId: 1,
+          chapterId: 1,
+          subChapterId: 1,
+          communityId: 1,
+          communityCode: 1,
+          moduleName: 1,
+          userAgent: 1,
+          userId: 1,
+          userName: 1,
+          docId: 1,
+          fieldName: 1,
+          field: 1,
+          currentValue: 1,
+          previousValue: 1,
+          timeStamp: 1,
+          docRef: '$refRecord.transactionId'
         }
-        if(result.resultsFetched===true){
-          pipeline=[{'$match':serverQuery},searchQueryParam.lookupQuery,searchQueryParam.unwindQuery,searchQueryParam.projectQuery];
-          if(foreignKeySearch)pipeline.push({'$match':resultantQuery});
-
-          if(!foreignKeySearch){//check if user has enabled(filter/search)
-            result.totalRecords = mlDBController.find('MlAudit',resultantQuery, context, fieldsProj).count();
-          }else{
-            var counterQuery = _.clone(pipeline);counterQuery.push({$count: "totalRecords"})
-               var totalRecordsCount =mlDBController.aggregate('MlAudit',counterQuery,context);
-              result.totalRecords= totalRecordsCount && totalRecordsCount.length ? totalRecordsCount[0].totalRecords : 0;
+      }
+    };
+    switch (module) {
+      case 'REGISTRATION':
+        result.resultsFetched = true;
+        break;
+      case 'PORTFOLIO,PORTFOLIOLIBRARY':
+        result.resultsFetched = true;
+        searchQueryParam.lookupQuery = {
+          $lookup: {
+            from: 'mlPortfolioDetails',
+            localField: 'docId',
+            foreignField: '_id',
+            as: 'refRecord'
           }
+        };
+        break;
+    }
+    if (result.resultsFetched === true) {
+      pipeline = [{'$match': serverQuery}, searchQueryParam.lookupQuery, searchQueryParam.unwindQuery, searchQueryParam.projectQuery];
+      if (foreignKeySearch) pipeline.push({'$match': resultantQuery});
 
-          pipeline= pipeline.concat(limitskipsort);
+      if (!foreignKeySearch) {//check if user has enabled(filter/search)
+        result.totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
+      } else {
+        var counterQuery = _.clone(pipeline);
+        counterQuery.push({$count: "totalRecords"})
+        var totalRecordsCount = mlDBController.aggregate('MlAudit', counterQuery, context);
+        result.totalRecords = totalRecordsCount && totalRecordsCount.length ? totalRecordsCount[0].totalRecords : 0;
+      }
 
-           result.data=mlDBController.aggregate('MlAudit',pipeline,context);
-        }
-        return result;
+      pipeline = pipeline.concat(limitskipsort);
+
+      result.data = mlDBController.aggregate('MlAudit', pipeline, context);
+    }
+    return result;
   }
 
 }
 
 
-export default CoreModulesRepo =  CoreModules;
+export default CoreModulesRepo = CoreModules;

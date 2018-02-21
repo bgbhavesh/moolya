@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function addSubDomain(SubDomainMasterData)
-{
+export async function addSubDomain(SubDomainMasterData) {
   const result = await client.mutate({
     mutation: gql`
             mutation($SubDomainMasterData:SubDomainMasterData){
@@ -18,7 +17,6 @@ export async function addSubDomain(SubDomainMasterData)
       moduleName: "SUBDOMAIN",
       actionName: "CREATE"
     }
-  })
-  const id = result.data.createSubDomain;
-  return id
+  });
+  return result.data.createSubDomain
 }

@@ -52,6 +52,15 @@ export default class AddressDetails extends React.Component{
   }
 
   componentDidMount(){
+    $('.switch input').change(function () {
+      if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+        $(this).val(true)
+      } else {
+        $(this).parent('.switch').removeClass('on');
+        $(this).val(false)
+      }
+    });
     initalizeFloatLabel();
   }
 

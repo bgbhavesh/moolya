@@ -27,7 +27,7 @@ $menuTrans:all 0.5s linear;
 	height: 108px;
 	z-index: 2;
 }
-.list_block {
+/*.list_block {
 	height: 143px !important;}
 .provider_mask {
     position: relative;
@@ -45,7 +45,9 @@ $menuTrans:all 0.5s linear;
 	width: 105px;
 	height: 108px;
 	z-index: 2;
-}
+}*/
+.panel .panel-heading .input_types input[type=checkbox]:not(old)+label{ margin-left:0;}
+.panel .panel-heading .input_types input[type=checkbox]:not(old)+label>span{ margin-left:-25px;}
 }
 @media only screen and ( min-width: 768px )  and ( max-width: 900px ) {
 	.app_header{

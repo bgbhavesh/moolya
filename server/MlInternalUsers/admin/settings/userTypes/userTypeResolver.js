@@ -7,38 +7,56 @@ MlResolver.MlMutationResolver['UpdateUserType'] = (obj, args, context, info) => 
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
+    return new MlRespPayload().errorPayload("Not Authorized", code);
   }
-  var firstName = '';
-  var lastName = '';
-  // let id = MlDepartments.insert({...args.department});
-  if (Meteor.users.findOne({_id: context.userId})) {
-    let user = Meteor.users.findOne({_id: context.userId}) || {}
-    if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
 
-      firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
-      lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
-    } else if (user && user.profile && user.profile.isExternaluser) { //resolve external user context based on default profile
-      firstName = (user.profile || {}).firstName || '';
-      lastName = (user.profile || {}).lastName || '';
+  let findUserType = {};
+  findUserType.userTypeName = args.userTypeName;
+  findUserType.communityCode = args.communityCode;
+
+  let userTypeDoc = mlDBController.findOne('MlUserTypes', findUserType, context);
+  if (userTypeDoc && userTypeDoc._id !== args._id) {
+    let code = 409;
+    let errorMessage = 'UserType "' + args.userTypeName + '" already exists with CommunityName "' +
+      '' + args.communityName + '"';
+    return new MlRespPayload().errorPayload(errorMessage, code);
+  }
+  else {
+    let firstName = '';
+    let lastName = '';
+    // let id = MlDepartments.insert({...args.department});
+    if (Meteor.users.findOne({_id: context.userId})) {
+      let user = Meteor.users.findOne({_id: context.userId}) || {};
+      if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+
+        firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+        lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+      }
+      else if (user && user.profile && user.profile.isExternaluser) {
+        //resolve external user context based on default profile
+        firstName = (user.profile || {}).firstName || '';
+        lastName = (user.profile || {}).lastName || '';
+      }
+    }
+    let createdBy = firstName + ' ' + lastName;
+    args.updatedBy = createdBy;
+    args.updatedDate = new Date();
+    if (args._id) {
+      let id = args._id;
+      args = _.omit(args, '_id');
+      let result = mlDBController.update('MlUserTypes', id, args, {$set: true}, context)
+      // let result= MlUserTypes.update(id, {$set: args});
+      let code = 200;
+      return new MlRespPayload().successPayload(result, code)
+    }
+    else {
+      let code = 409;
+      let errorMessage = 'No _id provided to update UserType';
+      return new MlRespPayload().errorPayload(errorMessage, code);
     }
   }
-  let createdBy = firstName + ' ' + lastName
-  args.updatedBy = createdBy;
-  args.updatedDate = new Date();
-  if (args._id) {
+};
 
-    var id = args._id;
-    args = _.omit(args, '_id');
-    let result = mlDBController.update('MlUserTypes', id, args, {$set: true}, context)
-    // let result= MlUserTypes.update(id, {$set: args});
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
-  }
-
-}
 MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
@@ -50,8 +68,8 @@ MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => 
     findUserType.userTypeName = args.userType.userTypeName;
     findUserType.communityCode = args.userType.communityCode;
 
-    let isFind = mlDBController.find('MlUserTypes', findUserType, context).fetch();
-    if (isFind && isFind.length) {
+    let userTypeDoc = mlDBController.findOne('MlUserTypes', findUserType, context);
+    if (userTypeDoc) {
       let code = 409;
       let errorMessage = 'UserType "' + args.userType.userTypeName + '" already exists with CommunityName "' +
         '' + args.userType.communityName + '"';
@@ -87,8 +105,7 @@ MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => 
     }
   }
   else {
-    let response = new MlRespPayload().errorPayload("Please select at least one community");
-    return response;
+    return new MlRespPayload().errorPayload("Please select at least one community");
   }
 };
 

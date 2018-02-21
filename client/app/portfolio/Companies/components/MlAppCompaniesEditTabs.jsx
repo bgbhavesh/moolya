@@ -342,7 +342,7 @@ export default class MlAppCompaniesEditTabs extends Component {
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
     let privateObject = this.state.portfolioKeys;
-const object = omitDeep(data, ['logo', "privateFields"]);privateObject['privateKeys'] = privateKeys;
+    privateObject['privateKeys'] = privateKeys;
     privateObject['removePrivateKeys'] = removePrivateKeys;
     this.setState({ portfolioKeys: privateObject });
   }

@@ -34,6 +34,7 @@ export default class MlStartupViewInformation extends React.Component {
       _.each(privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock');
       })
+      initalizeLockTitle();
     });
   }
 
@@ -122,19 +123,20 @@ export default class MlStartupViewInformation extends React.Component {
     const showLoader = this.state.loading;
     const { editorValue } = this.state;
     return (
-      <div>
+      <div className="requested_input">
         {showLoader === true ? ( <MlLoader/>) : (
       <div className="col-lg-12 col-sm-12">
         <div className="row">
           <h2>Information</h2>
           <div className="panel panel-default panel-form-view hide_unlock">
-            <div className="panel-body panel-body-scroll">
+            <div className="panel-body panel-body-scroll pos-rel">
+              
             <div id="annotatorContent">{this.props.informationDetails && this.props.informationDetails.informationDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}</div>
-            <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isDescriptionPrivate" />
+                    {/* <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" /> */}
               {/* <p id="annotatorContent">{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
             </div>
           </div>
@@ -144,3 +146,4 @@ export default class MlStartupViewInformation extends React.Component {
     )
   }
 };
+// req_header_icon

@@ -57,3 +57,40 @@ export function loginHandler(endPoint, cb) {
     }
   });
 }
+
+export function firbaseClientHandler(endPoint, token, isAllowedNotifications, cb) {
+  new Promise(function (resolve, reject) {
+    let xmlhttp;
+    if (window.XMLHttpRequest) {
+      xmlhttp = new XMLHttpRequest();
+    } else {
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    if(xmlhttp) {
+      const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
+      let serverEndPoint=Meteor.absoluteUrl(endPoint);
+      xmlhttp.open('POST', serverEndPoint, true);
+      xmlhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xmlhttp.setRequestHeader('meteor-login-token', localStorageLoginToken);
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          var response = JSON.parse(xmlhttp.response)
+          if(response.success)
+            resolve(xmlhttp.response);
+          else
+            reject(xmlhttp.response);
+        }
+      };
+      xmlhttp.send(
+      JSON.stringify({
+        firebaseId: token,
+        isAllowedNotifications: isAllowedNotifications
+      }));
+    }
+  }).then(result=>{
+    if(cb) {
+      cb(result);
+    }
+  });
+}

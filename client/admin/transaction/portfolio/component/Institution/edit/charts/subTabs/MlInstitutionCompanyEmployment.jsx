@@ -176,12 +176,12 @@ export default class MlInstitutionCompanyEmployment extends React.Component{
                   <div className="col-lg-12 col-md-12 col-sm-10">
                     <div className="row">
                       <div className="form-group col-lg-6">
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padl0">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofFromYear"+defaultIndex} onChange={this.handleFromYearChange.bind(this,defaultIndex)}/>
                         </div>
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padr0">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                     inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofFromMonth"+defaultIndex} onChange={this.handleFromMonthChange.bind(this,defaultIndex)}/>
@@ -191,12 +191,12 @@ export default class MlInstitutionCompanyEmployment extends React.Component{
 
 
                       <div className="form-group col-lg-6">
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padl0">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofToYear"+defaultIndex} onChange={this.handleToYearChange.bind(this,defaultIndex)}/>
                         </div>
-                        <div className="form-group col-md-6 col-sm-6">
+                        <div className="form-group col-md-6 col-sm-6 padr0">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                     inputProps={{placeholder: "Select To Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofToMonth"+defaultIndex} onChange={this.handleToMonthChange.bind(this,defaultIndex)}/>
@@ -223,13 +223,13 @@ export default class MlInstitutionCompanyEmployment extends React.Component{
                     <div className="col-lg-12 col-md-12 col-sm-10">
                       <div className="row">
                         <div className="form-group col-lg-6">
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padl0">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                       inputProps={{placeholder: "Select From Year", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofFromYear}
                                       closeOnSelect={true} ref={"eofFromYear"+idx} onChange={that.handleFromYearChange.bind(that, idx)}/>
                           </div>
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padr0">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                       inputProps={{placeholder: "Select From Month", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofFromMonth}
@@ -240,13 +240,13 @@ export default class MlInstitutionCompanyEmployment extends React.Component{
 
 
                         <div className="form-group col-lg-6">
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padl0">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                       inputProps={{placeholder: "Select To Year", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofToYear}
                                       closeOnSelect={true} ref={"eofToYear"+idx} onChange={that.handleToYearChange.bind(that, idx)}/>
                           </div>
-                          <div className="form-group col-md-6 col-sm-6">
+                          <div className="form-group col-md-6 col-sm-6 padr0">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                       inputProps={{placeholder: "Select To Month", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofToMonth}

@@ -56,6 +56,7 @@ class MlAddSubDomain extends React.Component {
       const response = await addSubDomain(subdomainInfo)
       if (response.success) {
         toastr.success("'Sub-Domain' added successfully")
+         FlowRouter.go("/admin/settings/documentProcess/SubDomainList");
       } else
         toastr.error(response.result)
       // return response;

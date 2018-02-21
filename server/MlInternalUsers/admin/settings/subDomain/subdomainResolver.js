@@ -26,7 +26,9 @@ MlResolver.MlMutationResolver['createSubDomain'] = (obj, args, context, info) =>
   if(args && args.SubDomainMasterData){
     try{
       const findObject = args.SubDomainMasterData.name.trim();
-      if (MlSubDomain.findOne({ name: findObject })) {
+      const displayobj = args.SubDomainMasterData.displayName.trim();
+      let res = MlSubDomain.findOne({$or:[ {name: findObject },{displayName:displayobj}]});
+      if (res) {
         let response = new MlRespPayload().errorPayload("Sub Domain name exists already!", 400);
         return response;
       }
@@ -68,7 +70,15 @@ MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, 
   args.SubDomainMasterData.updatedDate = new Date();
 
   if(args && args.SubDomainId && args.SubDomainMasterData){
-    // try{
+
+    try{
+       const findObject = args.SubDomainMasterData.name.trim();
+       const displayobj = args.SubDomainMasterData.displayName.trim();
+       let res=MlSubDomain.findOne({$or:[ {name: findObject },{displayName:displayobj}]});
+      if (res) {
+        let response = new MlRespPayload().errorPayload("Sub Domain name exists already!", 400);
+        return response;
+      }
       let resp = MlSubDomain.update({_id: args.SubDomainId}, {$set: args.SubDomainMasterData}, {upsert: true})
       if(resp){
         let response = new MlRespPayload().successPayload("Sub-Domain updated successfully", 200);
@@ -78,11 +88,11 @@ MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, 
         let response = new MlRespPayload().errorPayload("Sub-Domain could not be updated", 400);
         return response;
       }
-    // }
-    // catch (e){
-    //   let response = new MlRespPayload().errorPayload(e.message, 400);
-    //   return response;
-    // }
+     }
+     catch (e){
+       let response = new MlRespPayload().errorPayload(e.message, 400);
+       return response;
+     }
   }
 }
 

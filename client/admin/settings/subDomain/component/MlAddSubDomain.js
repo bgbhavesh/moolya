@@ -39,7 +39,7 @@ class MlAddSubDomain extends React.Component {
     console.log(val)
   }
 
-  async   createSubDomain() {
+  async createSubDomain() {
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
@@ -54,8 +54,11 @@ class MlAddSubDomain extends React.Component {
       }
 
       const response = await addSubDomain(subdomainInfo)
-      toastr.success("'Sub-Domain' added successfully")
-      return response;
+      if (response.success) {
+        toastr.success("'Sub-Domain' added successfully")
+      } else
+        toastr.error(response.result)
+      // return response;
     }
   }
   componentDidMount()  {

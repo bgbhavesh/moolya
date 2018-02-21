@@ -1,6 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
@@ -312,7 +313,7 @@ class MlAssignBackendUsers extends React.Component {
             <div className="col-md-6 nopadding-left">
               <div className="row">
                 <div className="left_wrap left_user_blocks">
-                  <ScrollArea speed={0.8} className="left_wrap">
+                  <Scrollbars speed={0.8} className="left_wrap">
                     <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
                       <div className="list_block provider_block">
                         <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
@@ -327,13 +328,13 @@ class MlAssignBackendUsers extends React.Component {
                       subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
                       {/*:*/}
                       {/*<div></div>}*/}
-                  </ScrollArea>
+                  </Scrollbars>
                 </div>
               </div>
             </div>
             <div className="col-md-6 nopadding-right">
               <div className="left_wrap">
-                <ScrollArea speed={0.8} className="left_wrap">
+                <Scrollbars speed={0.8} className="left_wrap">
 
                   {/*<h2>Details</h2>*/}
                   <form>
@@ -394,7 +395,7 @@ class MlAssignBackendUsers extends React.Component {
                     </div>
                   </form>
 
-                </ScrollArea>
+                </Scrollbars>
               </div>
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

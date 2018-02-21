@@ -23,9 +23,13 @@ MlResolver.MlMutationResolver['createSubDomain'] = (obj, args, context, info) =>
   let createdBy = firstName +' '+lastName
   args.SubDomainMasterData.createdBy = createdBy;
   args.SubDomainMasterData.createdDate = new Date();
-
   if(args && args.SubDomainMasterData){
     try{
+      const findObject = args.SubDomainMasterData.name.trim();
+      if (MlSubDomain.findOne({ name: findObject })) {
+        let response = new MlRespPayload().errorPayload("Sub Domain name exists already!", 400);
+        return response;
+      }
       let ret = MlSubDomain.insert({...args.SubDomainMasterData})
       if(ret){
         let response = new MlRespPayload().successPayload("Sub Domain added successfully", 200);

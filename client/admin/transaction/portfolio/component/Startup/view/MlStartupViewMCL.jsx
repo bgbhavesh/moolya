@@ -9,12 +9,13 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
+import { initalizeLockTitle } from '../../../../../../commons/utils/formElemUtil.js';
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
 
-export default class MlStartupViewMCL extends React.Component {
+export default class MlStartupViewMCL extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -80,6 +81,7 @@ export default class MlStartupViewMCL extends React.Component {
       _.each(privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
+      initalizeLockTitle();
     })
   }
 

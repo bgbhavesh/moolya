@@ -131,12 +131,13 @@ export default class MlStartupViewAbout extends React.Component {
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view hide_unlock">
             <div className="panel-body" id="annotatorContent">
+            <FontAwesome name='unlock' className="input_icon text-edit-view-icon req_header_icon un_lock" id="isDescriptionPrivate" />
+
             <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}
                     /> : (<NoData tabName={this.props.tabName} />)}</div>
-                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isDescriptionPrivate" />
               {/* <p >{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
             
             </div>

@@ -304,7 +304,7 @@ table{background: #fff;}
 .fileUpload input.upload {position: absolute;top: 0;right: 0;margin: 0;padding: 0;font-size: 20px;cursor: pointer;opacity: 0;filter: alpha(opacity=0);width: 107px;cursor: pointer; overflow: hidden; }
 .mlUpload_btn{z-index:99; background: #273545;padding: 0px 8px;display: block;color: #fff;text-shadow: 0px 1px 1px #333;width: 108px;    position: relative;margin-left: 15px;height: 36px;line-height: 33px;float: left;text-align: center; cursor: pointer;}
 .mlUpload_btn span{cursor: pointer;}
-a.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
+a.mlUpload_btn, span.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
 a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .mlUpload_btn:before{z-index:9999; position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 .mlUpload_btn:after{z-index:9999; position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #273545;top: 0px;}
@@ -724,7 +724,7 @@ button:focus{outline: 0;}
 .ml_icon_btn .cancel_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #273545;top: 0px;}
 .ml_icon_btn .cancel_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 
-.react-bs-table-tool-bar{margin-top:0px !important}
+.react-bs-table-tool-bar{margin-top:-28px !important}
 /* p.showTotal.small {
   position: absolute;
 } */
@@ -1726,3 +1726,8 @@ margin: 0px;
 .panel-header input{ height: 23px;}
 .padl0{ padding-left:0}
 .padr0{ padding-right: 0;}
+.text-edit-view-icon.input_icon {
+  position: absolute;
+  margin-top: 15px;
+  margin-right:25px; z-index: 99;
+}

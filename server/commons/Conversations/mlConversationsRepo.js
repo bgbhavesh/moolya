@@ -81,45 +81,46 @@ class ConversationsRepo{
     });
   }
 
-  sendRequest(endPoint, payload, method, isApplication, cb){
-    var options = {
-      url: Meteor.settings.private.notificationEngineURL+'/sms/send',
-      body:payload,
-      method: method,
-      json: true
-    };
+  // sendRequest(endPoint, payload, method, isApplication, cb){
+  //   var options = {
+  //     url: Meteor.settings.private.notificationEngineURL+'/sms/send',
+  //     body:payload,
+  //     method: method,
+  //     json: true
+  //   };
 
-    console.log('request end point', options.url);
-    if(!isApplication){
-      var apiKey = this.getApiKey();
-      if(!apiKey)
-        return {success:false}
-      options['headers'] = {
-        'x-api-key': apiKey
-      }
-    }
-    options['headers'].accesskey = Meteor.settings.private.notificationEngineAccessKey;
-    console.log('Options',options);
+  //   console.log('request end point', options.url);
+  //   if(!isApplication){
+  //     var apiKey = this.getApiKey();
+  //     if(!apiKey)
+  //       return {success:false}
+  //     options['headers'] = {
+  //       'x-api-key': apiKey
+  //     }
+  //   }
+  //   options['headers'].accesskey = Meteor.settings.private.notificationEngineAccessKey;
+  //   console.log('Options',options);
 
-    new Promise(function (resolve, reject) {
-      request(options, function (err, res, body) {
-        if(err){
-          console.log('Error',err);
-          reject(err)
-        }
+  //   new Promise(function (resolve, reject) {
+  //     request(options, function (err, res, body) {
+  //       if(err){
+  //         console.log('Error',err);
+  //         reject(err)
+  //       }
 
-        else{
-          resolve(body)
-        }
-      })
-    }).then((body) => {
-      if(cb) {
-        cb(body);
-      }
-    });
-  }
+  //       else{
+  //         resolve(body)
+  //       }
+  //     })
+  //   }).then((body) => {
+  //     if(cb) {
+  //       cb(body);
+  //     }
+  //   });
+  // }
 
-  sendRequestDeprecated(endPoint, payload, method, isApplication, cb){
+  // sendRequestDeprecated(endPoint, payload, method, isApplication, cb){
+    sendRequest(endPoint, payload, method, isApplication, cb){
     var options = {
       url: Meteor.settings.private.conversationsBaseURL+endPoint,
       body:payload,

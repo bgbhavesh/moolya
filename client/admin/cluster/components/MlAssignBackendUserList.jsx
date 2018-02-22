@@ -48,7 +48,7 @@ export default class MlAssignBackendUserList extends React.Component{
                 icon = "inactive-user"
               }
                 return(
-                    <div className="col-md-4 col-sm-4" key={idx} onClick={that.onBackEndUserClick.bind(that,user)}>
+                    <div className="col-lg-4 col-md-6 col-sm-6" key={idx} onClick={that.onBackEndUserClick.bind(that,user)}>
                         <div className="list_block provider_block">
                           <div className={`cluster_status ${status}_cl`}>{/*<span className={`ml ml-${icon}`}></span>*/}</div>
                             <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src={user.profile && user.profile.profileImage?generateAbsolutePath(user.profile.profileImage):"/images/def_profile.png"} /> </div>

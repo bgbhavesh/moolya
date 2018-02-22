@@ -90,6 +90,7 @@ let deleteToken = (cb) => {
   })
   .catch(function(err) {
     console.log('Error retrieving Instance ID token. ', err);
+    cb();
   });
 }
 export {requestPermission,deleteToken}

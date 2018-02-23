@@ -15,7 +15,7 @@ let mergeQueries=function(userFilter,serverFilter){
 }
 
 
-MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver['ContextSpecSearch'] = async (obj, args, context, info) =>{
   var totalRecords=0;
   var findOptions = {};
 
@@ -76,7 +76,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "AUDIT_LOG":
       let auditParams=args.context;
       let userSpecificSearch=args.fieldsData?true:false;
-      result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context,userSpecificSearch);
+      result=await CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context,userSpecificSearch);
       break;
     case "hierarchy":
       result=CoreModulesRepo.MlHierarchySubChapterRepo(args.context,contextQuery,findOptions, context);
@@ -189,7 +189,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 }
 
 MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
-  __resolveType(data, context, info){
+   __resolveType(data, context, info){
 
     var module=context.module||"";
     var resolveType='';

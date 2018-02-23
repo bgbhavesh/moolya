@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
+import { Scrollbars } from 'react-custom-scrollbars';
 import _ from 'lodash';
 import _underscore from 'underscore'
 //import formHandler from '../../../../commons/containers/MlFormHandler';
@@ -522,7 +523,7 @@ export default class Step5 extends React.Component {
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (<div className="step_form_wrap step5">
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+        <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           {Object.keys(registrationDocumentsGroup).map(function(key) {
             var documentNames =  key.replace(/\b\w/g, l => l.toUpperCase())
             return (
@@ -608,7 +609,7 @@ export default class Step5 extends React.Component {
               </div>
             </div>)
           })}
-         </ScrollArea>
+         </Scrollbars>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>)}
       </div>

@@ -274,7 +274,7 @@ export default class MlAnchorInfoView extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
+          <div className="col-lx-4 col-sm-4 col-md-4 provide-wrap-main nopadding-left">
               {!this.state.selectedUser.profile &&
               <div className="panel panel-default">
               <div className="panel-heading">Title</div>

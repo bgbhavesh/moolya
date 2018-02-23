@@ -97,7 +97,7 @@ export default class MlAppRegInstitution extends Component {
       staffCount          : existingObject.staffCount?existingObject.staffCount:null,
       chairman            : existingObject.chairman?existingObject.chairman:null,
       dean                : existingObject.dean?existingObject.dean:null,
-      headQuarterLocation:  existingObject.headQuarterLocation?this.state.headQuarterLocation:null,
+      headQuarterLocation:  existingObject.headQuarterLocation?existingObject.headQuarterLocation:null,
       branchLocations:  existingObject.branchLocations?existingObject.branchLocations:null
     }
     let newObject = {
@@ -115,7 +115,7 @@ export default class MlAppRegInstitution extends Component {
       staffCount          : this.refs.staffCount.value?this.refs.staffCount.value:null,
       chairman            : this.refs.chairman.value?this.refs.chairman.value:null,
       dean                : this.refs.dean.value?this.refs.dean.value:null,
-      headQuarterLocation:  this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
+      //headQuarterLocation:  this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
       branchLocations:  this.state.selectedBranches?this.state.selectedBranches:null
     }
     var differences = diff(oldObject, newObject);

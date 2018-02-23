@@ -71,13 +71,14 @@ class MlEditUserType extends React.Component{
 
     let UserTypeDetails = {
       id: this.refs.id.value,
+      userTypeName: this.refs.userTypeName.value,
       displayName: this.refs.displayName.value,
       userTypeDesc: this.refs.userTypeDesc.value,
       communityCode: this.state.communityCode,
       communityName: this.state.communityName,
       isActive: this.refs.isActive.checked
-    }
-    const response = await updateUserTypeActionHandler(UserTypeDetails)
+    };
+    const response = await updateUserTypeActionHandler(UserTypeDetails);
     return response;
   }
 

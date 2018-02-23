@@ -533,7 +533,7 @@ export default class MlMyProfile extends React.Component {
                     <div className="form-group">
                       <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} disabled={true}/>
                     </div>
-                    {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
+                    {this.state.showChangePassword?(<div className="form-group"> <span className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</span></div>):""}
                     {this.state.PasswordReset?(
                       <div>
                         {this.state.showPasswordFields ?

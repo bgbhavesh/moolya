@@ -1040,7 +1040,7 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
     }
     arr[index].totalSessions = totalSessions;
     arr[index].currentSession = currentSession;
-    console.log('Find Task', totalSessions, currentSession);
+    // console.log('Find Task', totalSessions, currentSession);
   });
   console.log(result);
   return result;

@@ -44,7 +44,8 @@ let BackEndUser = `
         middleName: String,
         lastName: String,
         externalUserProfiles:[ExternalProfile],
-        externalUserAdditionalInfo:[externalUserAdditionalInfoSchema]
+        externalUserAdditionalInfo:[externalUserAdditionalInfoSchema],
+        firebaseInfo: firebaseInfo
     }
     
     type userProfile{
@@ -292,7 +293,8 @@ let BackEndUser = `
       lastName: String,
       userName: String,
       genderType: String,
-      dateOfBirth: Date
+      dateOfBirth: Date,
+      frequency: String,
     }
     
     input settingsAttributesObject{
@@ -386,6 +388,10 @@ let BackEndUser = `
         socialLinkTypeName    : String
         socialLinkType        : String
         socialLinkUrl         : String
+     }
+
+     type firebaseInfo{
+        frequency   : String
      }
      
      input ContactInfo{

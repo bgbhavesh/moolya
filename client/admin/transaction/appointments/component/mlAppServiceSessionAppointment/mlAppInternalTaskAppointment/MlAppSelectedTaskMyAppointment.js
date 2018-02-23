@@ -197,7 +197,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
         }]
     };
     return (
-      <div className="col-lg-12">
+      <div className="col-lg-12 app_main_wrap">
         <div className="app_padding_wrap">
           <div className="clearfix" />
           <div className="col-md-12">

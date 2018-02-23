@@ -8,6 +8,9 @@ const dd = today.getDate().toString();
 const mm = (today.getMonth()+1).toString(); //January is 0!
 const yy = today.getFullYear().toString().substr(-2)
 const curDated = dd+"-"+mm+"-"+yy;
+const gcm = require("node-gcm");
+const async = require("async");
+const sender = new gcm.Sender("AAAAuB2v3xE:APA91bGFwduN9JGASvjzvM9UDD_IHA7b-Gbvkepy8K30W5VPg4p1t9O6jj1XKGUhOizaisud_Nk3kPfn_xBSkxhSgIysL9RVZRZyUpLxaco1YDu3h55w2Vu_3e72VnJnaxwyv-I0-bYW");
 
 class MlCronJobControllerClass {
     constructor() {
@@ -511,12 +514,12 @@ class MlCronJobControllerClass {
 
     sendHtmlEmail(emailObject) {
       if (Meteor.settings.public.instance != "DEV") {
-        console.log("cron sending mail>>>>>>>>>>>>>.", emailObject.html);
+        console.log("cron sending mail>>>>>>>>>>>>>.");
         Meteor.setTimeout(function () {
           mlEmail.sendHtml({
             from: fromEmail,
             to: "qateam@qa.moolya.global",
-            cc: "vishwadeep.kapoor@raksan.in",
+            cc: "ramana.chandavarapu@raksan.in",
             subject: "moolya daily monitoring report instance "+(Meteor.settings.public.instance),
             html: emailObject.html
           });
@@ -524,6 +527,195 @@ class MlCronJobControllerClass {
       } else {
         console.log("cron sending mail stopped in dev");
       }
+    }
+
+    sendPushNotifications(frequencyType) {
+      // const message = new gcm.Message({
+      //   data: {
+      //     notification: {
+      //         title: "RAKSAN NOTIFICATIONS ! ",
+      //         icon: "logo.png",
+      //         body: "Sample Notification From Raksan",
+      //         click_action: "https://qaapp.moolya.global/"
+      //     }
+      //   }
+      // });
+      // let dbValues = mlDBController.find('users',{}).fetch()
+      // console.log('******', dbValues);
+      // console.log('******', JSON.stringify(data));
+      // console.log('the lenght of the whole dicument is: ', data.length());
+
+
+      // for (var start = 0; start < tokens.length; start += batchLimit) {
+      //     var slicedTokens = tokens.slice(start, start + batchLimit);
+      //     tokenBatches.push(slicedTokens);
+      // }
+
+      // async.each(tokenBatches, function (batch, callback) {
+      //     sender.send(message, { registrationIds: batch }, function (err, result) {
+      //         if (err) {
+      //             // Stop executing other batches
+      //             return callback(err);
+      //         }
+      //         callback();
+      //     });
+      // },
+      // function (err) {
+      //     if (err) {
+      //         console.log(err);
+      //     }
+      // });
+
+      let pipeLine =
+      [
+          { "$match": { "profile.firebaseInfo.isAllowedNotifications": true } },
+          {
+              "$lookup": {
+                  from: "mlPortfolioDetails",
+                  localField: '_id',
+                  foreignField: 'userId',
+                  as: "portfolio"
+              }
+          },
+          {
+              "$lookup": {
+                  from: "mlLikes",
+                  localField: '_id',
+                  foreignField: 'userId',
+                  as: "likes"
+              }
+          },
+          {
+              "$lookup": {
+                  from: "mlViews",
+                  localField: '_id',
+                  foreignField: 'userId',
+                  as: "views"
+              }
+          },
+          {
+              "$lookup": {
+                  from: "mlConnections",
+                  localField: '_id',
+                  foreignField: 'actionUserId',
+                  as: "connections"
+              }
+          },
+          {
+              "$addFields": {
+                  "totalLikes": {
+                      "$size":"$likes"
+              
+                  },
+                  "totalViews": {
+                      "$size":"$views"
+              
+                  },
+                   "totalConnections": {
+                      "$size":"$connections"
+              
+                  }
+              }
+          },
+          {
+              "$project":{
+                  totalLikes: 1,
+                  totalViews: 1,
+                  totalConnections: 1,
+                  "profile.firebaseInfo": 1,
+              }
+          } 
+      ]
+      let usersData = mlDBController.aggregate('users', pipeLine);
+
+      async.each(usersData, function (object, callback){
+        if((object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId) && 
+          ((object.profile.firebaseInfo.frequency == frequencyType) || (object.profile.firebaseInfo.frequency == undefined && frequencyType=='Once a day'))){
+          const message = new gcm.Message({
+            data: {
+              notification: {
+                  title: "",
+                  icon: "/images/moolya_logo.png",
+                  body: "Your profile has " + object.totalLikes +" Likes, "+ object.totalViews + " Views and "+  object.totalConnections +" Connections",
+                  click_action: "https://qaapp.moolya.global/app/myprofile"
+              }
+            }
+          });
+          var id = [];
+          id.push(object.profile.firebaseInfo.firebaseId);
+          if (object.totalConnections == 0 &&  object.totalLikes ==0 && object.totalViews ==0){
+            //do not send the message
+            callback();
+          }
+          else {
+            sender.send(message, { registrationIds: id }, function (err, result) {
+              if (err) {
+                  return callback(err);
+              }
+              callback();
+            });
+          }
+        }
+      },
+      function (err){
+        if (err){
+          console.log(err);
+        }
+      })
+
+    }
+
+    sendPushNotificationsToALLUsers(frequencyType) {
+      let allUsersData = mlDBController.find('users', {}).fetch();
+      let totalUserCount = mlDBController.find('users', {}).count();
+      let ids = [];
+      let batchLimit = 1000;
+      let tokenBatches = [];
+      //Composing the message
+      const message = new gcm.Message({
+        data: {
+          notification: {
+              title: "",
+              icon: "/images/moolya_logo.png",
+              body: "moolya now hosts " +  totalUserCount+ " global users. Login now to explore and connect with them.",
+              click_action: "https://qaapp.moolya.global/"
+          }
+        }
+      });
+
+      async.each(allUsersData, function (object, callback){
+        if((object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId) && 
+          ((object.profile.firebaseInfo.frequency == frequencyType) || (object.profile.firebaseInfo.frequency == undefined && frequencyType=='Once a day'))){
+          ids.push(object.profile.firebaseInfo.firebaseId);
+        }
+        callback();
+      },
+      function (err){
+        if (err){
+          console.log(err);
+        }
+        else {
+          for (var start = 0; start < ids.length; start += batchLimit) {
+              var slicedTokens = ids.slice(start, start + batchLimit);
+              tokenBatches.push(slicedTokens);
+          }
+
+          async.each(tokenBatches, function (batch, callback) {
+              sender.send(message, { registrationIds: batch }, function (err, result) {
+                  if (err) {
+                      return callback(err);
+                  }
+                  callback();
+              });
+          },
+          function (err) {
+              if (err) {
+                  console.log(err);
+              }
+          });
+        }
+      })
+
     }
 }
 const MlCronJobController = new MlCronJobControllerClass();

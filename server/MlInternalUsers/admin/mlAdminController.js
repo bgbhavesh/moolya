@@ -3,7 +3,6 @@
  */
 
 import {graphqlExpress, graphiqlExpress} from 'graphql-server-express';
-
 import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools';
 import {parse, buildASTSchema} from 'graphql';
 import {build} from 'graphql-utilities';
@@ -24,7 +23,7 @@ import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/
 import getSiteMapUrls from '../../MlExternalUsers/microSite/microSiteRepo/siteMapCreation'
 import MlCronJobController from '../cronRepo/cronJobController';
 let helmet = require('helmet');
-var Tokens = require('csrf')
+var Tokens = require('csrf');
 var siteMap = require('sitemap')
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
@@ -985,7 +984,7 @@ updateBuildVersion = (request) => {
       break;
     case "GENERATEREPORT":
       MlCronJobController.dailyReport();
-      returnResponse.success = false
+      returnResponse.success = true;
       break;
     default:
       returnResponse.success = false

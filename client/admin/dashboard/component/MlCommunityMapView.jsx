@@ -113,7 +113,7 @@ export default class MlCommunityMapView extends Component {
           <p className='title'>Investors</p><span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
         </a>
         <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
-          <p className='title'>Service Providers</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
+          <p className='title'>Service P</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
         </a>
         {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">*/}
           {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}

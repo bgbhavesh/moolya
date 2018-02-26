@@ -2025,8 +2025,13 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
           var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
           var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+          // pipeLine = [
+          //       { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+          //       { $match: { $and: [{ longitude: { $lte: rightLng } }, { longitude: { $gte: leftLng } }, { latitude: { $lte: topLat } }, { latitude: { $gte: bottomLat } }] } },
+          // ];
           pipeLine = [
-                { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+                { $match: { chapterId, isActive: true } },
+                { $match: { $or: [{ isDefaultSubChapter: true }, { $and: [{ isDefaultSubChapter: false }, { $or: [{ 'moolyaSubChapterAccess.externalUser.canView': true }, { 'moolyaSubChapterAccess.externalUser.canSearch': true }] }] }] } },
                 { $match: { $and: [{ longitude: { $lte: rightLng } }, { longitude: { $gte: leftLng } }, { latitude: { $lte: topLat } }, { latitude: { $gte: bottomLat } }] } },
           ];
           subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
@@ -2066,11 +2071,14 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             subChapters = _.concat(subChapters, relatedSC);
           }
         } else {
+          // pipeLine = [
+          //       { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+          // ];
           pipeLine = [
-                { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+                { $match: { chapterId, isActive: true } },
+                { $match: { $or: [{ isDefaultSubChapter: true }, { $and: [{ isDefaultSubChapter: false }, { $or: [{ 'moolyaSubChapterAccess.externalUser.canView': true }, { 'moolyaSubChapterAccess.externalUser.canSearch': true }] }] }] } }
           ];
           subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
-
           pipeLine = [
                 { $match: { isActive: true } },
                 { $match: { subChapters: { $elemMatch: { subChapterId: userSubChapterId } } } },
@@ -2081,7 +2089,6 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
 
           if (relatedSubChapters && relatedSubChapters.length > 0) {
             var relatedIds = [];
-
             _.each(relatedSubChapters, (obj) => {
               const ids = _.map(obj.subChapters, 'subChapterId');
               relatedIds = _.concat(relatedIds, ids);

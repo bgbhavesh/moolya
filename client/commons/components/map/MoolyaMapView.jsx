@@ -155,14 +155,11 @@ componentDidMount(){
 
     const communityIconList=
       <div className="community_icons">
-        <a data-toggle="tooltip" title={moduleName()} data-placement="bottom" className="All map_active_community" data-filter="all">
-          <p className='title'>{moduleName()}</p><span className={moduleClassName()+" br"} onClick={this.onStatusChange.bind(this, "Reset")}></span>
-        </a>
-        <a data-toggle="tooltip" title={'All'} data-placement="bottom" className="All map_active_community" data-filter="all">
-          <p className='title'>All</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, "All")}></span>
-        </a>
-        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
-          <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
+        {/*{moduleName() && <a data-toggle="tooltip" title={moduleName()} data-placement="bottom" className="All map_active_community" data-filter="all">*/}
+          {/*<p className='title'>{moduleName()}</p><span className={moduleClassName()+" br"} onClick={this.onStatusChange.bind(this, "Reset")}></span>*/}
+        {/*</a>}*/}
+        <a data-toggle="tooltip" title={moduleTooltipName() || 'All'} data-placement="bottom" className="All map_active_community" data-filter="all">
+          <p className='title'>{moduleName()||'All'}</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
         </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
@@ -170,18 +167,23 @@ componentDidMount(){
         <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN Investors" data-filter="funder">
           <p className='title'>Investors</p><span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
         </a>
+        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
+          <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
+        </a>
+
         <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
-          <p className='title'>Service Providers</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
+          <p className='title'>Service P</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
         </a>
         {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">*/}
         {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
         {/*</a>*/}
-        <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
-          <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
-        </a>
         <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
           <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
         </a>
+        <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
+          <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
+        </a>
+
       </div>;
 
 
@@ -244,14 +246,31 @@ function properName(name) {
 function moduleName(){
   let path = FlowRouter._current.path;
   if(path.includes('clusters')){
-    return 'Clusters';
+    return 'Cluster';
   }
   if(path.includes('chapters')){
-    return 'Chapters';
+    return 'Chapter';
   }
   if(path.includes('subChapters')){
-    return 'Sub-Chapters';
+    return 'Subchapter';
   }
+  else
+    return '';
+}
+
+function moduleTooltipName(){
+  let path = FlowRouter._current.path;
+  if(path.includes('clusters')){
+    return 'Cluster';
+  }
+  if(path.includes('chapters')){
+    return 'Chapter';
+  }
+  if(path.includes('subChapters')){
+    return 'Subchapter';
+  }
+  else
+    return '';
 }
 
 function moduleClassName(){

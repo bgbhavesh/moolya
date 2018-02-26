@@ -426,6 +426,19 @@ MlResolver.MlMutationResolver['switchExternalProfile'] = (obj, args, context, in
 
 MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, context, info) => {
 
+  if(args.module === 'chapterUser' || args.module === 'subChapterUser'){
+    if(args.module === 'chapterUser') {
+      let clusterDetails = MlClusters.findOne(args.id||null);
+      if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
+        return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
+      }
+    }else if( args.module === 'subChapterUser'){
+      let chapterDetails = MlChapters.findOne(args.id||null);
+      if (chapterDetails && chapterDetails.latitude && chapterDetails.longitude) {
+        return {lat: chapterDetails.latitude, lng: chapterDetails.longitude};
+      }
+    }
+  }
   if(args.module == "subChapter" || args.module == "externalUsers"){
       var chapterId = args.id||null;
       if(!chapterId){
@@ -719,8 +732,8 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
 
 /**
  * @function getCategoryData
- * @param {*["cluster", "chapter"]} type 
- * @param {*typeId} id 
+ * @param {*["cluster", "chapter"]} type
+ * @param {*typeId} id
  * @note expected drill down to be only two level
  * @todo {*Accelerator, Incubator, Co-Working Space} $userCategory.userTypeName
  *       need to find in the lowerCase

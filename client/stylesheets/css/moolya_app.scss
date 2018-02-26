@@ -451,11 +451,14 @@ background:$mlBlue; width: 100%;position:absolute;bottom:0px;overflow-x: auto; o
     .list_block .hex_outer:after{position:absolute;right:-30px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 67px 0px 67px 30px;border-color: transparent transparent transparent #B9C5CC;top: 1px;}
     .list_block .hex_outer:before{position: absolute;left: -30px;content: " ";width: 0px;height: 0px;border-style: solid;border-width: 67px 30px 67px 0px;border-color: transparent #B9C5CC transparent transparent;top: 1px;}
     .list_block h3{color: #fff;background: #273545;position: absolute;width: 100%;line-height: 40px;bottom: 0px;text-shadow: 0px 1px 1px #000;font-size: 16px;font-weight: normal;border-radius: 0px 0px 4px 4px;margin-bottom: 0px;}
-    .community_icons{height: 45px;position: absolute;top: 0px;right: 50px;background-color:#fff;border-radius: 0px 0px 6px 6px;padding: 0px 5px 0px 5px;border: 1px solid #ccc;z-index: 3;}
+    .community_icons{height: 60px;position: absolute;top: 0px;right: 50px;background-color:#fff;border-radius: 0px 0px 6px 6px;padding: 0px 5px 0px 5px;border: 1px solid #ccc;z-index: 3;}
     .community_icons a .ml{font-size: 19px; color: #273545; border-radius: 100%; padding: 5px; margin-right: 5px; text-shadow: none;text-shadow: none;line-height: 40px;border:solid 2px transparent;background-color: #B9C5CC; }
     .community_icons a .fa.ml{display: inherit;}
     .community_icons a.active_community .ml{border: 2px solid #ef4647;background-color: #ef4647;color: #fff;}
-    .community_icons a{text-decoration: none;}
+    .community_icons a{  text-decoration: none;display: inline-block;  text-align: center;  padding: 0 1px;
+      p {  margin: 0;  font-size: 12px; color: black;text-overflow: ellipsis;white-space: nowrap;  overflow: hidden;width: 50px;  font-weight: bold;  }
+    }
+
     .ideator_mask{position: relative;width: 103px;height: 139px;background: url(../images/ideator_bg.png);top: 35px;left: 50%; transform: translateX(-50%); }
     .ideator_mask img{border: 0px;top: 5px;left: 5px;border-radius: 50%;width: 93px;height: 93px;}
     .provider_mask{position: relative;width: 138px;height: 138px;top: 35px;left: 50%;transform: translateX(-50%);background: #ddd;}

@@ -1167,6 +1167,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
           doc.createdby = fromUserProfile.firstName + ' ' + fromUserProfile.lastName;
           doc.mobileNumber = fromUserProfile.mobileNumber;
         }
+        if(transactionType === "appointment") {
+          let data = mlDBController.findOne('MlAppointments', {"appointmentId":doc.docId});
+          if(data && data.status){
+            doc.status = data.status;
+          }
+        }
         let activity = doc.activity;
         let activityDocId = doc.activityDocId;
         switch (activity){

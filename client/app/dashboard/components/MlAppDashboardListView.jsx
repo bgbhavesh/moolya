@@ -1,19 +1,20 @@
 import React, { Component, PropTypes } from 'react';
-import { render } from 'react-dom';
+
 // import dashboardRoutes from '../actions/routesActionHandler';
 var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import dashboardRoutes from '../actions/routesActionHandler';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
-export default class MlCommunityList extends Component {
 
+export default class MlCommunityList extends Component {
   constructor(props){
     super(props);
     this.state={
       userType : "All",
       configState:{}
     }
+    this.communityName = '';
     return this;
   }
 
@@ -53,6 +54,7 @@ export default class MlCommunityList extends Component {
   onStatusChange(userType,e) {
 
     if (userType) {
+      this.communityName = userType;
       let config = this.props.config;
       // config = _.omit(config, 'data')
       let options = {
@@ -83,6 +85,31 @@ export default class MlCommunityList extends Component {
 
       this.props.config.fetchMore(options, true);
     }
+  }
+
+  /**
+   * @func getSubChapterName()
+   * @param {*} state || props
+   * @return {*string || null}
+   */
+  getSubChapterName() {
+    let data = [];
+    const { userType } = this.state;
+    if (userType != "All") {
+      data = this.state.data;
+    } else {
+      data = this.props.data;
+    }
+    return data.length && data[0] && data[0].subChapterName ? data[0].subChapterName : null;
+  }
+
+  /**
+   * @func getSelectedCommunityName()
+   * @param {*} communityName
+   * @return {*string || null}
+   */
+  getSelectedCommunityName() {
+    return (this.communityName != 'All') && (this.communityName != '') ? ' :' + this.communityName : null;
   }
 
   render(){
@@ -178,7 +205,7 @@ export default class MlCommunityList extends Component {
             </a>
           </div>
         <div className="col-md-12">
-          <h2>Communities</h2>
+          <h2>Communities {this.getSubChapterName()} {this.getSelectedCommunityName()}</h2>
           <div className="row ideators_list">
             {list}
           </div>

@@ -192,8 +192,6 @@ MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['FetchUserTypeList'] = (obj, args, context, info) => {
   // let result=MlUserTypes.find({isActive:true}).fetch()||[];
-  console.log("::::::")
-  console.log(args);
   let result = mlDBController.find('MlUserTypes', {
     isActive: true,
     communityCode: args && args.communityCode ? args.communityCode : ""

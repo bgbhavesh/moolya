@@ -25,6 +25,7 @@ let externalUser = `
         profile:Profile,
         isActive:Boolean 
         accountType : String
+        subChapterName : String
     }
     type Profile{
       isExternaluser:Boolean,

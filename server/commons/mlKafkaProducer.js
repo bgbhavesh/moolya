@@ -24,8 +24,7 @@ export function pushlogsByKafka (message,topic) {
     });
 
     producer.on('error',function(err){
-
-      console.log(err);
+      console.log('error from fafka server to produce.................', err);
     });
 
 

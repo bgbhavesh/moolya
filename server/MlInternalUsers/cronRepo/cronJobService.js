@@ -27,6 +27,9 @@ var everyWeekJob = cron.schedule('*/10 * * * *', Meteor.bindEnvironment(() => {
     MlCronJobController.sendPushNotifications('Once a Week');
 }), false);
 
-everyDayJob.start();
-alternateDayJob.start();
-everyWeekJob.start();
+/**
+ * @todo {*} uncomment the code onces the issue is been resolved of slowness
+ */
+// everyDayJob.start();
+// alternateDayJob.start();
+// everyWeekJob.start();

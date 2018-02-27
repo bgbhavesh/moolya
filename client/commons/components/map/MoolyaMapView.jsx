@@ -95,6 +95,7 @@ componentDidMount(){
   }
 
   onStatusChange(userType,e) {
+    this.setState({userType});
     let params = this.props.params;
     if(this.props.moduleName === 'externalUsersNew'){
       if (userType === 'Reset') {
@@ -115,6 +116,13 @@ componentDidMount(){
         }
         this.props.fetchMore({queryProperty:{query:variables}});
 
+      }
+    }else if(this.props.moduleName === 'cluster'){
+      localStorage.setItem('userType',userType);
+      if(userType !=='Reset'){
+        let path = FlowRouter._current.path;
+        path = path.replace('?',`/users?`);
+        FlowRouter.go(path);
       }
     }else if(this.props.moduleName === 'chapter'){
       localStorage.setItem('userType',userType);
@@ -152,35 +160,36 @@ componentDidMount(){
       MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props});
     }
 
+    let userType = this.state.userType;
 
     const communityIconList=
       <div className="community_icons">
         {/*{moduleName() && <a data-toggle="tooltip" title={moduleName()} data-placement="bottom" className="All map_active_community" data-filter="all">*/}
           {/*<p className='title'>{moduleName()}</p><span className={moduleClassName()+" br"} onClick={this.onStatusChange.bind(this, "Reset")}></span>*/}
         {/*</a>}*/}
-        <a data-toggle="tooltip" title={moduleTooltipName() || 'All'} data-placement="bottom" className="All map_active_community" data-filter="all">
+        <a data-toggle="tooltip" title={moduleTooltipName() || 'All'} data-placement="bottom" className={userType?"All":"All active_community"} data-filter="all">
           <p className='title'>{moduleName()||'All'}</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
         </a>
-        <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
+        <a data-toggle="tooltip" title="Startups" data-placement="bottom" className={userType ==='Startups'?"STU Startups active_community":"STU Startups"} data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
         </a>
-        <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN Investors" data-filter="funder">
+        <a data-toggle="tooltip" title="Investors" data-placement="bottom" className={userType ==='Investors'?"FUN Investors active_community":"FUN Investors"} data-filter="funder">
           <p className='title'>Investors</p><span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
         </a>
-        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
+        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className={userType ==='Ideators'?"IDE Ideators active_community":"IDE Ideators"} data-filter="ideator">
           <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
         </a>
 
-        <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
+        <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className={userType ==='Service Providers'?"Service Providers active_community":"Service Providers"} data-filter="provider">
           <p className='title'>Service P</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
         </a>
         {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">*/}
         {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
         {/*</a>*/}
-        <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
+        <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className={userType ==='Institutions'?"Institutions active_community":"Institutions"} data-filter="institution">
           <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
         </a>
-        <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
+        <a data-toggle="tooltip" title="Companies" data-placement="bottom" className={userType ==='Companies'?"Companies active_community":"Companies"} data-filter="company">
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
         </a>
 
@@ -191,7 +200,9 @@ componentDidMount(){
 
     return (
       <span>
-        {this.props.moduleName!=='cluster' && !pathUrl.includes('/admin') &&  communityIconList}
+        {
+          // this.props.moduleName!=='cluster' &&
+        !pathUrl.includes('/admin') &&  communityIconList}
         {MapComponent?MapComponent:
           <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
         }
@@ -245,7 +256,7 @@ function properName(name) {
 
 function moduleName(){
   let path = FlowRouter._current.path;
-  if(path.includes('clusters')){
+  if(path === "/app/dashboard"){
     return 'Cluster';
   }
   if(path.includes('chapters')){
@@ -260,7 +271,7 @@ function moduleName(){
 
 function moduleTooltipName(){
   let path = FlowRouter._current.path;
-  if(path.includes('clusters')){
+  if(path === "/app/dashboard"){
     return 'Cluster';
   }
   if(path.includes('chapters')){

@@ -28,7 +28,9 @@ import {appClient} from '../../app/core/appConnection'
 import MlViews from '../../app/commons/view/MlAppViews'
 import {mlAppClusterDashboardListConfig, mlAppClusterDashboardMapConfig} from '../../app/dashboard/config/mlAppClusterDashboardConfig'
 import {mlAppChapterDashboardListConfig, mlAppChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppChapterDashboardConfig'
-import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppSubChapterDashboardConfig'
+import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppSubChapterDashboardConfig';
+import {mlAppSubChapterCommunityDashboardMapConfig} from '../../app/dashboard/config/mlAppSubChapterCommunityDashboardConfig';
+import {mlAppChapterCommunityDashboardMapConfig} from '../../app/dashboard/config/mlAppChapterCommunityDashboardConfig';
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
@@ -153,6 +155,22 @@ appSection.route('/dashboard/:clusterId/chapters', {
     })
   }
 });
+appSection.route('/dashboard/:clusterId/chapters/users', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode = true;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppChapterCommunityDashboardMapConfig}
+                           listConfig={mlAppChapterDashboardListConfig} params={params}/>
+
+    })
+  }
+});
 appSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
   name: 'dashboard',
   action(params, queryParams){
@@ -165,6 +183,22 @@ appSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
     mount(AppLayout, {
       appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppSubChapterDashboardMapConfig}
                            listConfig={mlAppSubChapterDashboardListConfig} params={params}/>
+    })
+  }
+});
+appSection.route('/dashboard/:clusterId/:chapterId/subChapters/users', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode = true;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppSubChapterCommunityDashboardMapConfig}
+                           listConfig={mlAppSubChapterDashboardListConfig} params={params}/>
+
     })
   }
 });

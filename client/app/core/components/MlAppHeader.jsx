@@ -93,10 +93,13 @@ class MlAppProfileHeader extends Component {
   }
 
   /**user logout function*/
+  /**
+  * @todo {*} uncomment the code onces the issue is been resolved of slowness
+  */
   logoutUser() {
-    deleteToken(function(){
+    // deleteToken(function(){
       logout();
-    });
+    // });
   }
 
   componentWillReceiveProps(user){

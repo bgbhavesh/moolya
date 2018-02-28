@@ -119,7 +119,7 @@ export default class MlMasterSettingRepo{
         result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true}).fetch();
 
         resultResponse=_.each(result,function (option,id) {
-          options.push({"label":option.contactTypeInfo.contactName,"value":option._id})
+          options.push({"label":option.contactTypeInfo.contactDisplayName,"value":option._id})
         })
 
         break;
@@ -131,7 +131,7 @@ export default class MlMasterSettingRepo{
         //}
 
         let resultResponse=_.each(result,function (option,id) {
-          options.push({"label":option.contactTypeInfo.contactName,"value":option._id})
+          options.push({"label":option.contactTypeInfo.contactDisplayName,"value":option._id})
         })
 
         break;
@@ -143,7 +143,7 @@ export default class MlMasterSettingRepo{
         //}
 
         let addressResponse=_.each(result,function (option,id) {
-          options.push({"label":option.addressTypeInfo.addressName,"value":option._id,"type" : option.addressTypeInfo.addressName})})
+          options.push({"label":option.addressTypeInfo.addressDisplayName,"value":option._id,"type" : option.addressTypeInfo.addressDisplayName})})
 
         break;
       case "SOCIALLINKS":
@@ -151,7 +151,7 @@ export default class MlMasterSettingRepo{
         result= MlMasterSettings.find({"type": "SOCIALLINKS",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let socialLinkResponse=_.each(result,function (option,id) {
-          options.push({"label":option.socialLinksInfo.socialName,"value":option._id,"type" : option.socialLinksInfo.socialName})})
+          options.push({"label":option.socialLinksInfo.socialDisplayName,"value":option._id,"type" : option.socialLinksInfo.socialDisplayName})})
 
         break;
       case "EMAILTYPE":
@@ -159,7 +159,7 @@ export default class MlMasterSettingRepo{
         result= MlMasterSettings.find({"type": "EMAILTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let emailResponse=_.each(result,function (option,id) {
-          options.push({"label":option.emailTypeInfo.emailName,"value":option._id,"type" : option.emailTypeInfo.emailName})})
+          options.push({"label":option.emailTypeInfo.emailDisplayName,"value":option._id,"type" : option.emailTypeInfo.emailDisplayName})})
 
         break;
       case "TITLE":
@@ -167,7 +167,7 @@ export default class MlMasterSettingRepo{
         result= MlMasterSettings.find({"type": "TITLE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let titleResponse=_.each(result,function (option,id) {
-          options.push({"label":option.titleInfo.titleName,"value":option._id,"type" : option.titleInfo.titleName})})
+          options.push({"label":option.titleInfo.titleDisplayName,"value":option._id,"type" : option.titleInfo.titleDisplayName})})
 
         break;
       case "GENDER":
@@ -182,14 +182,14 @@ export default class MlMasterSettingRepo{
         result= MlMasterSettings.find({"type": "COMPANYTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let companyTypeResponse=_.each(result,function (option,id) {
-          options.push({"label":option.companyTypeInfo.companyName,"value":option._id,"type" : option.companyTypeInfo.companyName})})
+          options.push({"label":option.companyTypeInfo.companyDisplayName,"value":option._id,"type" : option.companyTypeInfo.companyDisplayName})})
 
         break;
       case "EMPLOYMENTTYPE":
         result= MlMasterSettings.find({"type":"EMPLOYMENTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let EmploymentResponse=_.each(result,function (option,id) {
-          options.push({"label":option.employmentTypeInfo.employmentName,"value":option._id,"type" : option.employmentTypeInfo.employmentName})
+          options.push({"label":option.employmentTypeInfo.employmentDisplayName,"value":option._id,"type" : option.employmentTypeInfo.employmentDisplayName})
         })
 
         break;

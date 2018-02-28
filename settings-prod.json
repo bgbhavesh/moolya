@@ -3,7 +3,7 @@
     "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
     "conversationsBaseURL":"https://rkc.moolya.global",
     "isLeadSquaredTrackingEnabled":true,
-    "dateFormat":"MM-DD-YYYY hh:mm:ss",
+    "dateFormat":"D MMM YYYY HH:mm:ss",
     "createNewUser":{
       "code"    : 209,
       "message" : "New User Created"

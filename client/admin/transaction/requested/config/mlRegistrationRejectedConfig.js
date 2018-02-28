@@ -6,7 +6,7 @@ import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 import {client} from '../../../core/apolloConnection';
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
-  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+  return <div>{createdDateTime&&moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
 }
 const mlRegistrationRejectedTableConfig=new MlViewer.View({
   name:"registrationInfoTable",

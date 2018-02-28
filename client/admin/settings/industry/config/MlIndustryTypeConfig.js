@@ -5,7 +5,7 @@ import moment from 'moment'
 function createdateFormatter (data){
   let createdDate=data&&data.data&&data.data.createdDate;
   if(createdDate){
-    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+    return <div>{moment(createdDate).format(Meteor.settings.public.dateFormat)}</div>;
   }
   else {
     return <div></div>
@@ -14,7 +14,7 @@ function createdateFormatter (data){
 function updatedateFormatter (data){
   let updateDate=data&&data.data&&data.data.updatedDate;
   if(updateDate){
-    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+    return <div>{moment(updateDate).format(Meteor.settings.public.dateFormat)}</div>;
   }
   else {
     return <div></div>

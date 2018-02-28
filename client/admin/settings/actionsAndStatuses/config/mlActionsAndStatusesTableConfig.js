@@ -54,7 +54,7 @@ function  communityFormatter(data) {
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.date;
-  return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
+  return <div>{moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
 }
 const mlActionsAndStatueseTableConfig=new MlViewer.View({
   name:"roleTypeTable",

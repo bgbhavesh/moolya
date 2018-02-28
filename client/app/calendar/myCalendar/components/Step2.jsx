@@ -300,7 +300,7 @@ class MlAppServiceSelectTask extends Component{
                       }
                     </div>
                     <label style={{'marginTop':'5px'}} htmlFor="fancy-checkbox-default">
-                      { data.startDate ? moment(data.startDate).format('DD-MM-YYYY hh:mm:ss') : 'Yet To Start' }
+                      { data.startDate ? moment(data.startDate).format(Meteor.settings.public.dateFormat) : 'Yet To Start' }
                     </label>
                   </div>
                 </div>

@@ -7,10 +7,9 @@ import moment from "moment";
 import gql from "graphql-tag";
 import MlGenericTransactionAccordion from '../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
 
-function dateFormatter (cell,data){
-  let createdDateTime=data&&data.createdAt?data.createdAt:null;
-  let dateVal=createdDateTime?moment(createdDateTime).format(Meteor.settings.public.dateFormat):'';
-  return dateVal;
+function dateFormatter(cell, data) {
+  let createdDateTime = data && data.createdAt ? data.createdAt : null;
+  return createdDateTime ? moment(createdDateTime).format(Meteor.settings.public.dateFormat) : '';
 }
 
 const mlMyTransactionTableConfig = new MlViewer.View({
@@ -18,16 +17,16 @@ const mlMyTransactionTableConfig = new MlViewer.View({
   module: "myTransaction",//Module name for filter.
   viewType: MlViewerTypes.TABLE,
   extraFields: [],
-  fields: ['transactionId','transactionType' ,'clusterName', 'chapterName', 'communityName', 'status'],
-  searchFields: ['transactionId', 'transactionType','clusterName', 'chapterName', 'communityName', 'status'],
+  fields: ['transactionId', 'transactionType', 'clusterName', 'chapterName', 'communityName', 'status'],
+  searchFields: ['transactionId', 'transactionType', 'clusterName', 'chapterName', 'communityName', 'status'],
   throttleRefresh: false,
   pagination: true,//To display pagination
   selectRow: false,  //Enable checkbox/radio button to select the row.
-  isExpandableRow: (row)=> {
+  isExpandableRow: (row) => {
     return true;
   },
-  asyncExpand:true,
-  asyncExpandRowKey:'_id',
+  asyncExpand: true,
+  asyncExpandRowKey: '_id',
   expandComponent: MlGenericTransactionAccordion,
   columns: [
     {dataField: "_id", title: "_id", 'isKey': true, isHidden: true},
@@ -39,7 +38,13 @@ const mlMyTransactionTableConfig = new MlViewer.View({
     {dataField: "chapter", title: "Chapter", dataSort: true},
     {dataField: "subChapter", title: "Sub Chapter", dataSort: true},
     {dataField: "community", title: "Community", dataSort: true},
-    {dataField: "createdAt", title: "Date Time", dataSort: true,useCustomComponent:true,customComponent:dateFormatter},
+    {
+      dataField: "createdAt",
+      title: "Date Time",
+      dataSort: true,
+      useCustomComponent: true,
+      customComponent: dateFormatter
+    },
     {dataField: "status", title: "Status", dataSort: true}
   ],
   tableHeaderClass: 'react_table_head',

@@ -61,7 +61,7 @@ function subChapterFormatter(data){
 function dateFormatter(data){
   let createdDateTime=data&&data.data&&data.data.createdDateTime;
   if(createdDateTime){
-    return <div>{moment(createdDateTime).format('DD-MM-YYYY HH:MM:SS')}</div>;
+    return <div>{moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
   } else {
     return <div></div>;
   }
@@ -77,7 +77,7 @@ function createdByFormatter(data){
 function updateddateFormatter(data){
   let updatedDateTime=data&&data.data&&data.data.updatedDateTime;
   if(updatedDateTime){
-    return <div>{moment(updatedDateTime).format('DD-MM-YYYY HH:MM:SS')}</div>;
+    return <div>{moment(updatedDateTime).format(Meteor.settings.public.dateFormat)}</div>;
   } else {
     return <div></div>;
   }

@@ -126,7 +126,7 @@ export default class MlStartupViewServicesAndProducts extends React.Component {
           <h2>Service & Products</h2>
           <div className="panel panel-default panel-form-view hide_unlock">
             <div className="panel-body">
-            <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isDescriptionPrivate" />
+            <FontAwesome name='unlock' className="input_icon text-edit-view-icon req_header_icon un_lock" id="isDescriptionPrivate" />
             <div id="annotatorContent">{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
                     <MlTextEditor
                       value={editorValue}

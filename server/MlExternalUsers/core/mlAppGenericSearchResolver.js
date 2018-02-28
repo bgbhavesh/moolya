@@ -42,6 +42,9 @@ MlResolver.MlUnionResolver.AppGenericSearchUnion = {
       case 'EXTERNALUSERS':
         return 'Users';
         break;
+      case 'EXTERNALUSERSNEW':
+        return 'Users';
+        break;
       case 'MYCONNECTIONS':
         return 'ConnectedUser';
         break;
@@ -179,18 +182,18 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             "preserveNullAndEmptyArrays":true
          }
       },
-      { 
-        $redact: { 
+      {
+        $redact: {
           $cond: [
             {
               $and: [
                 { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
                 { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
-                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] },
                 { $eq: [ "$user.profile.isActive", true ] }
               ]
             },
-            "$$KEEP", 
+            "$$KEEP",
             "$$PRUNE"
           ]
         }
@@ -256,18 +259,18 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       { $unwind: { path: '$subChapter', preserveNullAndEmptyArrays: true } },
-      { 
-        $redact: { 
+      {
+        $redact: {
           $cond: [
             {
               $and: [
                 { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
                 { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
-                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] },
                 { $eq: [ "$user.profile.isActive", true ] }
               ]
             },
-            "$$KEEP", 
+            "$$KEEP",
             "$$PRUNE"
           ]
         }
@@ -324,18 +327,18 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             "preserveNullAndEmptyArrays":true
          }
       },
-      { 
-        $redact: { 
+      {
+        $redact: {
           $cond: [
             {
               $and: [
                 { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
                 { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
-                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] },
                 { $eq: [ "$user.profile.isActive", true ] }
               ]
             },
-            "$$KEEP", 
+            "$$KEEP",
             "$$PRUNE"
           ]
         }
@@ -564,18 +567,18 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             "preserveNullAndEmptyArrays":true
          }
       },
-      { 
-        $redact: { 
+      {
+        $redact: {
           $cond: [
             {
               $and: [
                 { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
                 { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
-                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] },
                 { $eq: [ "$user.profile.isActive", true ] }
               ]
             },
-            "$$KEEP", 
+            "$$KEEP",
             "$$PRUNE"
           ]
         }
@@ -635,18 +638,18 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             "preserveNullAndEmptyArrays":true
          }
       },
-      { 
-        $redact: { 
+      {
+        $redact: {
           $cond: [
             {
               $and: [
                 { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
                 { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
-                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] },
                 { $eq: [ "$user.profile.isActive", true ] }
               ]
             },
-            "$$KEEP", 
+            "$$KEEP",
             "$$PRUNE"
           ]
         }
@@ -794,18 +797,18 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             "preserveNullAndEmptyArrays":true
          }
       },
-      { 
-        $redact: { 
+      {
+        $redact: {
           $cond: [
             {
               $and: [
                 { $eq: [ "$user.profile.externalUserProfiles.profileId", "$port.profileId" ] },
                 { $eq: [ "$user.profile.externalUserProfiles.isApprove", true ] },
-                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] }, 
+                { $eq: [ "$user.profile.externalUserProfiles.isActive", true ] },
                 { $eq: [ "$user.profile.isActive", true ] }
               ]
             },
-            "$$KEEP", 
+            "$$KEEP",
             "$$PRUNE"
           ]
         }
@@ -1045,6 +1048,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 latitude: '$address.latitude',
                 longitude: '$address.longitude',
                 accountType: 1,
+                subChapterName: subChapter.subChapterName
               },
             },
           ];
@@ -1068,6 +1072,443 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
               { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
 
               { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId, 'profile.externalUserProfiles.subChapterId': subChapterId, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
+
+            {
+              $project: {
+                _id: 1,
+                name: '$profile.displayName',
+                profile: {
+                  profileImage: '$profile.profileImage',
+                  firstName: '$profile.firstName',
+                  lastName: '$profile.lastName',
+                },
+                portfolioId: '$portfolio._id',
+                communityCode: '$profile.externalUserProfiles.communityDefCode',
+                communityDefName: '$profile.externalUserProfiles.communityDefName',
+                chapterName: '$profile.externalUserProfiles.chapterName',
+                accountType: '$profile.externalUserProfiles.accountType',
+                isActive: '$profile.isActive',
+                externalUserAdditionalInfo: {
+                  $filter: {
+                    input: '$profile.externalUserAdditionalInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$externalUserAdditionalInfo',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $group: {
+                _id: '$externalUserAdditionalInfo.profileId',
+                data: { $first: '$$ROOT' },
+              },
+            },
+              { $replaceRoot: { newRoot: '$data' } },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                communityCode: 1,
+                communityDefName: 1,
+                chapterName: 1,
+                portfolioId: 1,
+                profile: 1,
+                isActive: 1,
+                accountType: 1,
+                address: {
+                  $filter: {
+                    input: '$externalUserAdditionalInfo.addressInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.isDefaultAddress', true] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$address',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                profile: 1,
+                communityCode: 1,
+                portfolioId: 1,
+                communityDefName: 1,
+                chapterName: 1,
+                isActive: 1,
+                accountType: 1,
+                latitude: '$address.latitude',
+                longitude: '$address.longitude',
+                subChapterName: subChapter.subChapterName
+              },
+            },
+          ];
+          users = mlDBController.aggregate('users', pipeline, context);
+        }
+      }
+    }
+    // context.module = "Users";
+    data = users;
+    count = users && users.length ? users.length : 0;
+  }
+  else if (args.module === 'externalUsersNew') {
+    var query = JSON.parse(args.queryProperty.query);
+
+    var clusterId = query.clusterId ? query.clusterId : '';
+    var chapterId = query.chapterId ? query.chapterId : '';
+    const userType = query.userType;
+
+    // Generic search query object for EXTERNAL Users
+    const queryObj = { isActive: true };
+
+    let users = [];
+
+    if (clusterId != '' && chapterId!='') {
+      const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context);
+      let chapter = '';
+      if(chapterId){
+        chapter = mlDBController.findOne('MlChapters', { _id: chapterId }, context);
+      }
+
+      if (cluster.isActive && chapter.isActive) {
+        queryObj.clusterId = clusterId;
+        queryObj.chapterId = chapterId;
+        queryObj.isApprove = true;
+        queryObj.isActive = true;
+
+          // FOR SPECIFIC COMMUNITY
+        if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
+          queryObj.communityDefName = userType;
+          var pipeline = [
+            {
+              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+            },
+            {
+              $unwind: '$profile.externalUserProfiles',
+            },
+
+              { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+              { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+              { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+              { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
+            {
+              $project: {
+                _id: 1,
+                name: '$profile.displayName',
+                portfolioId: '$portfolio._id',
+                profile: {
+                  profileImage: '$profile.profileImage',
+                  firstName: '$profile.firstName',
+                  lastName: '$profile.lastName',
+                },
+                communityCode: '$profile.externalUserProfiles.communityDefCode',
+                communityDefName: '$profile.externalUserProfiles.communityDefName',
+                chapterName: '$profile.externalUserProfiles.chapterName',
+                isActive: '$profile.isActive',
+                accountType: '$profile.externalUserProfiles.accountType',
+                externalUserAdditionalInfo: {
+                  $filter: {
+                    input: '$profile.externalUserAdditionalInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$externalUserAdditionalInfo',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $group: {
+                _id: '$externalUserAdditionalInfo.profileId',
+                data: { $first: '$$ROOT' },
+              },
+            },
+              { $replaceRoot: { newRoot: '$data' } },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                communityCode: 1,
+                communityDefName: 1,
+                chapterName: 1,
+                portfolioId: 1,
+                profile: 1,
+                isActive: 1,
+                accountType: 1,
+                address: {
+                  $filter: {
+                    input: '$externalUserAdditionalInfo.addressInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.isDefaultAddress', true] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$address',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                communityCode: 1,
+                communityDefName: 1,
+                portfolioId: 1,
+                profile: 1,
+                chapterName: 1,
+                isActive: 1,
+                latitude: '$address.latitude',
+                longitude: '$address.longitude',
+                accountType: 1,
+              },
+            },
+          ];
+          users = mlDBController.aggregate('users', pipeline, context);
+        }
+
+        // FOR All
+        else {
+          var pipeline = [
+            {
+              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+            },
+            {
+              $unwind: '$profile.externalUserProfiles',
+            },
+
+              { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+              { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+              { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+              { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId,
+                // 'profile.externalUserProfiles.subChapterId': subChapterId,
+                'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
+
+            {
+              $project: {
+                _id: 1,
+                name: '$profile.displayName',
+                profile: {
+                  profileImage: '$profile.profileImage',
+                  firstName: '$profile.firstName',
+                  lastName: '$profile.lastName',
+                },
+                portfolioId: '$portfolio._id',
+                communityCode: '$profile.externalUserProfiles.communityDefCode',
+                communityDefName: '$profile.externalUserProfiles.communityDefName',
+                chapterName: '$profile.externalUserProfiles.chapterName',
+                accountType: '$profile.externalUserProfiles.accountType',
+                isActive: '$profile.isActive',
+                externalUserAdditionalInfo: {
+                  $filter: {
+                    input: '$profile.externalUserAdditionalInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$externalUserAdditionalInfo',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $group: {
+                _id: '$externalUserAdditionalInfo.profileId',
+                data: { $first: '$$ROOT' },
+              },
+            },
+              { $replaceRoot: { newRoot: '$data' } },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                communityCode: 1,
+                communityDefName: 1,
+                chapterName: 1,
+                portfolioId: 1,
+                profile: 1,
+                isActive: 1,
+                accountType: 1,
+                address: {
+                  $filter: {
+                    input: '$externalUserAdditionalInfo.addressInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.isDefaultAddress', true] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$address',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                profile: 1,
+                communityCode: 1,
+                portfolioId: 1,
+                communityDefName: 1,
+                chapterName: 1,
+                isActive: 1,
+                accountType: 1,
+                latitude: '$address.latitude',
+                longitude: '$address.longitude',
+              },
+            },
+          ];
+          users = mlDBController.aggregate('users', pipeline, context);
+        }
+      }
+    }
+
+    else if (clusterId != '') {
+      const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context);
+
+      if (cluster.isActive ) {
+        queryObj.clusterId = clusterId;
+        queryObj.isApprove = true;
+        queryObj.isActive = true;
+
+        // FOR SPECIFIC COMMUNITY
+        if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
+          queryObj.communityDefName = userType;
+          var pipeline = [
+            {
+              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+            },
+            {
+              $unwind: '$profile.externalUserProfiles',
+            },
+
+            { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+            { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+            { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+            { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
+            {
+              $project: {
+                _id: 1,
+                name: '$profile.displayName',
+                portfolioId: '$portfolio._id',
+                profile: {
+                  profileImage: '$profile.profileImage',
+                  firstName: '$profile.firstName',
+                  lastName: '$profile.lastName',
+                },
+                communityCode: '$profile.externalUserProfiles.communityDefCode',
+                communityDefName: '$profile.externalUserProfiles.communityDefName',
+                chapterName: '$profile.externalUserProfiles.chapterName',
+                isActive: '$profile.isActive',
+                accountType: '$profile.externalUserProfiles.accountType',
+                externalUserAdditionalInfo: {
+                  $filter: {
+                    input: '$profile.externalUserAdditionalInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$externalUserAdditionalInfo',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $group: {
+                _id: '$externalUserAdditionalInfo.profileId',
+                data: { $first: '$$ROOT' },
+              },
+            },
+            { $replaceRoot: { newRoot: '$data' } },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                communityCode: 1,
+                communityDefName: 1,
+                chapterName: 1,
+                portfolioId: 1,
+                profile: 1,
+                isActive: 1,
+                accountType: 1,
+                address: {
+                  $filter: {
+                    input: '$externalUserAdditionalInfo.addressInfo',
+                    as: 'item',
+                    cond: { $eq: ['$$item.isDefaultAddress', true] },
+                  },
+                },
+              },
+            },
+            { $unwind: {
+              path: '$address',
+              preserveNullAndEmptyArrays: true,
+            },
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                communityCode: 1,
+                communityDefName: 1,
+                portfolioId: 1,
+                profile: 1,
+                chapterName: 1,
+                isActive: 1,
+                latitude: '$address.latitude',
+                longitude: '$address.longitude',
+                accountType: 1,
+              },
+            },
+          ];
+          users = mlDBController.aggregate('users', pipeline, context);
+        }
+
+        // FOR All
+        else {
+          var pipeline = [
+            {
+              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+            },
+            {
+              $unwind: '$profile.externalUserProfiles',
+            },
+
+            { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+            { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+            { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+            { $match: { 'profile.externalUserProfiles.clusterId': clusterId,
+              // 'profile.externalUserProfiles.subChapterId': subChapterId,
+              'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
 
             {
               $project: {
@@ -2025,8 +2466,13 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
           var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
           var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+          // pipeLine = [
+          //       { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+          //       { $match: { $and: [{ longitude: { $lte: rightLng } }, { longitude: { $gte: leftLng } }, { latitude: { $lte: topLat } }, { latitude: { $gte: bottomLat } }] } },
+          // ];
           pipeLine = [
-                { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+                { $match: { chapterId, isActive: true } },
+                { $match: { $or: [{ isDefaultSubChapter: true }, { $and: [{ isDefaultSubChapter: false }, { $or: [{ 'moolyaSubChapterAccess.externalUser.canView': true }, { 'moolyaSubChapterAccess.externalUser.canSearch': true }] }] }] } },
                 { $match: { $and: [{ longitude: { $lte: rightLng } }, { longitude: { $gte: leftLng } }, { latitude: { $lte: topLat } }, { latitude: { $gte: bottomLat } }] } },
           ];
           subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
@@ -2066,11 +2512,14 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             subChapters = _.concat(subChapters, relatedSC);
           }
         } else {
+          // pipeLine = [
+          //       { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+          // ];
           pipeLine = [
-                { $match: { $or: [{ isDefaultSubChapter: true, chapterId, isActive: true }, { _id: userSubChapterId, isActive: true, chapterId }] } },
+                { $match: { chapterId, isActive: true } },
+                { $match: { $or: [{ isDefaultSubChapter: true }, { $and: [{ isDefaultSubChapter: false }, { $or: [{ 'moolyaSubChapterAccess.externalUser.canView': true }, { 'moolyaSubChapterAccess.externalUser.canSearch': true }] }] }] } }
           ];
           subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
-
           pipeLine = [
                 { $match: { isActive: true } },
                 { $match: { subChapters: { $elemMatch: { subChapterId: userSubChapterId } } } },
@@ -2081,7 +2530,6 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
 
           if (relatedSubChapters && relatedSubChapters.length > 0) {
             var relatedIds = [];
-
             _.each(relatedSubChapters, (obj) => {
               const ids = _.map(obj.subChapters, 'subChapterId');
               relatedIds = _.concat(relatedIds, ids);

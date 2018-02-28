@@ -214,7 +214,7 @@ export default class MlIdeatorIdeas extends Component{
               {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>*/}
             </div>
           {/*</a>*/}
-          <div className="fileUpload mlUpload_btn" style={{'margin':'10px 0px 0 26px'}}>
+          <div className="fileUpload mlUpload_btn" style={{'margin':'10px auto 0 auto', float:'none'}}>
             <span onClick={this.toggleModal}>Upload Pic</span>
           </div>
         </div>

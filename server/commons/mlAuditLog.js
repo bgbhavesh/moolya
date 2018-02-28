@@ -5,9 +5,13 @@ var diff = require('deep-diff').diff;
 
 import './mlModuleCollectionMap.js';
 import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
-import {pushlogsByKafka} from '../commons/mlKafkaProducer'
+/**
+ * @todo {*} uncomment the code onces the issue is been resolved of slowness
+ */
+// import {pushlogsByKafka} from '../commons/mlKafkaProducer'
 //TODO: Drive the Audit Log through Audit Definition and configuration
-var isAuditEnabled=Meteor.settings.private.isAuditEnabled;
+const isAuditEnabled=Meteor.settings.private.isAuditEnabled;
+
 class MlAuditLog {
   constructor(){
     this.contextRefNames.bind(this);
@@ -142,12 +146,12 @@ class MlAuditLog {
           toInsert.currentValue=JSON.stringify(say.rhs)
           MlAudit.insert(toInsert);
 
-          pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
+          // pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
         })
       }catch (err){
 
         toInsert.errorReason=JSON.stringify("Error: " + err + ".");
-        pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
+        // pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
         MlAudit.insert(toInsert)
       }
       return true;
@@ -223,12 +227,12 @@ class MlAuditLog {
           }
         }
         MlAudit.insert(toInsert);
-        pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
+        // pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
       })
     }catch(err){
       toInsert.errorReason=JSON.stringify("Error: " + err + ".")
       MlAudit.insert(toInsert)
-      pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
+      // pushlogsByKafka(JSON.stringify(toInsert),'auditLogs');
     }
 
     return true;

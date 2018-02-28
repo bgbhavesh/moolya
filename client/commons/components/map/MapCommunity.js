@@ -9,6 +9,8 @@ import GoogleMap from 'google-map-react';
 import ClusterMarker from './ClusterMarker';
 import CommunityMarkers from './CommunitymapMarkers'
 import supercluster from 'points-cluster';
+// import MyLocationMarker from './myLocationMarker';
+
 
 export const gMap = ({
   style, hoverDistance, options,
@@ -28,6 +30,7 @@ export const gMap = ({
       onChildMouseEnter={onChildMouseEnter}
       onChildMouseLeave={onChildMouseLeave}
     >
+      {/*<MyLocationMarker key={9999999} lat={34.0} lng={77.0}/>*/}
       {
         clusters
           .map(({...markerProps, id, numPoints}) => (

@@ -7,7 +7,7 @@ export default class MlAppMemberTaskHistory extends React.Component{
   render(){
     return (
       <div className="text-center">
-        Will be updated soon.
+        Will be updated soon
       </div>
     )
   }

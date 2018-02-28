@@ -27,6 +27,7 @@ export default class MlAppContextHandler extends Component {
 
   /**
    * fetching and redirecting to pending registration it will check only first time login by the user
+   * @todo {*} uncomment the code onces the issue is been resolved of slowness
    * */
   async fetchPendingReg() {
     if (this.props.isFirst) {
@@ -37,7 +38,7 @@ export default class MlAppContextHandler extends Component {
       else if (response && response.length == 0) {
         this.setState({loading: false})
       }
-      requestPermission('LOGIN');
+      // requestPermission('LOGIN');
     }
   }
 

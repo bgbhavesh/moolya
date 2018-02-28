@@ -426,6 +426,19 @@ MlResolver.MlMutationResolver['switchExternalProfile'] = (obj, args, context, in
 
 MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, context, info) => {
 
+  if(args.module === 'chapterUser' || args.module === 'subChapterUser'){
+    if(args.module === 'chapterUser') {
+      let clusterDetails = MlClusters.findOne(args.id||null);
+      if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
+        return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
+      }
+    }else if( args.module === 'subChapterUser'){
+      let chapterDetails = MlChapters.findOne(args.id||null);
+      if (chapterDetails && chapterDetails.latitude && chapterDetails.longitude) {
+        return {lat: chapterDetails.latitude, lng: chapterDetails.longitude};
+      }
+    }
+  }
   if(args.module == "subChapter" || args.module == "externalUsers"){
       var chapterId = args.id||null;
       if(!chapterId){
@@ -569,6 +582,8 @@ MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => 
  */
 MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   let query={};
+  let chapterQuery;
+  let subChapterQuery;
   let moduleContext = "";
   var chapterCount=0
   let userId = context.userId;
@@ -590,7 +605,21 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           var relatedChapterId = _.map(relatedSC, "chapterId");
           relatedChapterId = _.uniq(relatedChapterId);
 
-          let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
+          // let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
+          // mlSubChapterAccessControl = mlSubChapterAccessControl || {};
+          // mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
+          // if (mlSubChapterAccessControl.isInclusive) {
+          // subChapterQuery = { $in: mlSubChapterAccessControl.subChapters };
+          // chapterQuery = { $in: mlSubChapterAccessControl.chapters };
+          // } else {
+          // subChapterQuery = { $nin: mlSubChapterAccessControl.subChapters };
+          // chapterQuery = { $nin: mlSubChapterAccessControl.chapters };
+          // }
+      }
+  }
+
+
+   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
           mlSubChapterAccessControl = mlSubChapterAccessControl || {};
           mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
           if (mlSubChapterAccessControl.isInclusive) {
@@ -600,8 +629,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           subChapterQuery = { $nin: mlSubChapterAccessControl.subChapters };
           chapterQuery = { $nin: mlSubChapterAccessControl.chapters };
           }
-      }
-  }
+
   switch(args.moduleName){
       case "cluster":
           moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
@@ -611,10 +639,12 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               let ids = _.map(sub, "chapterId");
               ids = _.uniq(ids)
               chapterCount = mlDBController.find('MlChapters', {_id:{$in:ids}, clusterId:args.id, isActive:true}, context).count();
-              query={"clusterId":args.id, chapterId:{$in:ids}, subChapterId:{$in:subIds}, isActive:true};
+              // query={"clusterId":args.id, chapterId:{$in:ids}, subChapterId:{$in:subIds}, isActive:true};
+              query={"clusterId":args.id, subChapterId:subChapterQuery, isActive:true};
           }else{
               chapterCount = mlDBController.find('MlChapters', {clusterId:args.id, isActive:true, _id:chapterQuery}, context).count();
-              query={"clusterId":args.id, isActive:true, "chapterId":chapterQuery, "subChapterId":subChapterQuery};
+              // query={"clusterId":args.id, isActive:true, "chapterId":chapterQuery, "subChapterId":subChapterQuery};
+              query={"clusterId":args.id, isActive:true, "subChapterId":subChapterQuery};
           }
           break;
       case "chapter":
@@ -623,9 +653,9 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           if(isDefaultSubChapter){
               let sub = mlDBController.find('MlSubChapters', {$or:[{chapterId:args.id, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{chapterId:args.id, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
               let ids = _.map(sub, "_id");
-
               chapterCount = sub.length;
-              query={"chapterId":args.id, "clusterId":chapter.clusterId, "subChapterId":{$in:ids}, isActive:true};
+              // query={"chapterId":args.id, "clusterId":chapter.clusterId, "subChapterId":{$in:ids}, isActive:true};
+              query={"chapterId":args.id, "clusterId":chapter.clusterId, isActive:true};
 
           }else{
               if(userSubChapter.moolyaSubChapterAccess.externalUser.canView || userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){
@@ -684,7 +714,6 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               }
           }
           let users=mlDBController.aggregate('users',pipeline,context);
-
           response.push({
             key: item._id,
             count:users.length,
@@ -719,8 +748,8 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
 
 /**
  * @function getCategoryData
- * @param {*["cluster", "chapter"]} type 
- * @param {*typeId} id 
+ * @param {*["cluster", "chapter"]} type
+ * @param {*typeId} id
  * @note expected drill down to be only two level
  * @todo {*Accelerator, Incubator, Co-Working Space} $userCategory.userTypeName
  *       need to find in the lowerCase

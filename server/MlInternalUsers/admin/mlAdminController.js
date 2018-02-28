@@ -984,7 +984,7 @@ updateBuildVersion = (request) => {
       break;
     case "GENERATEREPORT":
       MlCronJobController.dailyReport();
-      returnResponse.success = false
+      returnResponse.success = true;
       break;
     default:
       returnResponse.success = false

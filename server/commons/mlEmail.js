@@ -43,10 +43,15 @@ class SmtpEmail {
     Email.send(this._createEmailJSON(email));
   };
 
+/**
+ * 
+ * @param {*} email 
+ * @todo {*} reverted to the old code.
+ */
   sendHTML(email) {
 
-    sendEmailViaNotificationEngine(this._createEmailHTML(email));
-    //Email.send(this._createEmailHTML(email));
+    // sendEmailViaNotificationEngine(this._createEmailHTML(email));
+    Email.send(this._createEmailHTML(email));
   };
 
   sendAttachment(email) {

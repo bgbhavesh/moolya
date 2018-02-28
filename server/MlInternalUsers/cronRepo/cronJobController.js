@@ -514,12 +514,12 @@ class MlCronJobControllerClass {
 
     sendHtmlEmail(emailObject) {
       if (Meteor.settings.public.instance != "DEV") {
-        console.log("cron sending mail>>>>>>>>>>>>>.", emailObject.html);
+        console.log("cron sending mail>>>>>>>>>>>>>.");
         Meteor.setTimeout(function () {
           mlEmail.sendHtml({
             from: fromEmail,
             to: "qateam@qa.moolya.global",
-            cc: "vishwadeep.kapoor@raksan.in",
+            cc: "ramana.chandavarapu@raksan.in",
             subject: "moolya daily monitoring report instance "+(Meteor.settings.public.instance),
             html: emailObject.html
           });

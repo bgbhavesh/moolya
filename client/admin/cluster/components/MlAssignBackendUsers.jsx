@@ -314,7 +314,7 @@ class MlAssignBackendUsers extends React.Component {
               <div className="row">
                 <div className="left_wrap left_user_blocks">
                   <Scrollbars speed={0.8} className="left_wrap">
-                    <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
+                    <div className="col-lg-4 col-md-6 col-sm-6" onClick={this.resetBackendUers.bind(that)}>
                       <div className="list_block provider_block">
                         <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                         <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"

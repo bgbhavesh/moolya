@@ -354,7 +354,7 @@ class MlAddBackendUser extends React.Component {
                           <input id="radio3" type="radio" name="radio" value="others" onChange={this.onGenderSelect}/><label htmlFor="radio3"><span><span></span></span>Others</label>
                         </div>
                       </div>
-                    <div className="clearfix"></div>
+                      <br className="brclear"/>
                     <MlContactFormComponent clusterId={this.state.clusterId} getAssignedContacts={this.getAssignedContacts.bind(this)}/>
 
                     <div className="form-group switch_wrap inline_switch">

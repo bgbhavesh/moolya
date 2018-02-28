@@ -167,7 +167,7 @@ export default class CreateRequestComponent extends Component {
               <a data-toggle="tooltip" title="Submit" data-placement="top" onClick={this.createRequest.bind(this)} className="hex_btn hex_btn_in">
                 <span className="ml ml-save"></span>
               </a>
-              <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.props.closePopOver}>
+              <a data-toggle="tooltip" title="Cancel" data-placement="top" className="hex_btn hex_btn_in" onClick={this.props.closePopOver}>
                 <span className="ml ml-delete"></span>
               </a>
             </div>

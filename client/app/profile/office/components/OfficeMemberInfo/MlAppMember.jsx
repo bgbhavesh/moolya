@@ -21,19 +21,19 @@ export default class MlAppMember extends React.Component {
 
   componentWillMount() {
     const MlTabs = [
-      { name: 'Details', tabContent: <MlAppMemberDetails/> },
-      { name: 'Schedule', tabContent: <MlAppMemberSchedule/> },
-      { name: 'Task Info', tabContent: <MlAppMemberTaskInfo/> },
-      { name: 'Upcoming Task', tabContent: <MlAppMemberUpcomingTask/> },
-      { name: 'History of Task', tabContent: <MlAppMemberTaskHistory/> },
+      { name: 'Details', title: "Details", tabContent: <MlAppMemberDetails/> },
+      { name: 'Schedule', title :"Schedule",tabContent: <MlAppMemberSchedule/> },
+      { name: 'Task Info', title: "Task[s] Info",tabContent: <MlAppMemberTaskInfo/> },
+      { name: 'Upcoming Task', title : "Upcoming Task[s]", tabContent: <MlAppMemberUpcomingTask/> },
+      { name: 'History of Task', title :"History of Tasks", tabContent: <MlAppMemberTaskHistory/> },
     ];
 
     function getTabs() {
       return MlTabs.map(MlTab => ({
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
-        title: MlTab.name,
-        key: MlTab.name,
+        title: MlTab.title,
+        key: MlTab.title,
         getContent: () => MlTab.tabContent,
       }));
     }
@@ -51,7 +51,7 @@ export default class MlAppMember extends React.Component {
   }
   render() {
     const App = () => <MlTabComponent tabs={this.state.tabs} selectedTabKey={this.state.activeTab} onChange={this.updateTab}
-                                      type="tab" mkey="name"/>;
+                                      type="tab" mkey="title"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

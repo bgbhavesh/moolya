@@ -6,15 +6,17 @@ import _ from 'lodash';
 import dashboardRoutes from '../actions/routesActionHandler';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+import { fetchSubChapterDetails } from '../../registrations/actions/findRegistration.js';
 
 export default class MlCommunityList extends Component {
   constructor(props){
     super(props);
-    this.state={
-      userType : "All",
-      configState:{}
-    }
-    this.communityName = '';
+    this.state = {
+      userType: "All",
+      configState: {},
+      subChapterName: null,
+      communityName: null
+    };
     return this;
   }
 
@@ -52,9 +54,7 @@ export default class MlCommunityList extends Component {
   }
 
   onStatusChange(userType,e) {
-
     if (userType) {
-      this.communityName = userType;
       let config = this.props.config;
       // config = _.omit(config, 'data')
       let options = {
@@ -84,35 +84,60 @@ export default class MlCommunityList extends Component {
       options = _.extend(options,dynamicQueryOption);
 
       this.props.config.fetchMore(options, true);
+      this.setCommunityName(userType);
     }
   }
 
   /**
-   * @func getSubChapterName()
-   * @param {*} state || props
-   * @return {*string || null}
+   * @func componentWillMount()
+   * @desc react life cycle
+  */
+  componentWillMount(){
+    this.getSubChapterDetails();
+  }
+  
+  /**
+   * @param {*subChapterId} 
+   * @func getSubChapterDetails();
+   * @return {*subChapterName}
+   * @type {*async}
    */
-  getSubChapterName() {
-    let data = [];
-    const { userType } = this.state;
-    if (userType != "All") {
-      data = this.state.data;
-    } else {
-      data = this.props.data;
-    }
-    return data.length && data[0] && data[0].subChapterName ? data[0].subChapterName : null;
+  async getSubChapterDetails() {
+    const { subChapterId } = this.props.config.params;
+    const response = await fetchSubChapterDetails(subChapterId);
+    if (response)
+      this.setState({ subChapterName: response.subChapterName })
+    console.log("hitting server");  
   }
 
   /**
    * @func getSelectedCommunityName()
    * @param {*} communityName
-   * @return {*string || null}
+   * @return {*void}
+   * @desc making the state set
    */
-  getSelectedCommunityName() {
-    return (this.communityName != 'All') && (this.communityName != '') ? ' :' + this.communityName : null;
+  setCommunityName(communityType) {
+    console.log('sttting the community name');
+    const communityName = (communityType != 'All') && (communityType != '') ? ' : ' + communityType : null;
+    this.setState({ communityName })
+  }
+
+  /**
+   * @func getNullDataResult()
+   * @desc called if null response from data
+   * @return {*HTML}
+   */
+  getNullDataResult() {
+    const { communityName } = this.state;
+    return (
+        <h2>
+          There is no {communityName} portfolios to be shown
+        </h2>
+      )
   }
 
   render(){
+    const { subChapterName, communityName } = this.state;
     let data= [];
     if(this.state.userType != "All"){
       data=this.state.data;
@@ -205,9 +230,9 @@ export default class MlCommunityList extends Component {
             </a>
           </div>
         <div className="col-md-12">
-          <h2>Communities {this.getSubChapterName()} {this.getSelectedCommunityName()}</h2>
+          <h2>Communities {subChapterName} {communityName}</h2>
           <div className="row ideators_list">
-            {list}
+            {list && list.length ? list : this.getNullDataResult()}
           </div>
           </div>
       </div>

@@ -1047,8 +1047,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 isActive: 1,
                 latitude: '$address.latitude',
                 longitude: '$address.longitude',
-                accountType: 1,
-                subChapterName: subChapter.subChapterName
+                accountType: 1
               },
             },
           ];
@@ -1146,8 +1145,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 isActive: 1,
                 accountType: 1,
                 latitude: '$address.latitude',
-                longitude: '$address.longitude',
-                subChapterName: subChapter.subChapterName
+                longitude: '$address.longitude'
               },
             },
           ];

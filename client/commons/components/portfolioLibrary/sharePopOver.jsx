@@ -240,10 +240,10 @@ export default class SharePopOver extends React.Component {
       isDownloadable: this.state.downloadable
     }
     if(this.state.startDate) {
-       Details.sharedStartDate =  this.state.startDate.format("MM-DD-YYYY hh:mm:ss");
+       Details.sharedStartDate =  this.state.startDate.format(Meteor.settings.public.dateFormat);
     }
     if(this.state.endDate) {
-      Details.sharedEndDate = this.state.endDate.format("MM-DD-YYYY hh:mm:ss");
+      Details.sharedEndDate = this.state.endDate.format(Meteor.settings.public.dateFormat);
     }
     if(this.state.startDate < this.state.endDate) {
       this.saveInfo(Details);

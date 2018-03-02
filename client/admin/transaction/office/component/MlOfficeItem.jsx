@@ -228,7 +228,7 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue=" " value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" />
+                  <input type="text" placeholder="Date & Time" defaultValue=" " value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } className="form-control float-label" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name" defaultValue=" " value={this.state.userInfo.name} className="form-control float-label" />
@@ -371,7 +371,7 @@ export default class MlOfficeItem extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Transaction Date & Time"
                          value={(this.state.transInfo.paymentDetails && this.state.transInfo.paymentDetails.datetime )?
-                           moment(this.state.transInfo.paymentDetails.datetime).format('MM/DD/YYYY HH:mm:ss'):''} className="form-control float-label" />
+                           moment(this.state.transInfo.paymentDetails.datetime).format(Meteor.settings.public.dateFormat):''} className="form-control float-label" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Transaction ID"

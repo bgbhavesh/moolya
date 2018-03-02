@@ -7,7 +7,7 @@ import {client} from '../../core/apolloConnection';
 function creatorDateFormatter (data){
   if(data&&data.data&&data.data.createdDate){
     let createdDateTime = data&&data.data&&data.data.createdDate?data.data.createdDate:'';
-    return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>
+    return <div>{moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>
   }else{
     return <div></div>;
   }
@@ -16,7 +16,7 @@ function creatorDateFormatter (data){
 function modifiedDateFormatter (data){
   if(data&&data.data&&data.data.modifiedDate){
     let modifiedDateTime = data&&data.data&&data.data.modifiedDate?data.data.modifiedDate:'';
-    return <div>{moment(modifiedDateTime).format('MM-DD-YYYY, HH:MM')}</div>
+    return <div>{moment(modifiedDateTime).format(Meteor.settings.public.dateFormat)}</div>
   }else{
     return <div></div>;
   }

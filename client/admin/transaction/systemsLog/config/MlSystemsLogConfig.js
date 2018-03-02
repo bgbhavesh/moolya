@@ -1,9 +1,17 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from "moment";
 import MlSystemDetailsComponent from '../component/MlSystemsDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import {client} from '../../../core/apolloConnection';
+
+function dateFormatter(data) {
+  let createdDateTime = data && data.data && data.data.createdAt;
+  createdDateTime = createdDateTime ? createdDateTime: '';
+  return <div>{moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
+}
+
 const mlSystemsLogTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
   module:"TransactionsLog",//Module name for filter.
@@ -17,7 +25,7 @@ const mlSystemsLogTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="transactionLog" moduleName="transactionLog" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},
+    {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true, customComponent: dateFormatter},
     {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "userName", title: "User Name",dataSort:true,selectRow:true},
     {dataField: "activity", title: "Activity",dataSort:true,selectRow:true},

@@ -108,7 +108,7 @@ export default class sMlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY hh:mm:ss'),
+          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format(Meteor.settings.public.dateFormat),
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,

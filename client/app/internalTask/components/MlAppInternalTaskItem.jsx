@@ -235,7 +235,7 @@ componentDidMount() {
               <div className="col-md-6">
                 <div className="form_bg">
                   <div className="panel panel-default">
-                    <div className="panel-heading"> Date & Time: {task.createdAt&&moment(task.createdAt).format('DD-MM-YYYY hh:mm:ss')} </div>
+                    <div className="panel-heading"> Date & Time: {task.createdAt&&moment(task.createdAt).format(Meteor.settings.public.dateFormat)} </div>
                     <div className="panel-body">
                       <p>Client: { this.props.client }</p>
                       <p>Community: {task.community.name}</p>

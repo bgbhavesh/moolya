@@ -4,7 +4,8 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlDashboardListView from '../components/MlAppDashboardListView'
 import MlAppMapMarker from '../components/MlAppMapMarker';
-import MlAppMapViewContainer from '../../core/containers/MlAppMapViewContainer'
+import MlAppMapViewContainer from '../../core/containers/MlAppMapViewContainer';
+import MlMapFooter from '../components/MlMapFooter';
 
 export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   name:"SubChapterCommunityDashboard",
@@ -20,7 +21,7 @@ export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   buildQueryOptions:(config)=>{
 
     let userType = localStorage.getItem('userType');
-    localStorage.removeItem('userType');
+    // localStorage.removeItem('userType');
     let queryObj = {
       clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
       chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
@@ -44,6 +45,7 @@ export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppMapViewContainer params={this.params}/>,
   mapMarkerComponent:<MlAppMapMarker />,
+  // mapFooterComponent:<MlMapFooter />,
 
   actionConfiguration:[
     {

@@ -506,7 +506,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 
 
 
-
+.map_alert{position: relative;z-index: 9;margin-top: 100px;}
 /*.chapter_map_hover{position: absolute;z-index: 999;right: -144px;top:0px;}
 .chapter_map_hover_content{border-radius: 0px 10px 10px 10px; background: #fff; float: left; box-shadow: 0px 0px 3px 0px rgba(0,0,0,1); width: 144px; padding-bottom: 3px;}
 .chapter_map_hover_content h2{background: #ef4647; margin: 0px; border-radius: 10px 10px 0 0; padding: 2px 0px; color: #fff; text-shadow: none; text-align: center; font-size: 14px;}
@@ -1293,6 +1293,33 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .chapter_map .hex_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .chapter_map .hex_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
 
+.chapter_map .hex_btn.InvestorsHexaMarker{background: #82d51b;}
+.chapter_map .hex_btn.InvestorsHexaMarker:after{border-color: transparent transparent transparent #82d51b;}
+.chapter_map .hex_btn.InvestorsHexaMarker:before{border-color: transparent #82d51b transparent transparent;}
+
+.chapter_map .hex_btn.StartupsHexaMarker{background: #d83952;}
+.chapter_map .hex_btn.StartupsHexaMarker:after{border-color: transparent transparent transparent #d83952;}
+.chapter_map .hex_btn.StartupsHexaMarker:before{border-color: transparent #d83952 transparent transparent;}
+
+.chapter_map .hex_btn.IdeatorsHexaMarker{background: #9a9c9e;}
+.chapter_map .hex_btn.IdeatorsHexaMarker:after{border-color: transparent transparent transparent #9a9c9e;}
+.chapter_map .hex_btn.IdeatorsHexaMarker:before{border-color: transparent #9a9c9e transparent transparent;}
+
+.chapter_map .hex_btn.ServiceProvidersHexaMarker{background: #367064;}
+.chapter_map .hex_btn.ServiceProvidersHexaMarker:after{border-color: transparent transparent transparent #367064;}
+.chapter_map .hex_btn.ServiceProvidersHexaMarker:before{border-color: transparent #367064 transparent transparent;}
+
+.chapter_map .hex_btn.InstitutionsHexaMarker{background: #8f9fa9;}
+.chapter_map .hex_btn.InstitutionsHexaMarker:after{border-color: transparent transparent transparent #8f9fa9;}
+.chapter_map .hex_btn.InstitutionsHexaMarker:before{border-color: transparent #8f9fa9 transparent transparent;}
+
+.chapter_map .hex_btn.InstitutionsHexaMarker{background: #8f9fa9;}
+.chapter_map .hex_btn.InstitutionsHexaMarker:after{border-color: transparent transparent transparent #8f9fa9;}
+.chapter_map .hex_btn.InstitutionsHexaMarker:before{border-color: transparent #8f9fa9 transparent transparent;}
+
+.chapter_map .hex_btn.CompaniesHexaMarker{background: #0099ff;}
+.chapter_map .hex_btn.CompaniesHexaMarker:after{border-color: transparent transparent transparent #0099ff;}
+.chapter_map .hex_btn.CompaniesHexaMarker:before{border-color: transparent #0099ff transparent transparent;}
 
 .profile_block img{display: block;border-radius: 5px;width: auto;margin:0 auto;width: 100px;height: 100px;}
 .profile_block span{font-size: 20px;}

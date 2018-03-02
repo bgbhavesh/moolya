@@ -15,7 +15,7 @@ export const gMap = ({
   style, hoverDistance, options,
   mapProps: {center, zoom,bounds },clusterRadius,onChildClick,
   onChange, onChildMouseEnter, onChildMouseLeave,
-  clusters,mapContext,module,showImage
+  clusters,mapContext,module,showImage, userType
 }) => {
   return (
     <GoogleMap
@@ -36,7 +36,7 @@ export const gMap = ({
               ? <MapMarkers  key={id} lat={markerProps.lat} {...mapContext} module={module} hover={mapContext.hoverKey === markerProps.id}
                              lng={markerProps.lng} text={markerProps.desc}
                              desc={markerProps.desc}  markerId={markerProps.recordId} isActive ={markerProps.isActive} status ={markerProps.status} showImage={showImage}/>
-              : <ClusterMarker key={id} {...markerProps} />
+              : <ClusterMarker key={id} {...markerProps} userType={userType || ''} />
           )):[]
       }
     </GoogleMap>

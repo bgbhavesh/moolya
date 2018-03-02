@@ -4,7 +4,8 @@ import controllable from 'react-controllables';
 //import GoogleMap from 'google-map-react';
 //import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
-import MlLoader from '../../../commons/components/loader/loader'
+import MlLoader from '../../../commons/components/loader/loader';
+import NoMarkerDataMessage from './NoMarkerDataMessage';
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -95,11 +96,16 @@ componentDidMount(){
   }
 
   onStatusChange(userType,e) {
-    this.setState({userType});
+    if(userType === 'All' || userType === 'Reset'){
+      this.setState({userType:''});
+    }else
+      this.setState({userType});
+
     let params = this.props.params;
     if(this.props.moduleName === 'externalUsersNew'){
       if (userType === 'Reset') {
         let path = FlowRouter._current.path;
+        path = path.replace('/communityUsers','');
         path = path.replace(`/users`,'');
         // path = path.replace(`/${FlowRouter.getParam('userType')}`,'');
         FlowRouter.go(path);
@@ -107,8 +113,8 @@ componentDidMount(){
         let variables={};
         let hasQueryOptions = this.props.queryOptions ? true : false;
         if (hasQueryOptions) {
-          if(params.clusterId) variables.clusterId = params.clusterId;
-          if(params.chapterId) variables.chapterId = params.chapterId;
+          if(params && params.clusterId) variables.clusterId = params.clusterId;
+          if(params && params.chapterId) variables.chapterId = params.chapterId;
           if(userType) variables.userType = userType;
 
           variables = JSON.stringify(variables);
@@ -121,7 +127,11 @@ componentDidMount(){
       localStorage.setItem('userType',userType);
       if(userType !=='Reset'){
         let path = FlowRouter._current.path;
-        path = path.replace('?',`/users?`);
+
+        if(path.includes('/true')){
+          path = path.replace('/true',`/users/communityUsers`);
+        }else
+          path = path.replace('/dashboard',`/dashboard/users/communityUsers`);
         FlowRouter.go(path);
       }
     }else if(this.props.moduleName === 'chapter'){
@@ -160,7 +170,11 @@ componentDidMount(){
       MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props});
     }
 
-    let userType = this.state.userType;
+    let userType = this.state.userType || '';
+    if(!userType){
+      userType = localStorage.getItem('userType') || '';
+      // if(userType) localStorage.removeItem('userType');
+    }
 
     const communityIconList=
       <div className="community_icons">
@@ -195,16 +209,20 @@ componentDidMount(){
 
       </div>;
 
+          //StartupsHexaMarker, InvestorsHexaMarker, IdeatorsHexaMarker, ServiceProvidersHexaMarker, InstitutionsHexaMarker, CompaniesHexaMarker, HexaMarker
 
     let pathUrl = FlowRouter._current.path;
 
     return (
       <span>
+        {this.props.data&&this.props.data.data && this.props.data.data.length === 0 && userType &&  <NoMarkerDataMessage userType={userType}/>}
+
+        {// this.props.moduleName!=='cluster' &&
+          !pathUrl.includes('/admin') &&  communityIconList
+        }
         {
-          // this.props.moduleName!=='cluster' &&
-        !pathUrl.includes('/admin') &&  communityIconList}
-        {MapComponent?MapComponent:
-          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
+          MapComponent?MapComponent:
+            <MapCluster data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
         }
         {/*{data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
           <div className="bottom_actions_block bottom_count">
@@ -256,7 +274,7 @@ function properName(name) {
 
 function moduleName(){
   let path = FlowRouter._current.path;
-  if(path === "/app/dashboard"){
+  if(path === "/app/dashboard" || path === "/app/dashboard/true" || path.includes('/users/communityUsers')){
     return 'Cluster';
   }
   if(path.includes('chapters')){
@@ -271,7 +289,7 @@ function moduleName(){
 
 function moduleTooltipName(){
   let path = FlowRouter._current.path;
-  if(path === "/app/dashboard"){
+  if(path === "/app/dashboard"||  path === "/app/dashboard/true" || path.includes('/users/communityUsers')){
     return 'Cluster';
   }
   if(path.includes('chapters')){

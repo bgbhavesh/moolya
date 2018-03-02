@@ -5,7 +5,7 @@ import withPropsOnChange from 'recompose/withPropsOnChange';
 import { Motion, spring } from 'react-motion';
 
 export const clusterMarker = ({
-  styles, text,
+  styles, text, userType,
   defaultMotionStyle, motionStyle,
 }) => (
   <Motion defaultStyle={defaultMotionStyle}
@@ -20,7 +20,7 @@ export const clusterMarker = ({
           }}
         >
           <div
-            className={'hex_btn'}
+            className={`hex_btn ${userType}`}
           >
             {text}
           </div>

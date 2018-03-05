@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import moment from 'moment';
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.createdDate?data.data.createdDate:null;
-  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+  return <div>{createdDateTime&&moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
 }
 const mltemplatesConfig=new MlViewer.View({
   name:"templatesTable",

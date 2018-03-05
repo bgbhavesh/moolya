@@ -1,20 +1,25 @@
-import React, { Component, PropTypes } from 'react';
 
+/**
+ * @todo replacement of the icon component with the generic component
+ */
+import React, { Component, PropTypes } from 'react';
 // import dashboardRoutes from '../actions/routesActionHandler';
 var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import dashboardRoutes from '../actions/routesActionHandler';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+import { fetchSubChapterDetails } from '../../registrations/actions/findRegistration.js';
 
 export default class MlCommunityList extends Component {
   constructor(props){
     super(props);
-    this.state={
-      userType : "All",
-      configState:{}
-    }
-    this.communityName = '';
+    this.state = {
+      userType: "All",
+      configState: {},
+      subChapterName: null,
+      communityName: null
+    };
     return this;
   }
 
@@ -52,9 +57,7 @@ export default class MlCommunityList extends Component {
   }
 
   onStatusChange(userType,e) {
-
     if (userType) {
-      this.communityName = userType;
       let config = this.props.config;
       // config = _.omit(config, 'data')
       let options = {
@@ -84,35 +87,94 @@ export default class MlCommunityList extends Component {
       options = _.extend(options,dynamicQueryOption);
 
       this.props.config.fetchMore(options, true);
+      this.setCommunityName(userType);
     }
   }
 
   /**
-   * @func getSubChapterName()
-   * @param {*} state || props
-   * @return {*string || null}
+   * @func componentWillMount()
+   * @desc react life cycle
+  */
+  componentWillMount(){
+    this.getSubChapterDetails();
+  }
+  
+  /**
+   * @param {*subChapterId} 
+   * @func getSubChapterDetails();
+   * @return {*subChapterName}
+   * @type {*async}
    */
-  getSubChapterName() {
-    let data = [];
-    const { userType } = this.state;
-    if (userType != "All") {
-      data = this.state.data;
-    } else {
-      data = this.props.data;
-    }
-    return data.length && data[0] && data[0].subChapterName ? data[0].subChapterName : null;
+  async getSubChapterDetails() {
+    const { subChapterId } = this.props.config.params;
+    const response = await fetchSubChapterDetails(subChapterId);
+    if (response)
+      this.setState({ subChapterName: response.subChapterName })
   }
 
   /**
    * @func getSelectedCommunityName()
    * @param {*} communityName
-   * @return {*string || null}
+   * @return {*void}
+   * @desc making the state set
    */
-  getSelectedCommunityName() {
-    return (this.communityName != 'All') && (this.communityName != '') ? ' :' + this.communityName : null;
+  setCommunityName(communityType) {
+    const communityName = (communityType != 'All') && (communityType != '') ? ' : ' + communityType : null;
+    this.setState({ communityName })
+  }
+
+  /**
+   * @func getNullDataResult()
+   * @desc called if null response from data
+   * @return {*HTML}
+   */
+  getNullDataResult() {
+    const { userType } = this.props.config && this.props.config.params ? this.props.config.params : { userType: '' };
+    return (
+      <p className="col-md-8 alert alert-info col-md-offset-2 map_alert">
+        There is no {userType} portfolios to be shown
+      </p>
+    )
+  }
+  /**
+   * @func getPageCounter()
+   * @desc called on page header
+   * @return {*string}
+   */
+  getPageCounter(){
+    const { count, data } = this.props.config && this.props.config.data ? this.props.config.data : { count: 0, data: [] };
+    return <span className='count_text'>Showing {data.length}  of {count} results</span>;
+  }
+
+  /**
+   * @desc called at render
+   * @param {*string} communityCode 
+   * @param {*boolean} isInternaluser 
+   * @type switch case
+   * @return {*string}
+   */
+  getCommunityIcon(communityCode, isInternaluser) {
+    switch (communityCode) {
+      case 'IDE':
+        return 'ideator';
+      case 'FUN':
+        return 'funder';
+      case 'STU':
+        return 'startup';
+      case 'CMP':
+        return 'company';
+      case 'SPS':
+        return 'users';
+      case 'INS':
+        return 'institutions';
+      default:
+        return 'moolya-symbol'
+    }
   }
 
   render(){
+    const _this = this;
+    const { subChapterName, communityName } = this.state;
     let data= [];
     if(this.state.userType != "All"){
       data=this.state.data;
@@ -137,21 +199,7 @@ export default class MlCommunityList extends Component {
   // );
 
     const list=  data.map(function(prop, idx){
-
-      if(prop.communityCode == "IDE")
-        icon = "ideator"
-      else if(prop.communityCode == "FUN")
-        icon = "funder"
-      else if(prop.communityCode == "STU")
-        icon = "startup"
-      else if(prop.communityCode == "CMP")
-        icon = "company"
-      else if(prop.communityCode == "SPS")
-        icon = "users"
-      else if(prop.communityCode == "INS")
-        icon = "institutions"
-      else if(prop.profile.isInternaluser)
-        icon = "moolya-symbol"
+      icon = _this.getCommunityIcon(prop.communityCode, prop.profile.isInternaluser);
 
       return (
         <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
@@ -205,15 +253,33 @@ export default class MlCommunityList extends Component {
             </a>
           </div>
         <div className="col-md-12">
-          <h2>Communities {this.getSubChapterName()} {this.getSelectedCommunityName()}</h2>
+          <h2>Communities {subChapterName} {communityName} {this.getPageCounter()}</h2>
           <div className="row ideators_list">
-            {list}
+            {list && list.length ? list : this.getNullDataResult()}
           </div>
           </div>
       </div>
         );
 
   }
-
 }
 
+/************<code_backup>*****************/
+/**
+ * wrt: getCommunityIcon()
+ */
+// if(prop.communityCode == "IDE")
+      //   icon = "ideator"
+      // else if(prop.communityCode == "FUN")
+      //   icon = "funder"
+      // else if(prop.communityCode == "STU")
+      //   icon = "startup"
+      // else if(prop.communityCode == "CMP")
+      //   icon = "company"
+      // else if(prop.communityCode == "SPS")
+      //   icon = "users"
+      // else if(prop.communityCode == "INS")
+      //   icon = "institutions"
+      // else if(prop.profile.isInternaluser)
+      //   icon = "moolya-symbol"
+/************<end_code_backup>*****************/

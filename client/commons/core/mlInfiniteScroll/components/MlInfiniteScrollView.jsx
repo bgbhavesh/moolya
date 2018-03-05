@@ -21,9 +21,33 @@ export default class MlInfiniteScrollView extends Component {
     super(props);
   }
 
+  /**
+   * @todo :: need to make the dynamic with the dynamic content, don't use the dependency on the URL.
+   */
   componentDidMount() {
     var WinHeight = $(window).height();
-    $('.infinite_scroll').height(WinHeight - (120 + $('.app_header').outerHeight(true)));
+    $('.infinite_scroll').height(WinHeight - (70 + $('.app_header').outerHeight(true)));
+    //replace with props content
+    setTimeout(function(){
+    const url = window.location.pathname;
+    const comType = url.substring(url.lastIndexOf('/')+1);
+    let PageTitle = "";
+    if(comType == "company"){
+      PageTitle = "Companies";
+    }else if(comType == "ideator"){
+      PageTitle = "Ideators";
+    }else if(comType == "startup"){
+      PageTitle = "Startups";
+    }else if(comType == "investor"){
+      PageTitle = "Investors";
+    }else if(comType == "serviceProvider"){
+      PageTitle = "Service Providers";
+    }else if(comType == "institution"){
+      PageTitle = "Institutions";
+    }
+    $("#pageTitle").text(PageTitle);
+  },200);
+  //replace with props content
   }
 
   render() {
@@ -31,6 +55,9 @@ export default class MlInfiniteScrollView extends Component {
     let pConfig=_.extend(this.props.config);
     let ListComponent =React.cloneElement(viewComponent,{data:data, config:pConfig});
     return (
+      <div>
+      <div className="col-md-12"><h2 id="pageTitle"></h2></div>
+      <br className="brclear"/>
       <div className="infinite_scroll">
         <ScrollArea
         speed={0.8}
@@ -40,6 +67,7 @@ export default class MlInfiniteScrollView extends Component {
         >
           {ListComponent}
         </ScrollArea>
+      </div>
       </div>
       )
   }

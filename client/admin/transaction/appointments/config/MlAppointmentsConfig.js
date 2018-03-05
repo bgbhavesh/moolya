@@ -21,7 +21,7 @@ function createdateFormatter (data){
   console.log(data)
   let createdAt=data&&data.data&&data.data.createdAt;
   if(createdAt){
-    return <div>{moment(createdAt).format('DD-MM-YYYY HH:mm:ss')}</div>;
+    return <div>{moment(createdAt).format(Meteor.settings.public.dateFormat)}</div>;
   }
   else {
     return <div></div>

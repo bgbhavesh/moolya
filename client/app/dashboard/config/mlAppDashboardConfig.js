@@ -145,7 +145,6 @@ export const mlDashboardListConfig=new MlAppViewer({
                           portfolioId
                           isActive
                           accountType
-                          subChapterName
                       }
                    }                                                                                                     
                 }

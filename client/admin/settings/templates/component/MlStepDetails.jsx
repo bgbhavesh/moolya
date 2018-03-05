@@ -36,7 +36,7 @@ export default class MlStepDetails extends Component {
       for(let i=0;i<assignedTemplates.length;i++){
         let json = {
           templateCode:assignedTemplates[i].templateCode,
-          date: moment(assignedTemplates[i].createdDate).format('MM-DD-YYYY hh:mm:ss'),
+          date: moment(assignedTemplates[i].createdDate).format(Meteor.settings.public.dateFormat),
           templateName: assignedTemplates[i].templateName,
           isActive:assignedTemplates[i].isActive,
           view: 'Yes',

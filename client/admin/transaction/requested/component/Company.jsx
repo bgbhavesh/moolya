@@ -307,7 +307,7 @@ export default class Company extends React.Component{
     let companytypesOption={options: { variables: {type : "COMPANYTYPE",hierarchyRefId:this.props.registrationInfo.clusterId}}};
 
     let businesstypesquery=gql` query{
-    data:fetchBusinessTypes{label:businessTypeName,value:_id}
+    data:fetchBusinessTypes{label:businessTypeDisplayName,value:_id}
     }
     `;
 
@@ -327,7 +327,7 @@ export default class Company extends React.Component{
     }
     `;*/
     let entitiesquery = gql`query{
-    data:fetchEntities {label:entityName,value:_id  }
+    data:fetchEntities {label:entityDisplayName,value:_id  }
     }
     `;
     let industriesquery=gql` query{
@@ -358,7 +358,7 @@ export default class Company extends React.Component{
     `;
 
     let subDomainQuery = gql`query($industryId: String){
-      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+      data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
     `;
 
@@ -386,7 +386,7 @@ export default class Company extends React.Component{
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY HH:mm:ss')} disabled="true"/>
+                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format(Meteor.settings.public.dateFormat)} disabled="true"/>
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Request Id" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationId} disabled="true"/>

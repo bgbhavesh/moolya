@@ -128,7 +128,7 @@ export default class MlAppFilterContainer extends Component {
         for(let variable in variables){
           let objectValue = variables[variable];
           console.log('objectValue', objectValue, " adf ",variables, " adf ",variable);
-          console.log(objectValue.substr(0,2) );
+          // console.log(objectValue.substr(0,2) );
           if(objectValue.substr(0,2) === "$$"){
             let value = that.state.selectedList[objectValue.substr(2)];
             filter.graphQLOption.options.variables[variable] = value ? value : "";

@@ -107,8 +107,8 @@ export default class MlAppStartupListView extends Component {
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-          <div className="ideators_list">
-          <div className="col-md-12"> <h2>Startups</h2></div>
+          <div>
+          
             {data && !data.length?(
               <NoDataList profile={true} moduleName="user profiles" />
             ):(<div>{list}</div>)

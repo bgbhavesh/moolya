@@ -43,10 +43,10 @@ export default class MlAppIdeatorListView extends Component {
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-          <div className="ideators_list">
-          <div className="col-md-12">
+          <div>
+          {/* <div className="col-md-12">
             <h2>Ideators</h2>
-          </div>
+          </div> */}
           {data && !data.length?
             (<NoDataList profile={true} moduleName="user profiles" />):(
               <div>

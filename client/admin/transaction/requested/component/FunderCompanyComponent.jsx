@@ -395,7 +395,7 @@ export default class Company extends React.Component{
     `;
 
     let subDomainQuery = gql`query($industryId: String){
-      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+      data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
     `;
 

@@ -338,7 +338,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                   }
                 }
               };
-              let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName, isAnchor}}`;
+              let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:displayName, isAnchor}}`;
               return (
                 <div className="panel panel-default" key={id}>
                   <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"

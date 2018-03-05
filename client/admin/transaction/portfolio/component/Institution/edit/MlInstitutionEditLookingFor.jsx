@@ -226,7 +226,7 @@ export default class MlInstitutionEditLookingFor extends Component {
   render() {
     let query = gql`query($communityCode:String){
         data:fetchLookingFor(communityCode:$communityCode) {
-          label:lookingForName
+          label:lookingForDisplayName
           value:_id
           about
         }

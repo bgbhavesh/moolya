@@ -385,14 +385,14 @@ export default class IdeatorIndividualComponent extends React.Component{
     }`;
     let citizenshipsquery=gql`query{
         data:FetchCitizenship {
-          label:citizenshipTypeName
+          label:citizenshipTypeDisplayName
           value:_id
         
         }
         }
      `;
     let subDomainQuery = gql`query($industryId: String){
-      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+      data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
     `;
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};

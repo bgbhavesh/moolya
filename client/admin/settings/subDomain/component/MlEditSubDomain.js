@@ -110,7 +110,7 @@ class MlEditSubDomain extends React.Component {
       }
     ];
     let industriesquery = gql` query{
-    data:fetchIndustries{label:industryName,value:_id}
+    data:fetchIndustries{label:industryDisplayName,value:_id}
     }`;
 
     const showLoader = this.state.loading;

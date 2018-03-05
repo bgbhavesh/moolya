@@ -367,7 +367,7 @@ export default class Individual extends React.Component{
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.props.clusterId}}};
     let citizenshipsquery=gql`query{
         data:FetchCitizenship {
-          label:citizenshipTypeName
+          label:citizenshipTypeDisplayName
           value:_id
         
         }
@@ -394,7 +394,7 @@ export default class Individual extends React.Component{
 
 
     let subDomainQuery = gql`query($industryId: String){
-      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+      data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
     `;
 

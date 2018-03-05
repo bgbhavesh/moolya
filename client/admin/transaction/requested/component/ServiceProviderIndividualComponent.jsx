@@ -356,7 +356,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
      `;
 
     let subDomainQuery = gql`query($industryId: String){
-      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+      data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
     `;
     let employmentOption={options: { variables: {type : "EMPLOYMENTTYPE",hierarchyRefId:this.props.clusterId}}};
@@ -389,7 +389,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     }`;
     let citizenshipsquery=gql`query{
         data:FetchCitizenship {
-          label:citizenshipTypeName
+          label:citizenshipTypeDisplayName
           value:_id
         
         }

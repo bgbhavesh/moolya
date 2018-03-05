@@ -88,7 +88,7 @@ export default class CreateRequestComponent extends Component {
   render() {
     let requestTypeQuery=gql`query{
       data:FetchRequestType {
-        label:requestName
+        label:displayName
         value:_id
       }
     }`;

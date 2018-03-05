@@ -515,21 +515,21 @@ export default class step1 extends React.Component{
     let userTypequery = gql` query($communityCode:String){  
     data:FetchUserType(communityCode:$communityCode) {
       value:_id
-      label:userTypeName
+      label:displayName
   }  }
     `;
     let industriesquery=gql` query{
-    data:fetchIndustries{label:industryName,value:_id}
+    data:fetchIndustries{label:industryDisplayName,value:_id}
     }
     `;
 
     let accountsquery=gql `query{
-    data: FetchAccount {label:accountName,value: _id}
+    data: FetchAccount {label:accountDisplayName,value: _id}
 }
 `;
     let professionQuery=gql` query($industryId:String){
       data:fetchIndustryBasedProfession(industryId:$industryId) {
-        label:professionName
+        label:professionDisplayName
         value:_id
       }
     }`;

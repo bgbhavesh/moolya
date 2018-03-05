@@ -11,6 +11,7 @@ import controllable from 'react-controllables';
 import MapCluster from '../../../commons/components/map/MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import  NoMarkerDataMessage  from '../../../commons/components/map/NoMarkerDataMessage';
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -79,7 +80,7 @@ export default class MlDashboardMapView extends Component {
   onStatusChange(userType,e) {
     // const data = this.state.data;
     if (userType) {
-      //this.setState({userType: userType});
+      this.setState({userType: userType});
       // console.log(this.props);
       let variables={};
       let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
@@ -142,6 +143,7 @@ export default class MlDashboardMapView extends Component {
 
     return (
       <span>
+        {this.props.data&& this.props.data.length === 0 && this.state.userType && <NoMarkerDataMessage userType={this.state.userType}/>}
         {communityIconList}
         {/*<MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
         <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>

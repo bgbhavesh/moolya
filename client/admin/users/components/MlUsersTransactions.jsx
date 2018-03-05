@@ -31,7 +31,7 @@
 //           status:requestDetails[i].status,
 //           transactionId:requestDetails[i].transactionId,
 //           transactionType:requestDetails[i].transactionType,
-//           createdAt:moment(requestDetails[i].createdAt).format('MM/DD/YYYY HH:mm:ss'),
+//           createdAt:moment(requestDetails[i].createdAt).format(Meteor.settings.public.dateFormat),
 //           clusterName:requestDetails[i].cluster,
 //           chapterName:requestDetails[i].chapter,
 //           subChapterName:requestDetails[i].subChapter,

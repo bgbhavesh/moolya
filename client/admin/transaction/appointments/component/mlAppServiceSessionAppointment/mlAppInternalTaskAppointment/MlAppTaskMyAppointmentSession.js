@@ -142,10 +142,10 @@ export default class MlAppTaskMyAppointmentSession extends Component {
                   <div className="col-md-9">
                     <br />
                     <div className="form-group">
-                      <input className="form-control float-label" type="text" placeholder="Start Date Time" defaultValue={data.startDate ? new Moment(data.startDate).format('MM-DD-YYYY HH:mm:ss') : ''} id="" disabled />
+                      <input className="form-control float-label" type="text" placeholder="Start Date Time" defaultValue={data.startDate ? new Moment(data.startDate).format(Meteor.settings.public.dateFormat) : ''} id="" disabled />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="End Date Time" defaultValue={data.endDate ? new Moment(data.endDate).format('MM-DD-YYYY HH:mm:ss') : ''} className="form-control float-label" id="" disabled />
+                      <input type="text" placeholder="End Date Time" defaultValue={data.endDate ? new Moment(data.endDate).format(Meteor.settings.public.dateFormat) : ''} className="form-control float-label" id="" disabled />
                     </div>
                   </div>
                 </div>

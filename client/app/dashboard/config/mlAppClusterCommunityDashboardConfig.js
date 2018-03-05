@@ -9,6 +9,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext';
 import MlAppClusterMapMarker from '../components/MlAppClusterMapMarker'
 import MlAppMapViewContainer from '../../core/containers/MlAppMapViewContainer';
 import MlAppMapMarker from '../components/MlAppMapMarker';
+import MlMapFooter from '../components/MlMapFooter';
 
 
 const mlAppClusterDashboardListConfig=new MlAppViewer({
@@ -80,7 +81,7 @@ const mlAppClusterCommunityDashboardMapConfig=new MlAppViewer({
   queryOptions:true,
   buildQueryOptions:(config)=>{
     let userType = localStorage.getItem('userType');
-    localStorage.removeItem('userType');
+    // localStorage.removeItem('userType');
     let queryObj = {
       userType: userType  || "All"
     };
@@ -91,6 +92,7 @@ const mlAppClusterCommunityDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppMapViewContainer/>,
   mapMarkerComponent:<MlAppMapMarker/>,
+  // mapFooterComponent:<MlMapFooter />,
   disableHover:true,
   // mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[

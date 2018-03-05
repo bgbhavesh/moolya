@@ -183,9 +183,9 @@ class MlAppSetCalendarVacation extends Component {
         vacationData.endDate = (typeof vacationData.endDate === 'object') ? new Moment(vacationData.endDate).format('DD-MM-YYYY') : vacationData.endDate;
         vacationData.endTime = (typeof vacationData.endTime === 'object') ? new Moment(vacationData.endTime).format('HH:mm:ss') : vacationData.endTime;
       }
-      let start = new Moment(vacationData.startDate + ' ' + vacationData.startTime, 'DD-MM-YYYY HH:mm:ss');
-      let end = new Moment(vacationData.endDate + ' ' + vacationData.endTime, 'DD-MM-YYYY HH:mm:ss');
-      this.isValidTime = new Moment(end, 'DD-MM-YYYY HH:mm:ss').isSameOrAfter(new Moment(start, 'DD-MM-YYYY HH:mm:ss'));
+      let start = new Moment(vacationData.startDate + ' ' + vacationData.startTime, Meteor.settings.public.dateFormat);
+      let end = new Moment(vacationData.endDate + ' ' + vacationData.endTime, Meteor.settings.public.dateFormat);
+      this.isValidTime = new Moment(end, Meteor.settings.public.dateFormat).isSameOrAfter(new Moment(start, Meteor.settings.public.dateFormat));
       if (!this.isValidTime) {
         toastr.error('Start datetime must be less than end datetime');
         this.isValid = false;

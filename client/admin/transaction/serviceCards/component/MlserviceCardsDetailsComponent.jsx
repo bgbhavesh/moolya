@@ -262,7 +262,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
                   <input type="text" placeholder="Transaction Id" value={that.props.data.transactionId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={that.props.data.createdAt ? moment(that.props.data.createdAt).format('DD-MM-YYYY HH:mm:ss') : ''} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={that.props.data.createdAt ? moment(that.props.data.createdAt).format(Meteor.settings.public.dateFormat) : ''} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">

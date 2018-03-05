@@ -71,7 +71,7 @@ export default class MlCustomFilterComponent extends Component {
   }
   onFromDateSelection(fieldName,subType,displayName,event) {
     if (event._d) {
-      let value = moment(event._d).format("MM/DD/YYYY HH:mm:ss");
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedFromDate: value});
       this.setFilterData(fieldName,value,displayName,null,"Date",subType)
     }
@@ -79,7 +79,7 @@ export default class MlCustomFilterComponent extends Component {
   onToDateSelection(fieldName,subType,displayName,event) {
     if (event._d) {
       //let value = moment(event._d).format(Meteor.settings.public.dateFormat);
-      let value = moment(event._d).format("MM/DD/YYYY HH:mm:ss");
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedToDate: value});
       this.setFilterData(fieldName,value,displayName,null,"Date",subType)
     }
@@ -188,7 +188,7 @@ export default class MlCustomFilterComponent extends Component {
         select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : "$and"}
         return select;
       case "Date":
-        //let dateTime = moment(selectedValue).format("MM/DD/YYYY HH:mm:ss");
+        //let dateTime = moment(selectedValue).format(Meteor.settings.public.dateFormat);
         let value= moment(selectedValue).startOf("day").toDate();
         if(selectedSubType==="from"){
           select= this.state.dateQuery

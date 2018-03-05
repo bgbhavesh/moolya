@@ -30,7 +30,7 @@ export function stringTitleAllFormatter(data){
  */
 export function dateTitleFormatter(data){
   if(data){
-    return moment(data).format('DD-MM-YYYY HH:MM:SS');
+    return moment(data).format(Meteor.settings.public.dateFormat);
   }else{
     return data;
   };

@@ -1910,10 +1910,17 @@ MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
   var chapterId = args.chapterId || ''
   var subChapterId = args.subChapterId || ''
   if (args.clusterId && args.chapterId && args.subChapterId) {
+    // query.push({
+    //   '$match': {
+    //     '$and': [{'profile.isInternaluser': true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isAnchor': true}],
+    //     '$or': [{'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': args.clusterId},
+    //       {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId': args.chapterId},
+    //       {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId': args.subChapterId}]
+    //   }
+    // })
     query.push({
       '$match': {
-        '$and': [{'profile.isInternaluser': true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isAnchor': true}],
-        '$or': [{'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': args.clusterId},
+        '$and': [{'profile.isInternaluser': true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isAnchor': true},{'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': args.clusterId},
           {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId': args.chapterId},
           {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId': args.subChapterId}]
       }

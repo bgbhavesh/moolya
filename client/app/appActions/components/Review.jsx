@@ -98,7 +98,7 @@ export default class Review extends React.Component {
                      <img src={review&&review.userProfileImage?generateAbsolutePath(review.userProfileImage):"/images/img2.png"} className="media-object" />
                    </div>
                    <div className="media-body rating_xs">
-                     <h4 className="media-heading">{review.userName}<span>{review.createdOn&& moment(review.createdOn).format('DD-MM-YYYY hh:mm:ss')}</span></h4>
+                     <h4 className="media-heading">{review.userName}<span>{review.createdOn&& moment(review.createdOn).format(Meteor.settings.public.dateFormat)}</span></h4>
                      <StarRatings initialRate={review.rating||0} readonly={true} /><div className="clearfix" />
                      {that.isEllipseRequired(review.message)?<p onClick={that.toggleView.bind(that,'viewDetails',review)}>{that.applyEllipse(review.message)}</p>:<p>{review.message}</p>}
                    </div>
@@ -116,7 +116,7 @@ export default class Review extends React.Component {
                     <img src={this.state.selectedReview&&this.state.selectedReview.userProfileImage?generateAbsolutePath(this.state.selectedReview.userProfileImage):"/images/img2.png"} className="media-object" />
                   </div>
                   <div className="media-body rating_xs">
-                    <h4 className="media-heading">{this.state.selectedReview.userName}<span>{this.state.selectedReview.createdOn&& moment(this.state.selectedReview.createdOn).format('DD-MM-YYYY hh:mm:ss')}</span></h4>
+                    <h4 className="media-heading">{this.state.selectedReview.userName}<span>{this.state.selectedReview.createdOn&& moment(this.state.selectedReview.createdOn).format(Meteor.settings.public.dateFormat)}</span></h4>
                     <StarRatings initialRate={this.state.selectedReview.rating||0} readonly={true} /><div className="clearfix" />
                     <p>{this.state.selectedReview.message}</p>
                   </div>

@@ -20,7 +20,7 @@ import {client} from '../../../core/apolloConnection';
 function createdateFormatter (data){
   let createdAt=data&&data.data&&data.data.updatedAt;
   if(createdAt){
-    return <div>{moment(createdAt).format('DD-MM-YYYY HH:mm:ss')}</div>;
+    return <div>{moment(createdAt).format(Meteor.settings.public.dateFormat)}</div>;
   }
   else {
     return <div></div>
@@ -29,7 +29,7 @@ function createdateFormatter (data){
 function updatedateFormatter (data){
   let updateDate=data&&data.data&&data.data.updatedDate;
   if(updateDate){
-    return <div>{moment(updateDate).format('DD-MM-YYYY HH:mm:ss')}</div>;
+    return <div>{moment(updateDate).format(Meteor.settings.public.dateFormat)}</div>;
   }
   else {
     return <div></div>

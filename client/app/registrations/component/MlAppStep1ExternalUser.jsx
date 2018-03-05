@@ -339,7 +339,7 @@ export default class MlAppStep1ExternalUser extends Component {
                   <form>
                     <div className="form-group">
                       <input type="text" ref="datetime" placeholder="Date & Time"
-                             defaultValue={moment(that.state.registrationDetails && that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')}
+                             defaultValue={moment(that.state.registrationDetails && that.state.registrationDetails.registrationDate).format(Meteor.settings.public.dateFormat)}
                              className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">

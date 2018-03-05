@@ -589,7 +589,7 @@ export default class step1 extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY HH:mm:ss')} className="form-control float-label" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format(Meteor.settings.public.dateFormat)} className="form-control float-label" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" disabled="true"/>

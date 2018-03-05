@@ -1093,8 +1093,11 @@ MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context
           case 'Pending':
             status = 'Pending';
             break;
+          case 'Rejected':
+          status = 'Rejected';
+          break;
           case 'Accepted':
-            status = 'Started';
+            status = 'Accepted';
             break;
           case 'Completed':
             status = 'Completed';

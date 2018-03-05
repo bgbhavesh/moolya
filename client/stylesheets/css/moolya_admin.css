@@ -1748,6 +1748,7 @@ margin: 0px;
 .fil_active{font-weight: bold;}
 .ml_inner_btn .h_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ccc;top: 0px;}
 .ml_inner_btn .h_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ccc transparent transparent;top: 0px;}
+.count_text{float: right;position: relative;right: 30%;font-size: 14px;top: 10px;}
 /* .make-private-check{ position: relative; z-index: 9999 !important;} */
 
 .medium-popover .form-group .input_types input{position: relative; z-index: 9999 !important;}

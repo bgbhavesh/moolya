@@ -26,6 +26,15 @@ export default class MlDashboardMapView extends Component {
   }
   async componentWillMount() {
     let that = this;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position)=>{
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+        that.setState({lat,lng});
+      });
+    }
+
     let zoom = 1;
     let hasZoom=that.props.config.fetchZoom||false;
     if(hasZoom){
@@ -146,7 +155,7 @@ export default class MlDashboardMapView extends Component {
         {this.props.data&& this.props.data.length === 0 && this.state.userType && <NoMarkerDataMessage userType={this.state.userType}/>}
         {communityIconList}
         {/*<MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
-        <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
+        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
       </span>
     );
   }

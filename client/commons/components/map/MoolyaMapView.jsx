@@ -23,6 +23,15 @@ componentDidMount(){
   }
   async componentWillMount() {
     let that = this;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position)=>{
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+        that.setState({lat,lng});
+      });
+    }
+
     let zoom = 1;
     let hasZoom=that.props.fetchZoom||false;
     if(hasZoom){
@@ -166,8 +175,10 @@ componentDidMount(){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
     }
 
+    let count = this.props.data&&this.props.data.data?this.props.data.data.length : 0;
+
     if(this.props.mapFooterComponent){
-      MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props});
+      MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props,count:count});
     }
 
     let userType = this.state.userType || '';
@@ -222,7 +233,7 @@ componentDidMount(){
         }
         {
           MapComponent?MapComponent:
-            <MapCluster data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
+            <MapCluster lat={!pathUrl.includes('/admin')?this.state.lat:''} lng={!pathUrl.includes('/admin')?this.state.lng:''} data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
         }
         {/*{data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
           <div className="bottom_actions_block bottom_count">

@@ -1292,7 +1292,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .chapter_map .hex_btn{display: inline-block; background: #ef4647; border: 0px; line-height: 30px; font-weight: bold; position: relative; text-decoration: none; font-size: 12px; text-shadow: none; height: 30px;min-width: 20px;text-align: center;color: #fff;}
 .chapter_map .hex_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .chapter_map .hex_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
-.my-ml-pin1{font-size: 22px;color: #ef4647;}
+.my-ml-pin1{font-size: 32px;color: #ef4647;}
 .chapter_map .hex_btn.InvestorsHexaMarker{background: #82d51b;}
 .chapter_map .hex_btn.InvestorsHexaMarker:after{border-color: transparent transparent transparent #82d51b;}
 .chapter_map .hex_btn.InvestorsHexaMarker:before{border-color: transparent #82d51b transparent transparent;}

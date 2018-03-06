@@ -137,7 +137,7 @@ export default class MlDashboardMapView extends Component {
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
         </a>
         <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
-          <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+          <p className='title'>Institutions</p><span className="ml my-ml-Institutions ins" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
         </a>
       </div>
 

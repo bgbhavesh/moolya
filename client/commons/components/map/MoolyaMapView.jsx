@@ -182,7 +182,7 @@ componentDidMount(){
           {/*<p className='title'>{moduleName()}</p><span className={moduleClassName()+" br"} onClick={this.onStatusChange.bind(this, "Reset")}></span>*/}
         {/*</a>}*/}
         <a data-toggle="tooltip" title={moduleTooltipName() || 'All'} data-placement="bottom" className={userType?"All":"All active_community"} data-filter="all">
-          <p className='title'>{moduleName()||'All'}</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
+          <p className='title'>{moduleName()||'All'}</p><span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
         </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className={userType ==='Startups'?"STU Startups active_community":"STU Startups"} data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
@@ -201,7 +201,7 @@ componentDidMount(){
         {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
         {/*</a>*/}
         <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className={userType ==='Institutions'?"Institutions active_community":"Institutions"} data-filter="institution">
-          <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+          <p className='title'>Institutions</p><span className="ml my-ml-Institutions ins" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
         </a>
         <a data-toggle="tooltip" title="Companies" data-placement="bottom" className={userType ==='Companies'?"Companies active_community":"Companies"} data-filter="company">
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>

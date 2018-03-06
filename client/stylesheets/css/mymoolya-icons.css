@@ -13,6 +13,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.my-ml-pin:before {
+  content: "\ea0f";
+}
+.my-ml-pin1:before {
+  content: "\ea10";
+}
 .my-ml-enter_arrow:before {
   content: "\ea0d";
 }

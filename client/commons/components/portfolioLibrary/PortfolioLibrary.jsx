@@ -1603,6 +1603,7 @@ setTimeout(function(){
   }
 
   componentDidUpdate() {
+    
     $(".icon_count").click(function () {
       $(this).parents('.thumbnail').find(".fa-times").show();
       $(this).parents('.thumbnail').find(".show_details").show();
@@ -1622,6 +1623,13 @@ setTimeout(function(){
       $(this).parents('.thumbnail').find(".input_types").show();
 
     });
+    setTimeout(function(){
+      var mySwiper = new Swiper('.manage_tasks', {
+        slidesPerView: 'auto',
+        speed: 400,
+        spaceBetween: 5
+    });
+  },300);
   }
 
   /**

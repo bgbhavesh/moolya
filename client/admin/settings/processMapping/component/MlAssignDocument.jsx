@@ -111,13 +111,13 @@ export default class MlAssignDocument extends React.Component {
     let that=this;
 
     let docTypequery=gql` query{
-    data:fetchDocumentsType{label:docTypeName,value:_id}
+    data:fetchDocumentsType{label:docTypeDisplayName,value:_id}
     }
 `;
     let docKycquery=gql`query($documentTypeId:String,$clusterId:[String],$chapterId:[String],$subChapterId:[String]){
   data:fetchKycDocProcessMapping(documentTypeId:$documentTypeId,clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId) {
     value:_id
-		label:docCategoryName
+		label:docCategoryDisplayName
   }
 }
 `;

@@ -219,15 +219,15 @@ class MlAddProcessMapping extends React.Component{
     let fetchUsers = gql` query($communityId:[String]){  
     data:FetchUserTypeForMultiSelect(communityId:$communityId) {
       value:_id
-      label:userTypeName
+      label:displayName
   }  }
     `;
     let industriesquery=gql` query{
-    data:fetchIndustries{label:industryName,value:_id}
+    data:fetchIndustries{label:industryDisplayName,value:_id}
     }
 `;
     let professionquery=gql` query($industry:[String]!){
-    data:FetchProfessionIndustry(industry:$industry){label:professionName,value:_id}
+    data:FetchProfessionIndustry(industry:$industry){label:professionDisplayName,value:_id}
     }
 `;
     let clusterquery=gql`  query{

@@ -429,7 +429,7 @@ export default class MlAppFunderCompanyComponent extends React.Component {
                   <form>
                     <div className="form-group">
                       <input type="text" placeholder="Date & Time" className="form-control float-label" id=""
-                             defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY hh:mm:ss')}
+                             defaultValue={moment(this.props.registrationInfo.registrationDate).format(Meteor.settings.public.dateFormat)}
                              disabled="true"/>
                     </div>
                     <div className="form-group">

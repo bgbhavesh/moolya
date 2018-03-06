@@ -170,7 +170,6 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
     var differences = diff(oldObject, newObject);
     //console.log(differences)
     var filteredObject = _underscore.where(differences, {kind: "E"});
-    console.log("///////////////////////////////////////////////")
     console.log(differences)
     if(filteredObject && filteredObject.length>0){
       return false
@@ -403,7 +402,7 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
                 <div>
                   <div className="form-group">
                     <input type="text" placeholder="Date & Time" className="form-control float-label" id=""
-                           defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY hh:mm:ss')}
+                           defaultValue={moment(this.props.registrationInfo.registrationDate).format(Meteor.settings.public.dateFormat)}
                            disabled="true"/>
                   </div>
                   <div className="form-group">

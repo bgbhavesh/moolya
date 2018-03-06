@@ -169,7 +169,7 @@ export default class MlAppMemberDetails extends React.Component{
                     <input type="text" placeholder="Phone Number" defaultValue=" " value={this.state.memberInfo.mobileNumber} disabled={true} className="form-control float-label" id="cluster_name"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Joining Date" defaultValue=" " value={this.state.memberInfo.joiningDate ? moment(this.state.memberInfo.joiningDate).format('MM/DD/YYYY HH:mm:ss') : ' '} disabled={true} className="form-control float-label" id="cluster_name"/>
+                    <input type="text" placeholder="Joining Date" defaultValue=" " value={this.state.memberInfo.joiningDate ? moment(this.state.memberInfo.joiningDate).format(Meteor.settings.public.dateFormat) : ' '} disabled={true} className="form-control float-label" id="cluster_name"/>
                   </div>
 
                   <div className="form-group">

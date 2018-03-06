@@ -126,8 +126,8 @@ export default class MlAppCompanyListView extends Component {
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-      <div className="ideators_list">
-      <div className="col-md-12"><h2>Companies</h2></div>
+      <div>
+      {/* <div className="col-md-12"><h2>Companies</h2></div> */}
       {data && !data.length?(
         <NoDataList profile={true} moduleName="user profiles" />
       ):(<div>{list}</div>)

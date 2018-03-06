@@ -15,7 +15,7 @@ function ipAddressFormatter(data){
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.timeStamp?data.data.timeStamp:null;
-  return <div>{createdDateTime&&moment(createdDateTime).format('DD-MM-YYYY hh:mm:ss')}</div>;
+  return <div>{createdDateTime&&moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
 }
 
 

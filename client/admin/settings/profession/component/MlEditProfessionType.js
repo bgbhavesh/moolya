@@ -92,7 +92,7 @@ class MlEditProfessionType extends React.Component{
 
   render(){
     let query = gql` query{
-  data:fetchIndustries{label:industryName,value:_id}
+      data:fetchIndustries{label:industryDisplayName,value:_id}
 }
 `;
 

@@ -6,7 +6,7 @@ export default class MlAppMemberSchedule extends React.Component{
   render(){
     return (
       <div className="text-center">
-        Will be updated soon.
+        Will be updated soon
       </div>
     )
   }

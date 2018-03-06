@@ -5,7 +5,7 @@ import moment from 'moment'
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.createdDateTime;
-  return <div>{moment(createdDateTime).format('DD/MM/YYYY, hh:mm:ss')}</div>;
+  return <div>{moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
 }
 
 const mlTransactionTypeTableConfig=new MlViewer.View({

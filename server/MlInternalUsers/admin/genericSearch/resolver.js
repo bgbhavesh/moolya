@@ -1111,7 +1111,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             $filter: {
               input: "$transactionLogs",
               as: "transaction",
-              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] }
+              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] } 
             }
           }
         }
@@ -1152,7 +1152,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         'appointment'
       ];
       if( transactionsTypeCheck.indexOf(transactionType) >= 0 ) {
-        if(doc.fromUserType === 'user') {
+        if(doc.fromUserType === 'user') { 
           let fromUserProfile;
           if(doc.fromProfileId) {
             fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
@@ -1166,6 +1166,20 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
           doc.email = fromUserProfile.email;
           doc.createdby = fromUserProfile.firstName + ' ' + fromUserProfile.lastName;
           doc.mobileNumber = fromUserProfile.mobileNumber;
+        }
+        if(transactionType === "appointment") {
+          let data = mlDBController.findOne('MlAppointments', {"appointmentId":doc.docId});
+          if(data && data.status){
+            if(data.endDate ||  data.startDate){
+              let appDate = new Date(data.endDate)
+              let isExpired = new Date() > appDate ? true : false;
+              let ifEqual =  new Date().setHours(0,0,0,0) === new Date(data.startDate).setHours(0,0,0,0);
+              //let currentStatus = data.status === "Accepted" ? true : false;
+              if(isExpired) doc.status = "Expired";
+              else if (ifEqual && data.status !== "Completed") doc.status = "Today";
+              else doc.status = data.status;
+            } 
+          } 
         }
         let activity = doc.activity;
         let activityDocId = doc.activityDocId;

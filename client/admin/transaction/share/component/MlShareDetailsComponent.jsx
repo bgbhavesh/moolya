@@ -66,9 +66,9 @@ export default class MlShareDetailsComponent extends React.Component {
     let users = this.state && this.state.data && this.state.data.users ? this.state.data.users : [];
     let files = this.state && this.state.data && this.state.data.files ? this.state.data.files : [];
     let transId = this.state && this.state.shareId ? this.state.shareId : '';
-    let createdAt = that.state.data && that.state.data.createdAt ? moment(that.state.data.createdAt).format('DD-MM-YYYY hh:mm:ss'):"";
-    let sharedStartDate = that.state.data && that.state.data.sharedStartDate ? moment(that.state.data.sharedStartDate).format('DD-MM-YYYY hh:mm:ss'):"";
-    let sharedEndDate = that.state.data && that.state.data.sharedEndDate ? moment(that.state.data.sharedEndDate).format('DD-MM-YYYY hh:mm:ss'):"";
+    let createdAt = that.state.data && that.state.data.createdAt ? moment(that.state.data.createdAt).format(Meteor.settings.public.dateFormat):"";
+    let sharedStartDate = that.state.data && that.state.data.sharedStartDate ? moment(that.state.data.sharedStartDate).format(Meteor.settings.public.dateFormat):"";
+    let sharedEndDate = that.state.data && that.state.data.sharedEndDate ? moment(that.state.data.sharedEndDate).format(Meteor.settings.public.dateFormat):"";
     // console.log('this.state', this.state);
     return (
       <div className="ml_tabs">

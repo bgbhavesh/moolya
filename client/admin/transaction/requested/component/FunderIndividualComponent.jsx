@@ -185,7 +185,6 @@ export default class Individual extends React.Component{
     }
     var differences = diff(oldObject, newObject);
     var filteredObject = _underscore.where(differences, {kind: "E"});
-    console.log("///////////////////////////////////////////////")
     console.log(differences)
     if(filteredObject && filteredObject.length>0){
       return false
@@ -367,7 +366,7 @@ export default class Individual extends React.Component{
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.props.clusterId}}};
     let citizenshipsquery=gql`query{
         data:FetchCitizenship {
-          label:citizenshipTypeName
+          label:citizenshipTypeDisplayName
           value:_id
         
         }
@@ -394,7 +393,7 @@ export default class Individual extends React.Component{
 
 
     let subDomainQuery = gql`query($industryId: String){
-      data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+      data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
     `;
 
@@ -425,7 +424,7 @@ export default class Individual extends React.Component{
               <form>
                 <div>
                   <div className="form-group">
-                    <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY hh:mm:ss')} disabled="true"/>
+                    <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format(Meteor.settings.public.dateFormat)} disabled="true"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}  disabled="true"/>

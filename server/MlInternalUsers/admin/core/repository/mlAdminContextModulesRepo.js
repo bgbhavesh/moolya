@@ -55,22 +55,56 @@ let CoreModules = {
     //let query=contextQuery;
     let countriesId = [];
     let activeCluster = [];
-    let activeCountries = mlDBController.find('MlCountries', {isActive: true}, context, {sort: {country: 1}}).fetch();
-    activeCountries.map(function (country) {
-      countriesId.push(country._id);
-    })
-    let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
+    let skipLimit = [];
+    // let activeCountries = mlDBController.find('MlCountries', {isActive: true}, context, {sort: {country: 1}}).fetch();
+    // activeCountries.map(function (country) {
+    //   countriesId.push(country._id);
+    // });
+    // let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
 
-    countriesId.map(function (id) {
-      Clusters.map(function (cluster) {
-        if (cluster.countryId == id) {
-          activeCluster.push(cluster);
-        }
-      })
-    })
-    const data = activeCluster;
+    // countriesId.map(function (id) {
+    //   Clusters.map(function (cluster) {
+    //     if (cluster.countryId == id) {
+    //       activeCluster.push(cluster);
+    //     }
+    //   })
+    // });
+    // const data = activeCluster;
     // const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-    return {totalRecords: Clusters.length, data: data};
+    let limit = fieldsProj.limit?JSON.parse(fieldsProj.limit):0;
+    let skip = fieldsProj.skip?JSON.parse(fieldsProj.skip):0;
+    let totalCount = [
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ];
+
+    /**
+    @func createPipeline
+    called to map countries and clusters
+    **/
+    let pipeline = createPipeline(resultantQuery);
+
+    if(limit){
+      skipLimit = [
+        {
+         '$skip': skip
+        },
+        {
+         '$limit': limit
+        }
+      ]
+    }
+    else {
+      skipLimit = [
+        {
+         '$skip': skip
+        }
+      ]
+    }
+    resQuery = pipeline.concat(skipLimit);
+    const countQuery = pipeline.concat(totalCount);
+    const totalSize = mlDBController.aggregate('MlClusters', countQuery);
+    const data = mlDBController.aggregate('MlClusters', resQuery, context);
+    return {totalRecords: totalSize[0].count, data: data};
   },
   MlChapterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
 
@@ -818,21 +852,58 @@ let CoreModules = {
     var activeCluster = [];
     var userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
     if (userProfile.hierarchyLevel == 4) {
-      let activeCountries = mlDBController.find('MlCountries', {isActive: true}, context, {sort: {country: 1}}).fetch();
-      activeCountries.map(function (country) {
-        countriesId.push(country._id);
-      })
-      let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
-      countriesId.map(function (id) {
-        Clusters.map(function (cluster) {
-          if (cluster.countryId == id) {
-            activeCluster.push(cluster);
-          }
-        })
-      })
-      const data = activeCluster;
-      const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-      return {totalRecords: totalRecords + 1, data: data};
+      // let activeCountries = mlDBController.find('MlCountries', {isActive: true}, context, {sort: {country: 1}}).fetch();
+      // activeCountries.map(function (country) {
+      //   countriesId.push(country._id);
+      // })
+      // console.log('The res q: ', JSON.stringify(resultantQuery));
+      // let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
+      // countriesId.map(function (id) {
+      //   Clusters.map(function (cluster) {
+      //     if (cluster.countryId == id) {
+      //       activeCluster.push(cluster);
+      //     }
+      //   })
+      // })
+      // const data = activeCluster;
+      // const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
+      // console.log('The value are:: ', totalRecords);
+      // return {totalRecords: totalRecords + 1, data: data};
+
+    let limit = fieldsProj.limit?JSON.parse(fieldsProj.limit):0;
+    let skip = fieldsProj.skip?JSON.parse(fieldsProj.skip):0;
+    let totalCount = [
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ];
+
+    /**
+    @func createPipeline
+    called to map countries and clusters
+    **/
+    let pipeline = createPipeline(resultantQuery);
+
+    if(limit){
+      skipLimit = [
+        {
+         '$skip': skip
+        },
+        {
+         '$limit': limit
+        }
+      ]
+    }
+    else {
+      skipLimit = [
+        {
+         '$skip': skip
+        }
+      ]
+    }
+    resQuery = pipeline.concat(skipLimit);
+    const countQuery = pipeline.concat(totalCount);
+    const totalSize = mlDBController.aggregate('MlClusters', countQuery);
+    const data = mlDBController.aggregate('MlClusters', resQuery, context);
+    return {totalRecords: totalSize[0].count, data: data};
     } else {
       let clusterIds = userProfile && userProfile.defaultCluster ? userProfile.defaultCluster : [];
       resultantQuery = {_id: {$in: [clusterIds]}}
@@ -1254,3 +1325,42 @@ let CoreModules = {
 
 
 export default CoreModulesRepo = CoreModules;
+
+
+/********************************************functions <start>*********************************************************/
+
+const createPipeline=(resultantQuery)=> {
+  return pipeline = [
+    {
+      '$lookup':
+        {
+          from: 'mlCountries',
+          localField: 'countryId',
+          foreignField: '_id',
+          as: 'clusters'
+        }
+    },
+    { $unwind: { path: '$clusters', preserveNullAndEmptyArrays: true } },
+    {
+      '$redact': {
+        '$cond': [
+          {
+            '$and': [
+              { '$eq': [ "$clusters.isActive", true ] }
+            ]
+          },
+          "$$KEEP",
+          "$$PRUNE"
+        ]
+      }
+    },
+    {
+      '$sort':{"countryName":1}
+    },
+    {
+      '$match': resultantQuery
+    }
+  ];
+};
+
+/********************************************functions <end>***********************************************************/

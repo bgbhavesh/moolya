@@ -4,6 +4,14 @@ import gql from 'graphql-tag'
 import MlInternalRequestDetailsComponent from '../../internalRequests/component/MlInternalRequestDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import {client} from '../../../core/apolloConnection';
+import moment from "moment/moment";
+
+function dateFormatter(data) {
+  let createdDateTime = data && data.data && data.data.transactionCreatedDate;
+  createdDateTime = createdDateTime ? createdDateTime: '';
+  return <div>{moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
+}
+
 const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
   module:"internalApprovedRequests",//Module name for filter.
@@ -25,7 +33,7 @@ const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
     {dataField: "transactionTypeName", title: "Transaction Type",dataSort:true,selectRow:true},
-    {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
+    {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true, customComponent: dateFormatter},
     {dataField: "status", title: "status",dataSort:true,selectRow:true},
     {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
   ],

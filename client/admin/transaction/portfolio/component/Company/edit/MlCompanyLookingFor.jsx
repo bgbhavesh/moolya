@@ -204,13 +204,13 @@ export default class MlComapanyLookingFor extends Component {
   render() {
     let query = gql`query($communityCode:String){
         data:fetchLookingFor(communityCode:$communityCode) {
-          label:lookingForName
+          label:lookingForDisplayName
           value:_id
           about
         }
       }`;
     const showLoader = this.state.loading;
-    let lookingOption = {options: {variables: {communityCode: "IDE"}}};
+    let lookingOption = {options: {variables: {communityCode: "CMP"}}};
     let that = this;
     let companyLookingForList = that.state.companyLookingForList || [];
     return (

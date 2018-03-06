@@ -1026,7 +1026,7 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
           }
           totalSessions += array[index].sessions.length;
         });
-        console.log("data.serviceTasks", data.serviceTasks);
+        
       }
     } else if (data.appointmentType === "INTERNAL-TASK") {
       data.sessions = data.sessions ? data.sessions : [];
@@ -1042,7 +1042,6 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
     arr[index].currentSession = currentSession;
     // console.log('Find Task', totalSessions, currentSession);
   });
-  console.log(result);
   return result;
 
 };
@@ -1094,8 +1093,11 @@ MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context
           case 'Pending':
             status = 'Pending';
             break;
+          case 'Rejected':
+          status = 'Rejected';
+          break;
           case 'Accepted':
-            status = 'Started';
+            status = 'Accepted';
             break;
           case 'Completed':
             status = 'Completed';

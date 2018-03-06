@@ -179,6 +179,15 @@ class MlAppOngoingSelectedMyAppointment extends Component {
           }
         ];
         break;
+        case 'today':
+        appActionConfig = [
+          {
+            showAction: true,
+            actionName: 'complete',
+            handler: async (event) => that.props.handler(that.updateAppointment.bind(this, 'Completed'))
+          }
+        ];
+        break;
       case 'rejected':
         appActionConfig = [
           {

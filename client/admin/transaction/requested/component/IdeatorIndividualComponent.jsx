@@ -170,7 +170,6 @@ export default class IdeatorIndividualComponent extends React.Component{
     var differences = diff(oldObject, newObject);
     //console.log(differences)
     var filteredObject = _underscore.where(differences, {kind: "E"});
-    console.log("///////////////////////////////////////////////")
     console.log(differences)
     if(filteredObject && filteredObject.length>0){
       return false

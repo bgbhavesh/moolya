@@ -18,6 +18,15 @@ export default class MlCommunityMapView extends Component {
   }
   async componentWillMount() {
     let that = this;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position)=>{
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+        that.setState({lat,lng});
+      });
+    }
+
     let zoom = 1;
     let loggedInUser = getAdminUserContext();
     if(loggedInUser.hierarchyLevel != 4){
@@ -132,7 +141,7 @@ export default class MlCommunityMapView extends Component {
     return (
       <span>
         {communityIconList}
-        <MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        <MapCommunity lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
       </span>
     );
   }

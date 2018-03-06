@@ -11,7 +11,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import { fetchSubChapterDetails } from '../../registrations/actions/findRegistration.js';
 
-export default class MlCommunityList extends Component {
+export default class MlAppDashboardListView extends Component {
   constructor(props){
     super(props);
     this.state = {

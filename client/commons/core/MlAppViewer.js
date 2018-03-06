@@ -31,6 +31,7 @@ const MlAppViewer = class {
     this.headerComponents = options.headerComponents;
     this.perPageLimit = options.perPageLimit;
     this.isApp = true;
+    this.mapFooterComponent = options.mapFooterComponent;
   }
 };
 

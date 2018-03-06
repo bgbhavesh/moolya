@@ -92,7 +92,7 @@ const mlAppClusterCommunityDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppMapViewContainer/>,
   mapMarkerComponent:<MlAppMapMarker/>,
-  // mapFooterComponent:<MlMapFooter />,
+  mapFooterComponent:<MlMapFooter />,
   disableHover:true,
   // mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[

@@ -61,7 +61,7 @@ class MlEditProcessMapping extends React.Component{
     var WinWidth = $(window).width();
     $('.main_wrap_scroll ').height(WinHeight-(168+$('.admin_header').outerHeight(true)));
 
-  
+
   }
   componentWillMount() {
     const resp=this.findProcess();
@@ -285,23 +285,23 @@ class MlEditProcessMapping extends React.Component{
   }
 }
 `;*/
-    let fetchUsers = gql` query($communityId:[String]){  
+    let fetchUsers = gql` query($communityId:[String]) {  
     data:FetchUserTypeForMultiSelect(communityId:$communityId) {
       value:_id
-      label:userTypeName
+      label:displayName
   }  }
     `;
-    let industriesquery=gql` query{
-    data:fetchIndustries{label:industryName,value:_id}
+    let industriesquery=gql` query {
+    data:fetchIndustries{label:industryDisplayName,value:_id}
     }
     `;
-    let professionquery=gql` query($industry:[String]!){
-    data:FetchProfessionIndustry(industry:$industry){label:professionName,value:_id}
+    let professionquery=gql` query($industry:[String]!) {
+    data:FetchProfessionIndustry(industry:$industry){label:professionDisplayName,value:_id}
     }
 `; let clusterquery=gql`  query{
   data:fetchActiveClusters{label:countryName,value:_id}
 }`;
-    let statesQuery=gql`query($clusters:[String]){  
+    let statesQuery=gql`query($clusters:[String]){ 
         data:FetchActiveStatesForCluster(clusters:$clusters) {
           value:_id
           label:name
@@ -341,7 +341,7 @@ console.log(this.state.industries);
         <div className="admin_padding_wrap">
           <h2>Edit Process</h2>
           <div className="main_wrap_scroll">
-            
+
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <Scrollbars

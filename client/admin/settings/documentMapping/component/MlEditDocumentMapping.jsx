@@ -286,19 +286,19 @@ class MlEditDocumentMapping extends React.Component{
     let kycCategoryquery=gql`query{  
   data:fetchKYCCategories{
     value:_id
-    label:docCategoryName
+    label:docCategoryDisplayName
   }  
 }`;
     let documentTypequery=gql`query{  
   data:fetchDocumentsType{
     value:_id
-    label:docTypeName
+    label:docTypeDisplayName
   }  
 }`;
     let documentFormatquery=gql`query{  
   data:fetchDocumentsFormat{
     value:_id
-    label:docFormatName
+    label:docFormatDisplayName
   }  
 }`;
 

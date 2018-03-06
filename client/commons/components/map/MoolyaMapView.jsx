@@ -193,7 +193,7 @@ componentDidMount(){
           {/*<p className='title'>{moduleName()}</p><span className={moduleClassName()+" br"} onClick={this.onStatusChange.bind(this, "Reset")}></span>*/}
         {/*</a>}*/}
         <a data-toggle="tooltip" title={moduleTooltipName() || 'All'} data-placement="bottom" className={userType?"All":"All active_community"} data-filter="all">
-          <p className='title'>{moduleName()||'All'}</p><span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
+          <p className='title'>{moduleName()||'All'}</p><span className={moduleClassName()|| "ml ml-select-all"} onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
         </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className={userType ==='Startups'?"STU Startups active_community":"STU Startups"} data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>

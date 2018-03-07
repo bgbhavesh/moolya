@@ -315,7 +315,7 @@ function moduleTooltipName(){
 
 function moduleClassName(){
   let path = FlowRouter._current.path;
-  if(path.includes('clusters')){
+  if(path === "/app/dashboard" || path === "/app/dashboard/true"){
     return 'ml my-ml-cluster';
   }
   if(path.includes('chapters')){

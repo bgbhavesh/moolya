@@ -178,6 +178,55 @@ class MlRegistrationRepo{
       }
     }
   }
+
+  /**
+   * @func createPayloadForPortfolio()
+   * @desc creating the payload for portfolio
+   *       1) if the communityCode is {*INS} removing the {*null} values 
+   *          under the condition of subdomain as we can not save the null value under subDomain
+   * @param {*object} regRecord 
+   * @return {*object}
+   */
+  createPayloadForPortfolio(regRecord) {   //communityCode
+    let portfolioPayload = {
+      "transactionType": "portfolio",
+      "communityType": regRecord.registrationInfo.communityDefName,
+      "communityCode": regRecord.registrationInfo.communityDefCode,
+      "clusterId": regRecord.registrationInfo.clusterId,
+      "chapterId": regRecord.registrationInfo.chapterId,
+      "subChapterId": regRecord.registrationInfo.subChapterId,
+      "communityId": regRecord.registrationInfo.communityId,
+      "createdAt": new Date(),
+      "source": "self",
+      "createdBy": "admin",
+      "status": "REG_PORT_KICKOFF",
+      "isPublic": false,
+      "isGoLive": false,
+      "isActive": false,
+      "portfolioUserName": regRecord.registrationInfo.userName,
+      "userId": regRecord.registrationInfo.userId,
+      "userType": regRecord.registrationInfo.userType,
+      contactNumber: regRecord.registrationInfo.contactNumber,
+      accountType: regRecord.registrationInfo.accountType,
+      registrationId: regRecord._id,
+      clusterName: regRecord.registrationInfo.clusterName,
+      chapterName: regRecord.registrationInfo.chapterName,
+      subChapterName: regRecord.registrationInfo.subChapterName,
+      communityName: regRecord.registrationInfo.communityName,
+      identityType: regRecord.registrationInfo.identityType,
+      industryId: regRecord.registrationInfo.industry,
+      subDomainId: regRecord && regRecord.registrationDetails && regRecord.registrationDetails.subDomain ? regRecord.registrationDetails.subDomain : null,
+      professionId: regRecord.registrationInfo.profession,
+      gender: regRecord.registrationDetails.gender,
+      employmentStatus: regRecord.registrationDetails.employmentStatus,
+      businessType: regRecord && regRecord.registrationDetails && regRecord.registrationDetails.businessType ? regRecord.registrationDetails.businessType : null,
+      stageOfCompany: regRecord && regRecord.registrationDetails && regRecord.registrationDetails.stageOfCompany ? regRecord.registrationDetails.stageOfCompany : null,
+      transactionCreatedDate: new Date()
+    }
+    if (portfolioPayload.communityCode === 'INS')
+      Object.keys(portfolioPayload).forEach((key) => (portfolioPayload[key] == null) && delete portfolioPayload[key]);
+    return portfolioPayload;
+  }
 }
 const mlRegistrationRepo = new MlRegistrationRepo();
 Object.freeze(mlRegistrationRepo);

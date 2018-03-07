@@ -98,9 +98,9 @@ export default class MlAppDashboardListView extends Component {
   componentWillMount(){
     this.getSubChapterDetails();
   }
-  
+
   /**
-   * @param {*subChapterId} 
+   * @param {*subChapterId}
    * @func getSubChapterDetails();
    * @return {*subChapterName}
    * @type {*async}
@@ -132,7 +132,7 @@ export default class MlAppDashboardListView extends Component {
     const { userType } = this.props.config && this.props.config.params ? this.props.config.params : { userType: '' };
     return (
       <p className="col-md-8 alert alert-info col-md-offset-2 map_alert">
-        There is no {userType} portfolios to be shown
+        There are no {userType} portfolios to be shown
       </p>
     )
   }
@@ -148,8 +148,8 @@ export default class MlAppDashboardListView extends Component {
 
   /**
    * @desc called at render
-   * @param {*string} communityCode 
-   * @param {*boolean} isInternaluser 
+   * @param {*string} communityCode
+   * @param {*boolean} isInternaluser
    * @type switch case
    * @return {*string}
    */
@@ -230,14 +230,14 @@ export default class MlAppDashboardListView extends Component {
             <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
               <p className='title'>All</p><span className="ml ml-select-all br br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
             </a>
-            <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
-              <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
+            <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
+              <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
             </a>
             <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN Investors" data-filter="funder">
               <p className='title'>Investors</p><span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
             </a>
-            <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
-              <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
+            <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
+              <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
             </a>
             <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
               <p className='title'>Service P</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
@@ -245,12 +245,13 @@ export default class MlAppDashboardListView extends Component {
             {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="" data-filter="browser">*/}
               {/*<span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
             {/*</a>*/}
+            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
+              <p className='title'>Institutions</p><span className="ml my-ml-Institutions ins" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+            </a>
             <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
               <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
             </a>
-            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
-              <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
-            </a>
+
           </div>
         <div className="col-md-12">
           <h2>Communities {subChapterName} {communityName} {this.getPageCounter()}</h2>

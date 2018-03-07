@@ -932,42 +932,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       MlNotificationController.onUserApproval(regRecord);
       MlSMSNotification.sendSMSonKYCApproved(regRecord)
       // mlSmsController
-
-      let portfolioDetails = {
-        "transactionType": "portfolio",
-        "communityType": regRecord.registrationInfo.communityDefName,
-        "communityCode": regRecord.registrationInfo.communityDefCode,
-        "clusterId": regRecord.registrationInfo.clusterId,
-        "chapterId": regRecord.registrationInfo.chapterId,
-        "subChapterId": regRecord.registrationInfo.subChapterId,
-        "communityId": regRecord.registrationInfo.communityId,
-        "createdAt": new Date(),
-        "source": "self",
-        "createdBy": "admin",
-        "status": "REG_PORT_KICKOFF",
-        "isPublic": false,
-        "isGoLive": false,
-        "isActive": false,
-        "portfolioUserName": regRecord.registrationInfo.userName,
-        "userId": regRecord.registrationInfo.userId,
-        "userType": regRecord.registrationInfo.userType,
-        contactNumber: regRecord.registrationInfo.contactNumber,
-        accountType: regRecord.registrationInfo.accountType,
-        registrationId: regRecord._id,
-        clusterName: regRecord.registrationInfo.clusterName,
-        chapterName: regRecord.registrationInfo.chapterName,
-        subChapterName: regRecord.registrationInfo.subChapterName,
-        communityName: regRecord.registrationInfo.communityName,
-        identityType: regRecord.registrationInfo.identityType,
-        industryId: regRecord.registrationInfo.industry,
-        subDomainId:regRecord&&regRecord.registrationDetails&&regRecord.registrationDetails.subDomain?regRecord.registrationDetails.subDomain:null,
-        professionId: regRecord.registrationInfo.profession,
-        gender: regRecord.registrationDetails.gender,
-        employmentStatus: regRecord.registrationDetails.employmentStatus,
-        businessType : regRecord&&regRecord.registrationDetails&&regRecord.registrationDetails.businessType?regRecord.registrationDetails.businessType:null,
-        stageOfCompany : regRecord&&regRecord.registrationDetails&&regRecord.registrationDetails.stageOfCompany?regRecord.registrationDetails.stageOfCompany:null,
-        transactionCreatedDate: new Date()
-      }
+      //creating payload for portfolio
+      let portfolioDetails = mlRegistrationRepo.createPayloadForPortfolio(regRecord);
       orderNumberGenService.assignPortfolioId(portfolioDetails)
 
       let registrationData = regRecord.registrationDetails;
@@ -1998,7 +1964,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, in
   }
 }
 
-
+//*****************************************************<function start>********************************************************************/
 headerCommunityDisplay = (registrationInfo, context) => {
   var subChapter = mlDBController.findOne('MlSubChapters', {_id: registrationInfo.subChapterId}) || {}
   var isMoolya = subChapter.isDefaultSubChapter
@@ -2033,3 +1999,4 @@ var setUserAgentForRegistration = (regObj,userAgent,ip)=>{
   }
   return regObj;
 }
+//*****************************************************<function end>********************************************************************/

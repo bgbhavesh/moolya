@@ -116,14 +116,12 @@ class MlGenericTransactions{
             let code = 401;
             let result =  {message:"Not available in hierarchy"}
             let response = new MlRespPayload().errorPayload(result, code);
-            // console.log(response);
             return response;
           }
       }else{
           let code = 401;
           let result =  {message:"Not available in hierarchy"}
           let response = new MlRespPayload().errorPayload(result, code);
-          // console.log(response);
           return response;
       }
   }
@@ -136,7 +134,6 @@ class MlGenericTransactions{
       let code = 401;
       let result = {message:"Transaction Error"}
       let response = new MlRespPayload().errorPayload(result, code);
-      console.log(response);
       return response;
     }
   }

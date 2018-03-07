@@ -1,9 +1,9 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
-import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+// import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import portfolioValidationRepo from '../portfolioValidation';
-import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController';
+// import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController';
 
 var _ = require('lodash')
 

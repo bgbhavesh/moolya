@@ -798,9 +798,9 @@ const getCategoryData = (type, id, query) => {
     {
       $addFields: {
         userCategory: [
-          { key: "accelerator", count: "$accelerator", icon: "ml my-ml-chapter" },
-          { key: "incubator", count: "$incubator", icon: "ml my-ml-chapter" },
-          { key: "co_working", count: "$co_working", icon: "ml my-ml-chapter" }]
+          { key: "accelerator", count: "$accelerator", icon: "ml my-ml-acce" },
+          { key: "incubator", count: "$incubator", icon: "ml my-ml-incu" },
+          { key: "co_working", count: "$co_working", icon: "ml my-ml-cowor" }]
       }
     },
     { $project: { userCategory: 1 } }
@@ -809,9 +809,9 @@ const getCategoryData = (type, id, query) => {
   const data = mlDBController.aggregate('MlSubChapters', pipeline);
   const emptyCategoryAry = [{
     userCategory: [
-      { key: "accelerator", count: 0, icon: "ml my-ml-chapter" },
-      { key: "incubator", count: 0, icon: "ml my-ml-chapter" },
-      { key: "co_working", count: 0, icon: "ml my-ml-chapter" }]
+      { key: "accelerator", count: 0, icon: "ml my-ml-acce" },
+      { key: "incubator", count: 0, icon: "ml my-ml-incu" },
+      { key: "co_working", count: 0, icon: "ml my-ml-cowor" }]
   }]
   return data.length ? data : emptyCategoryAry;
 }

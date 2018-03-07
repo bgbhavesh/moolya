@@ -8,6 +8,7 @@ import gql from 'graphql-tag'
 import MlDashboardMapView from '../components/MlAppDashboardMapView'
 import MlDashboardListView from '../components/MlAppDashboardListView'
 import MlAppMapMarker from '../components/MlAppMapMarker'
+import MlMapFooter from '../components/MlMapFooter';
 // import {getExternalUserContext} from '../../../commons/getExternalUserContext';
 
 export const mlDashboardMapConfig=new MlAppViewer({
@@ -46,6 +47,7 @@ export const mlDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlDashboardMapView params={this.params}/>,
     mapMarkerComponent:<MlAppMapMarker/>,
+  mapFooterComponent:<MlMapFooter />,
 
   actionConfiguration:[
   //   {

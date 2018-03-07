@@ -26,6 +26,15 @@ export default class MlDashboardMapView extends Component {
   }
   async componentWillMount() {
     let that = this;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position)=>{
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+        that.setState({lat,lng});
+      });
+    }
+
     let zoom = 1;
     let hasZoom=that.props.config.fetchZoom||false;
     if(hasZoom){
@@ -118,27 +127,30 @@ export default class MlDashboardMapView extends Component {
         <a data-toggle="tooltip" title="All" data-placement="bottom" className="All map_active_community" data-filter="all">
           <p className='title'>All</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
         </a>
-        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
-          <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
-        </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
         </a>
         <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN Investors" data-filter="funder">
           <p className='title'>Investors</p><span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
         </a>
+        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
+          <p className='title'>Ideators</p><span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
+        </a>
+
+
         <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
           <p className='title'>Service P</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
         </a>
         {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">*/}
         {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
         {/*</a>*/}
+        <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
+          <p className='title'>Institutions</p><span className="ml my-ml-Institutions ins" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+        </a>
         <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
         </a>
-        <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
-          <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
-        </a>
+
       </div>
 
     return (
@@ -146,7 +158,7 @@ export default class MlDashboardMapView extends Component {
         {this.props.data&& this.props.data.length === 0 && this.state.userType && <NoMarkerDataMessage userType={this.state.userType}/>}
         {communityIconList}
         {/*<MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
-        <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
+        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
       </span>
     );
   }

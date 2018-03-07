@@ -20,7 +20,8 @@ export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   queryOptions:true,
   buildQueryOptions:(config)=>{
 
-    let userType = localStorage.getItem('userType');
+    var userType = localStorage.getItem('userType');
+
     // localStorage.removeItem('userType');
     let queryObj = {
       clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
@@ -45,7 +46,7 @@ export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppMapViewContainer params={this.params}/>,
   mapMarkerComponent:<MlAppMapMarker />,
-  // mapFooterComponent:<MlMapFooter />,
+  mapFooterComponent:<MlMapFooter />,
 
   actionConfiguration:[
     {

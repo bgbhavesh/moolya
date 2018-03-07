@@ -57,10 +57,14 @@ export default class Step5 extends React.Component {
     setTimeout(function(){
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
-     },500);
+     },800);
     // this.props.getRegistrationKYCDetails()
     let communityType = this.props.registrationData&&this.props.registrationData.registrationInfo&&this.props.registrationData.registrationInfo.registrationType?this.props.registrationData.registrationInfo.registrationType:""
     this.setState({"communities" : communityType})
+  }
+  componentDidUpdate() {
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
   }
   
   componentWillMount() {

@@ -23,6 +23,15 @@ componentDidMount(){
   }
   async componentWillMount() {
     let that = this;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position)=>{
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+        that.setState({lat,lng});
+      });
+    }
+
     let zoom = 1;
     let hasZoom=that.props.fetchZoom||false;
     if(hasZoom){
@@ -166,8 +175,10 @@ componentDidMount(){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
     }
 
+    let count = this.props.data&&this.props.data.data?this.props.data.data.length : 0;
+
     if(this.props.mapFooterComponent){
-      MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props});
+      MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props,count:count});
     }
 
     let userType = this.state.userType || '';
@@ -182,7 +193,7 @@ componentDidMount(){
           {/*<p className='title'>{moduleName()}</p><span className={moduleClassName()+" br"} onClick={this.onStatusChange.bind(this, "Reset")}></span>*/}
         {/*</a>}*/}
         <a data-toggle="tooltip" title={moduleTooltipName() || 'All'} data-placement="bottom" className={userType?"All":"All active_community"} data-filter="all">
-          <p className='title'>{moduleName()||'All'}</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
+          <p className='title'>{moduleName()||'All'}</p><span className={moduleClassName()|| "ml ml-select-all"} onClick={this.onStatusChange.bind(this, moduleName()?"Reset":"All")}></span>
         </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className={userType ==='Startups'?"STU Startups active_community":"STU Startups"} data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
@@ -201,7 +212,7 @@ componentDidMount(){
         {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
         {/*</a>*/}
         <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className={userType ==='Institutions'?"Institutions active_community":"Institutions"} data-filter="institution">
-          <p className='title'>Institutions</p><span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+          <p className='title'>Institutions</p><span className="ml my-ml-Institutions ins" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
         </a>
         <a data-toggle="tooltip" title="Companies" data-placement="bottom" className={userType ==='Companies'?"Companies active_community":"Companies"} data-filter="company">
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
@@ -222,7 +233,7 @@ componentDidMount(){
         }
         {
           MapComponent?MapComponent:
-            <MapCluster data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
+            <MapCluster lat={!pathUrl.includes('/admin')?this.state.lat:''} lng={!pathUrl.includes('/admin')?this.state.lng:''} data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
         }
         {/*{data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
           <div className="bottom_actions_block bottom_count">
@@ -304,7 +315,7 @@ function moduleTooltipName(){
 
 function moduleClassName(){
   let path = FlowRouter._current.path;
-  if(path.includes('clusters')){
+  if(path === "/app/dashboard" || path === "/app/dashboard/true"){
     return 'ml my-ml-cluster';
   }
   if(path.includes('chapters')){

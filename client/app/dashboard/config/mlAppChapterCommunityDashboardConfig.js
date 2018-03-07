@@ -42,7 +42,7 @@ export const mlAppChapterCommunityDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppMapViewContainer params={this.params}/>,
   mapMarkerComponent:<MlAppMapMarker/>,
-  // mapFooterComponent:<MlMapFooter />,
+  mapFooterComponent:<MlMapFooter />,
 
   actionConfiguration:[
     {

@@ -56,6 +56,7 @@ let DocumentMapping = `
         documentType   : [String]
         validity  : Date
         isActive : Boolean
+        docCategoryDisplayName : String
       }
       input allowableFormat{
           id   :  String

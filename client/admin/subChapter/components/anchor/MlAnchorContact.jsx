@@ -8,11 +8,16 @@ import gql from 'graphql-tag';
 // import { findSubChapterActionHandler } from '../../actions/findSubChapter';
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
+import { valueFromAST } from 'graphql/utilities/valueFromAST';
 
 //todo:// replace set-time out for sending data to parent need to change
 export default class MlAnchorContact extends React.Component {
   constructor(props) {
     super(props);
+    // this.state = {
+    //   lat:'',
+    //   lng:''
+    // }
     this.sendDataToParent = this.sendDataToParent.bind(this);
     this.onChange = this.onChange.bind(this);
     this.selectUser = this.selectContact.bind(this);
@@ -33,11 +38,21 @@ export default class MlAnchorContact extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
   }
-
+  // componentWillMount()
+  // {
+  //   let that = this;
+  //   if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition((position)=>{
+  //   let lat = position.coords.latitude;
+  //   let lng = position.coords.longitude;
+  //   that.setState({lat,lng});
+  //   });
+  //   }
+    
+  // }
   sendDataToParent(data) {
     this.props.getContactDetails(data);
   }
@@ -72,11 +87,9 @@ export default class MlAnchorContact extends React.Component {
     const data = {
       selectedIndex: -1,
       formData: {
-        contactPersonRole: '',
-        addressTypeId: '',
+        name :'',
         addressTypeName:'',
         contactNumber: '',
-        emailId: '',
         buildingNumber: '',
         street: '',
         landmark: '',
@@ -87,31 +100,34 @@ export default class MlAnchorContact extends React.Component {
         pincode: '',
         latitude: '',
         longitude: '',
-        status: false,
+        // emailId: '',
+        // contactPersonRole: '',
+        // addressTypeId: '',
+        // status: false,
       },
     };
     this.sendDataToParent(data);
   }
 
-  onOptionSelectedAddressType(val, callback, label) {
-    this.props.onContactChange('addressTypeId', val)
-    setTimeout(() => {
-      this.props.onContactChange('addressTypeName', label.label);
-    }, 10);
-  }
+  // onOptionSelectedAddressType(val, callback, label) {
+  //   this.props.onContactChange('addressTypeId', val)
+  //   setTimeout(() => {
+  //     this.props.onContactChange('addressTypeName', label.label);
+  //   }, 10);
+  // }
 
   onChange(field, value) {
     this.props.onContactChange(field, value);
   }
 
   render() {
-    let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
-     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-     label
-     value
-     }
-     }
-     `;
+    // let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+    //  data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+    //  label
+    //  value
+    //  }
+    //  }
+    //  `;
     let countryQuery = gql`query{
       data:fetchCountries {
          value:_id
@@ -132,7 +148,7 @@ export default class MlAnchorContact extends React.Component {
    }`;
     let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
     let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
-    let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
+    // let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
     console.log(this.props.formData.addressTypeId);
     return (
       <div className="main_wrap_scroll">
@@ -171,46 +187,35 @@ export default class MlAnchorContact extends React.Component {
             <div>
               <form>
                 <div className="form-group">
-                <input type="text" placeholder="Role Type"
-                    value={this.props.formData.contactPersonRole}
+                <input type="text" placeholder="Address Type"
+                    value={this.props.formData.addressTypeName}
                     className="form-control float-label"
-                    onChange={event => this.onChange('contactPersonRole', event.target.value)} />
+                    onChange={event => this.onChange('addressTypeName', event.target.value)} /> 
                 </div>
-                <div className="form-group">
-                  <Moolyaselect multiSelect={false} ref="addressTypeId" className="form-control float-label"
-                    valueKey={'value'} labelKey={'label'} placeholder="Address Type" queryOptions={addressTypeOption}
-                    selectedValue={this.props.formData.addressTypeId} queryType="graphql" query={addressTypeQuery}
-                    isDynamic={true} onSelect={this.onOptionSelectedAddressType.bind(this)}/>
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Contact Number"
-                    value={this.props.formData.contactNumber}
+                <div className="form-group mandatory">
+                <input type="text" placeholder="Name"
+                    value={this.props.formData.name}
                     className="form-control float-label"
-                    onChange={event => this.onChange('contactNumber', event.target.value)} />
+                    onChange={event => this.onChange('name', event.target.value)} /> 
                 </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Email Id" className="form-control float-label"
-                    value={this.props.formData.emailId}
-                    onChange={event => this.onChange('emailId', event.target.value)} />
-                </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" placeholder="Flat/House/floor/Building No"
                     className="form-control float-label"
                     value={this.props.formData.buildingNumber}
                     onChange={event => this.onChange('buildingNumber', event.target.value)} />
                 </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" placeholder="Colony/Street/Locality "
                     className="form-control float-label"
                     value={this.props.formData.street}
                     onChange={event => this.onChange('street', event.target.value)} />
                 </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" placeholder="Landmark" className="form-control float-label"
                     value={this.props.formData.landmark}
                     onChange={event => this.onChange('landmark', event.target.value)} />
                 </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" placeholder="Area" className="form-control float-label"
                     value={this.props.formData.area}
                     onChange={event => this.onChange('area', event.target.value)} />
@@ -218,22 +223,28 @@ export default class MlAnchorContact extends React.Component {
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref="country" className="form-control float-label"
                     valueKey={'value'} labelKey={'label'} placeholder="Your Country"
-                    selectedValue={this.props.formData.countryId} queryType={"graphql"} query={countryQuery}
+                    mandatory={true}selectedValue={this.props.formData.countryId} queryType={"graphql"} query={countryQuery}
                     isDynamic={true} onSelect={this.onOptionSelectedCountry.bind(this)} />
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref="state" className="form-control float-label"
                     valueKey={'value'} labelKey={'label'} placeholder="State" queryOptions={statesOption}
-                    selectedValue={this.props.formData.stateId} queryType={"graphql"} query={statesQuery}
+                     mandatory={true}selectedValue={this.props.formData.stateId} queryType={"graphql"} query={statesQuery}
                     isDynamic={true} onSelect={this.onOptionSelectedStates.bind(this)} />
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref="cityId" className="form-control float-label"
                     valueKey={'value'} labelKey={'label'} placeholder="Town/City" queryOptions={citiesOption}
-                    selectedValue={this.props.formData.cityId} queryType={"graphql"} query={citiesQuery}
+                    mandatory={true}selectedValue={this.props.formData.cityId} queryType={"graphql"} query={citiesQuery}
                     isDynamic={true} onSelect={this.onOptionSelectedCities.bind(this)} />
                 </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
+                  <input type="text" placeholder="Contact Number"
+                    value={this.props.formData.contactNumber}
+                    className="form-control float-label"
+                    onChange={event => this.onChange('contactNumber', event.target.value)} />
+                </div>
+                <div className="form-group mandatory">
                   <input type="number" placeholder="Pincode" className="form-control float-label"
                     value={this.props.formData.pincode}
                     onChange={event => this.onChange('pincode', event.target.value)} />
@@ -241,16 +252,30 @@ export default class MlAnchorContact extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Lattitude" className="form-control float-label"
                     value={this.props.formData.latitude}
-                    onChange={event => this.onChange('latitude', event.target.value)} />
+                    onChange={event => this.onChange('latitude', event.target.value)} disabled={true} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Longitude" className="form-control float-label"
                     value={this.props.formData.longitude}
-                    onChange={event => this.onChange('longitude', event.target.value)} />
+                    onChange={event => this.onChange('longitude', event.target.value)} disabled={true} />
                 </div>
-
-                <br className="brclear" />
-                <div className="form-group switch_wrap inline_switch">
+                {/* <div className="form-group">
+                  <input type="text" placeholder="Email Id" className="form-control float-label"
+                    value={this.props.formData.emailId}
+                    onChange={event => this.onChange('emailId', event.target.value)} />
+                </div> */}
+                {/* <div className="form-group"> */}
+                {/* <input type="text" placeholder="Role Type"
+                    value={this.props.formData.contactPersonRole}
+                    className="form-control float-label"
+                    onChange={event => this.onChange('contactPersonRole', event.target.value)} /> */}
+                {/* </div> */}
+                 {/* <Moolyaselect multiSelect={false} ref="addressTypeId" className="form-control float-label"
+                    valueKey={'value'} labelKey={'label'} placeholder="Address Type" queryOptions={addressTypeOption}
+                    selectedValue={this.props.formData.addressTypeId} queryType="graphql" query={addressTypeQuery}
+                    isDynamic={true} onSelect={this.onOptionSelectedAddressType.bind(this)}/> */}
+                {/* <br className="brclear" /> */}
+                {/* <div className="form-group switch_wrap inline_switch">
                   <label className="">Status</label>
                   <label className={`switch ${this.props.formData.status ? 'on' : ''}`}>
                     <input type="checkbox"
@@ -258,7 +283,7 @@ export default class MlAnchorContact extends React.Component {
                       onChange={event => this.onChange('status', event.target.checked)} />
                     <div className="slider"></div>
                   </label>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>

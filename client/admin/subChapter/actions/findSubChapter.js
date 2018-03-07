@@ -61,11 +61,9 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
             status
           }
           contactDetails {
-            contactPersonRole,
-            addressTypeId
+            name
             addressTypeName
             contactNumber
-            emailId,
             buildingNumber,
             street,
             landmark,
@@ -76,7 +74,6 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
             pincode,
             latitude,
             longitude,
-            status,
           }
         }
     }

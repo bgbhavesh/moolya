@@ -125,7 +125,7 @@ export default class MlDashboardMapView extends Component {
     const communityIconList=
       <div className="community_icons">
         <a data-toggle="tooltip" title="All" data-placement="bottom" className="All map_active_community" data-filter="all">
-          <p className='title'>All</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+          <p className='title'>All</p><span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
         </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
@@ -153,12 +153,15 @@ export default class MlDashboardMapView extends Component {
 
       </div>
 
+
+    let userType  =  this.state.userType || '';
+
     return (
       <span>
         {this.props.data&& this.props.data.length === 0 && this.state.userType && <NoMarkerDataMessage userType={this.state.userType}/>}
         {communityIconList}
         {/*<MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
-        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
+        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} userType={userType.replace(/\s+/, "")+'HexaMarker'} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
       </span>
     );
   }

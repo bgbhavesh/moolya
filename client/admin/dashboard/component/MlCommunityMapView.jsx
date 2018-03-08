@@ -110,7 +110,7 @@ export default class MlCommunityMapView extends Component {
     const communityIconList=
       <div className="community_icons">
         <a data-toggle="tooltip" title="All" data-placement="bottom" className="All map_active_community" data-filter="all">
-          <p className='title'>All</p><span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+          <p className='title'>All</p><span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
         </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU" data-filter="startup">
           <p className='title'>Startups</p><span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>

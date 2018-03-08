@@ -18,7 +18,6 @@ class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // module:'subchapter',
       objective: [
         {
           description: '',
@@ -66,7 +65,6 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   async handleSuccess(response) {
-    console.log("*************",response)
     if (response && response.success)
       toastr.success('Updated Successfully')
     else 
@@ -90,7 +88,52 @@ class MlAnchorTabsContainer extends React.Component {
         //   toastr.error('Address type is required in contact form');
         //   return
         // }
+        console.log("data::",this.state.contactDetailsFormData.formData)
+        console.log('The alueos ::: ', stateContactDetails);
+        if(!this.state.contactDetailsFormData.formData.name){
+          console.log("dataName::",this.state.contactDetailsFormData.formData.name)
+          toastr.error("Name is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.buildingNumber){
+          console.log("building number::",this.state.contactDetailsFormData.formData.buildingNumber)
+          toastr.error("Flat/House/floor/Building No is required in contact form");
+          return
+        }
         
+        if(!this.state.contactDetailsFormData.formData.street){
+          console.log("street::",this.state.contactDetailsFormData.formData.street)
+          toastr.error("Colony/Street/Locality is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.landmark){
+          toastr.error("Landmark is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.area){
+          toastr.error("Area is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.countryId){
+          toastr.error("Country is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.stateId){
+          toastr.error("State is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.cityId){
+          toastr.error("City is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.contactNumber){
+          toastr.error("Contact Number is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.pincode){
+          toastr.error("Pincode is required in contact form");
+          return
+        } 
         const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
         const { clusterId, chapterId, subChapterId } = this.props;
         const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {

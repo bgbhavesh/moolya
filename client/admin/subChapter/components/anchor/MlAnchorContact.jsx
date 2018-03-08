@@ -88,7 +88,7 @@ export default class MlAnchorContact extends React.Component {
       selectedIndex: -1,
       formData: {
         name :'',
-        addressTypeName:'',
+        addressTypeName:'Subchapter',
         contactNumber: '',
         buildingNumber: '',
         street: '',
@@ -146,6 +146,9 @@ export default class MlAnchorContact extends React.Component {
        label: name
      }
    }`;
+   let type = [
+     {value:'Subchapter', label:'Subchapter'}
+   ]
     let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
     let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
     // let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
@@ -188,8 +191,8 @@ export default class MlAnchorContact extends React.Component {
               <form>
                 <div className="form-group">
                 <input type="text" placeholder="Address Type"
-                    value={this.props.formData.addressTypeName}
-                    className="form-control float-label"
+                    value="Subchapter" option={type}
+                    className="form-control float-label" disabled={true}
                     onChange={event => this.onChange('addressTypeName', event.target.value)} /> 
                 </div>
                 <div className="form-group mandatory">

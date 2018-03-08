@@ -226,7 +226,7 @@ componentDidMount(){
 
     return (
       <span>
-        {this.props.data&&this.props.data.data && this.props.data.data.length === 0 && userType &&  <NoMarkerDataMessage userType={userType}/>}
+        {this.props.data&&this.props.data.data && this.props.data.data.length === 0 &&   <NoMarkerDataMessage userType={userType}/>}
 
         {// this.props.moduleName!=='cluster' &&
           !pathUrl.includes('/admin') &&  communityIconList

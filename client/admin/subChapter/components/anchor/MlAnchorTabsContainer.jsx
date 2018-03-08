@@ -32,7 +32,7 @@ class MlAnchorTabsContainer extends React.Component {
         selectedIndex: -1,
         formData: {
           name : '',
-          addressTypeName: '',
+          addressTypeName: 'Subchapter',
           contactNumber: '',
           buildingNumber: '',
           street: '',
@@ -80,17 +80,16 @@ class MlAnchorTabsContainer extends React.Component {
       case 'subchapter':
         let stateContactDetails = JSON.parse(JSON.stringify(this.state.subChapter.contactDetails));
         const { objective: stateObjective } = this.state;
-        if (this.state.contactDetailsFormData.selectedIndex === -1
-          && this.state.contactDetailsFormData.formData.addressTypeName) {
+        if (this.state.contactDetailsFormData.selectedIndex === -1) {
           if (!stateContactDetails) stateContactDetails = [];
           stateContactDetails.push(this.state.contactDetailsFormData.formData);
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {
           stateContactDetails[this.state.contactDetailsFormData.selectedIndex] = this.state.contactDetailsFormData.formData;
         }
-        if (this.state.contactDetailsFormData.formData.name && ! this.state.contactDetailsFormData.formData.addressTypeName) {
-          toastr.error('Address type is required in contact form');
-          return
-        }
+        // if (this.state.contactDetailsFormData.formData.name && ! this.state.contactDetailsFormData.formData.addressTypeName) {
+        //   toastr.error('Address type is required in contact form');
+        //   return
+        // }
         
         const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
         const { clusterId, chapterId, subChapterId } = this.props;

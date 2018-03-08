@@ -45,10 +45,12 @@ export default class MapDetails extends Component {
 
     mapDataArr = this.reorderMapData(mapDataArr);
 
+    let backendUserCount = 0;
     const mapDataList = mapDataArr.map(function (m) {
       let title = ""
       if(m.key == "backendUsers"){
         title = "Backend U"
+        backendUserCount = m.count;
       }else if (m.key == "ideators"){
         title = "Ideators"
       }else if (m.key == "funders"){
@@ -73,7 +75,7 @@ export default class MapDetails extends Component {
         title = "Co_Working"
       }
 
-      if(title !=='Chapters' && title !=="Sub Chapters")
+      if(m.key !== "cluster" && m.key !== "chapter" && m.key !== "backendUsers")
         return (
           <li key={m.key}>
             <span className="title">{title}</span>
@@ -83,9 +85,16 @@ export default class MapDetails extends Component {
         )
     });
 
+    let path = FlowRouter._current.route.path;
+
+    let message =(totalUsers&&totalUsers.count?totalUsers.count:0) +' Users';
+
+    if(path.includes('admin'))
+      message = (totalUsers&&totalUsers.count?totalUsers.count:0) +' /BU: '+backendUserCount;
+
     return (
       <div className="chapter_map_hover">
-        <h2><b>{totalUsers && totalUsers.context ? totalUsers.context:""}</b> - {totalUsers&&totalUsers.count?totalUsers.count:0} Users</h2>
+        <h2><b>{totalUsers && totalUsers.context ? totalUsers.context:""}</b> - {message}</h2>
         <div className="chapter_map_hover_content">
 
           <ul>

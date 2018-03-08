@@ -226,7 +226,7 @@ componentDidMount(){
 
     return (
       <span>
-        {this.props.data&&this.props.data.data && this.props.data.data.length === 0 && userType &&  <NoMarkerDataMessage userType={userType}/>}
+        {this.props.data&&this.props.data.data && this.props.data.data.length === 0 &&   <NoMarkerDataMessage userType={userType}/>}
 
         {// this.props.moduleName!=='cluster' &&
           !pathUrl.includes('/admin') &&  communityIconList
@@ -315,7 +315,7 @@ function moduleTooltipName(){
 
 function moduleClassName(){
   let path = FlowRouter._current.path;
-  if(path.includes('clusters')){
+  if(path === "/app/dashboard" || path === "/app/dashboard/true"){
     return 'ml my-ml-cluster';
   }
   if(path.includes('chapters')){

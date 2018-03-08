@@ -5,6 +5,7 @@ import React from "react";
 // import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import 'react-responsive-tabs/styles.css'
+import moment from "moment";
 
 export default class MlAppPortfolioRedirect extends React.Component {
   constructor(props, context) {
@@ -92,10 +93,14 @@ export default class MlAppPortfolioRedirect extends React.Component {
                       <div className="panel-heading">
                         <div className="row">
                           <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
-                          <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
-                          <hr />
+                          <div className="col-md-6"><b>Created
+                            Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate ? moment(pf.transactionCreatedDate).format(Meteor.settings.public.dateFormat) : ' '}
+                          </div>
+                          <hr/>
                           <div className="col-md-6"><b>Community Type&nbsp; : &nbsp;</b> {pf.communityType}</div>
-                          <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
+                          <div className="col-md-6"><b>Live
+                            Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate ? moment(pf.transactionUpdatedDate).format(Meteor.settings.public.dateFormat) : ' '}
+                          </div>
                         </div>
                       </div>
                       <div className="panel-body">

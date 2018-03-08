@@ -299,6 +299,7 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
   try {
+
     args.subChapter.isDefaultSubChapter = false;
     //Required to set the external access perms
     var externalUser=args.subChapter&&args.subChapter.moolyaSubChapterAccess&&args.subChapter.moolyaSubChapterAccess.externalUser?args.subChapter.moolyaSubChapterAccess.externalUser:{};
@@ -387,11 +388,48 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
  *       3) checking the access-permission for update of "key" moolyaSubChapterAccess {hierarchyLevel:4}
  * */
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
-  let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
+ let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
+ var newContact =Object.assign({},subChapter);
   if (subChapter) {
     for (key in args.subChapterDetails) {
       subChapter[key] = args.subChapterDetails[key]
     }
+    let cityName = mlDBController.findOne('MlCities', {_id: subChapter.contactDetails[0].cityId},context);
+    cityName = cityName.name;
+    let geoCIty =subChapter.contactDetails[0].buildingNumber + ", "+ (subChapter.contactDetails[0].street?(subChapter.contactDetails[0].street+", "):("")) + (subChapter.contactDetails[0].landmark?(subChapter.contactDetails[0].landmark+", "):(""))  +subChapter.contactDetails[0].area  + ', '+cityName ;
+    // console.log("geocity=",geoCIty);
+    // console.log("subChapter",subChapter);
+    geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+      // if (err && !data) {
+      //   console.log('Error while creating sub-chapter')
+      //   return "Invalid Country Name";
+      // }
+      // let subChapter = MlSubChapters.findOne({"_id": subChapter._id})
+      // if (subChapter) {
+
+      // console.log('error=',err);
+      // console.log('data=',data);
+        try{
+          // console.log('The data is:: ', JSON.stringify(data));
+        if(data && data.results && data.results[0] && data.results[0].geometry){
+          var latitude = data.results[0].geometry.location.lat;
+          var longitude = data.results[0].geometry.location.lng;
+          newContact.contactDetails[0].latitude = "" +latitude;
+          newContact.contactDetails[0].longitude ="" + longitude;
+          newContact.latitude = "" + latitude ;
+          newContact.longitude ="" + longitude;
+          let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
+          // console.log('updateRes=',updateRes);
+        }
+        // else{
+        //   console.log('423432425423423423423423432423432');
+        // }
+      }
+      catch(err){
+        console.log(err);
+      }
+      // }
+    }));
 
     //pre-condition for related sub chapter updation :(Jira-3035)
     var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
@@ -417,7 +455,7 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
       }
       let code = 200;
       // let result = {subChapter: resp}
-      let response = new MlRespPayload().successPayload("Updated successfully", code);
+      let response = new MlRespPayload().successPayload(newContact, code);
       return response
     }
 

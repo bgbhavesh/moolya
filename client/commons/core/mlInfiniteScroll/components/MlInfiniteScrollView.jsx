@@ -58,7 +58,7 @@ export default class MlInfiniteScrollView extends Component {
       <div>
       <div className="col-md-12"><h2 id="pageTitle"></h2></div>
       <br className="brclear"/>
-      <div className="infinite_scroll">
+      <div className="infinite_scroll ideators_list">
         <ScrollArea
         speed={0.8}
         className="infinite_scroll"

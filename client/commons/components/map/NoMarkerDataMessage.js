@@ -51,8 +51,13 @@ export default class NoMarkerDataMessage extends Component{
 
   render(){
     let { name, unmount } = this.state;
+
+    let message = `No active Chapters in ${name} as of now.`;
+
+    if(this.props.userType) message = `${ this.props.userType==='All'?'All Users':this.props.userType } profiles for ${name} are being updated. There are no active portfolios to be shown as of now.`;
+
     let component = unmount ?<div></div>:<div ref="noMessageComponent" className="alert alert-info col-md-8 col-md-offset-2 text-center map_alert">
-      {`${ this.props.userType==='All'?'All Users':this.props.userType } profiles for ${name} are being updated. There are no active portfolios to be shown as of now.`}
+      {message}
     </div>;
 
     return (

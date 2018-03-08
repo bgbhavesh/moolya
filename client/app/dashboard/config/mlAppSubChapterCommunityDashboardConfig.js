@@ -7,8 +7,6 @@ import MlAppMapMarker from '../components/MlAppMapMarker';
 import MlAppMapViewContainer from '../../core/containers/MlAppMapViewContainer';
 import MlMapFooter from '../components/MlMapFooter';
 
-var userType = localStorage.getItem('userType');
-
 export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   name:"SubChapterCommunityDashboard",
   moduleName:"externalUsersNew",
@@ -22,6 +20,7 @@ export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   queryOptions:true,
   buildQueryOptions:(config)=>{
 
+    var userType = localStorage.getItem('userType');
 
     // localStorage.removeItem('userType');
     let queryObj = {
@@ -47,7 +46,7 @@ export const mlAppSubChapterCommunityDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppMapViewContainer params={this.params}/>,
   mapMarkerComponent:<MlAppMapMarker />,
-  mapFooterComponent:<MlMapFooter userType={userType||'All'}/>,
+  mapFooterComponent:<MlMapFooter />,
 
   actionConfiguration:[
     {

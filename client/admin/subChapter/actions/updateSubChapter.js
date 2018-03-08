@@ -43,5 +43,6 @@ export async function updateSubChapterActionHandler(ClusterId, ChapterId, subCha
     }
   })
   const id = result.data.updateSubChapter;
-  return id
+  console.log('id=',id);
+  return id;
 }

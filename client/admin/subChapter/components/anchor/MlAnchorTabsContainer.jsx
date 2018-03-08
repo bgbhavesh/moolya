@@ -18,18 +18,21 @@ class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      objective: [],
+      objective: [
+        {
+          description: '',
+          status: false
+        }
+      ],
       subChapter: {
         contactDetails: [],
       },
       contactDetailsFormData: {
         selectedIndex: -1,
         formData: {
-          contactPersonRole: '',
-          addressTypeId: '',
-          addressTypeName: '',
+          name : '',
+          addressTypeName: 'Subchapter',
           contactNumber: '',
-          emailId: '',
           buildingNumber: '',
           street: '',
           landmark: '',
@@ -40,7 +43,10 @@ class MlAnchorTabsContainer extends React.Component {
           pincode: '',
           latitude: '',
           longitude: '',
-          status: false,
+          // emailId: '',
+          // contactPersonRole: '',
+          // addressTypeId: '',
+          // status: false,
         },
       },
     };
@@ -59,30 +65,75 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   async handleSuccess(response) {
-    console.log(response)
     if (response && response.success)
-      toastr.success(response.result)
-    else if (response && !response.success)
-      toastr.error(response.result)
+      toastr.success('Updated Successfully')
+    else 
+      toastr.error(response.result);
   }
 
   async updateAnchorDetails() {
     let response;
+    console.log('state=',this.state)
     switch (this.state.module) {
       case 'subchapter':
         let stateContactDetails = JSON.parse(JSON.stringify(this.state.subChapter.contactDetails));
         const { objective: stateObjective } = this.state;
-        if (this.state.contactDetailsFormData.selectedIndex === -1
-          && this.state.contactDetailsFormData.formData.addressTypeId) {
+        if (this.state.contactDetailsFormData.selectedIndex === -1) {
           if (!stateContactDetails) stateContactDetails = [];
           stateContactDetails.push(this.state.contactDetailsFormData.formData);
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {
           stateContactDetails[this.state.contactDetailsFormData.selectedIndex] = this.state.contactDetailsFormData.formData;
         }
-        if (this.state.contactDetailsFormData.formData.contactPersonRole && ! this.state.contactDetailsFormData.formData.addressTypeId) {
-          toastr.error('Address type is required in contact form');
+        // if (this.state.contactDetailsFormData.formData.name && ! this.state.contactDetailsFormData.formData.addressTypeName) {
+        //   toastr.error('Address type is required in contact form');
+        //   return
+        // }
+        console.log("data::",this.state.contactDetailsFormData.formData)
+        console.log('The alueos ::: ', stateContactDetails);
+        if(!this.state.contactDetailsFormData.formData.name){
+          console.log("dataName::",this.state.contactDetailsFormData.formData.name)
+          toastr.error("Name is required in contact form");
           return
         }
+        if(!this.state.contactDetailsFormData.formData.buildingNumber){
+          console.log("building number::",this.state.contactDetailsFormData.formData.buildingNumber)
+          toastr.error("Flat/House/floor/Building No is required in contact form");
+          return
+        }
+        
+        if(!this.state.contactDetailsFormData.formData.street){
+          console.log("street::",this.state.contactDetailsFormData.formData.street)
+          toastr.error("Colony/Street/Locality is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.landmark){
+          toastr.error("Landmark is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.area){
+          toastr.error("Area is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.countryId){
+          toastr.error("Country is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.stateId){
+          toastr.error("State is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.cityId){
+          toastr.error("City is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.contactNumber){
+          toastr.error("Contact Number is required in contact form");
+          return
+        }
+        if(!this.state.contactDetailsFormData.formData.pincode){
+          toastr.error("Pincode is required in contact form");
+          return
+        } 
         const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
         const { clusterId, chapterId, subChapterId } = this.props;
         const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
@@ -100,24 +151,26 @@ class MlAnchorTabsContainer extends React.Component {
           subChapter: resp,
           contactDetailsFormData: {
             selectedIndex: -1,
-            formData: {
-              contactPersonRole: '',
-              addressTypeId: '',
-              addressTypeName: '',
-              contactNumber: '',
-              emailId: '',
-              buildingNumber: '',
-              street: '',
-              landmark: '',
-              area: '',
-              cityId: '',
-              stateId: '',
-              countryId: '',
-              pincode: '',
-              latitude: '',
-              longitude: '',
-              status: false,
-            },
+            formData:JSON.parse(response.result)
+            //  {
+            //   name:'',
+            //   addressTypeName: '',
+            //   contactNumber: '', 
+            //   buildingNumber: '',
+            //   street: '',
+            //   landmark: '',
+            //   area: '',
+            //   cityId: '',
+            //   stateId: '',
+            //   countryId: '',
+            //   pincode: '',
+            //   latitude: '',
+            //   longitude: '',
+            //   // emailId: '',
+            //   // contactPersonRole: '',
+            //   // addressTypeId: '',
+            //   // status: false,
+            // },
           },
         });
         return response;
@@ -142,6 +195,7 @@ class MlAnchorTabsContainer extends React.Component {
 
   getUserDetails(details) {
     //get tab details
+  
     if (details.socialLinksInfo && details.socialLinksInfo[0]) {
       details.profile.InternalUprofile.moolyaProfile.socialLinksInfo = details.socialLinksInfo;
       // details.socialLinksInfo = undefined;
@@ -164,7 +218,7 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   onContactChange(field, value) {
-    const state = JSON.parse(JSON.stringify(this.state));
+    var state = JSON.parse(JSON.stringify(this.state));
     state.contactDetailsFormData.formData[field] = value;
     this.setState(state);
   }

@@ -70,11 +70,9 @@ let chapterSchema = `
     }
     
     type contactDetailsOutput{
-      contactPersonRole: String,
-      addressTypeId: String,
+      name : String
       addressTypeName : String
       contactNumber: String
-      emailId: String,
       buildingNumber: String,
       street: String,
       landmark: String,
@@ -85,7 +83,6 @@ let chapterSchema = `
       pincode: String,
       latitude: String,
       longitude: String,
-      status: Boolean,
     }
   
     type SubChapter{
@@ -133,11 +130,9 @@ let chapterSchema = `
     }
     
     input contactDetailsInput {
-      contactPersonRole: String,
-      addressTypeId: String,
+      name : String
       addressTypeName : String
       contactNumber: String
-      emailId: String,
       buildingNumber: String,
       street: String,
       landmark: String,
@@ -148,7 +143,6 @@ let chapterSchema = `
       pincode: String,
       latitude: String,
       longitude: String,
-      status: Boolean,
     }
     
     input subChapterObject{

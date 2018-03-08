@@ -153,12 +153,15 @@ export default class MlDashboardMapView extends Component {
 
       </div>
 
+
+    let userType  =  this.state.userType || '';
+
     return (
       <span>
         {this.props.data&& this.props.data.length === 0 && this.state.userType && <NoMarkerDataMessage userType={this.state.userType}/>}
         {communityIconList}
         {/*<MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
-        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
+        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} userType={userType.replace(/\s+/, "")+'HexaMarker'} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
       </span>
     );
   }

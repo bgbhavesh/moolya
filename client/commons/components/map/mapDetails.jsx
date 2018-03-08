@@ -75,7 +75,7 @@ export default class MapDetails extends Component {
         title = "Co_Working"
       }
 
-      if(title !=='Chapters' && title !=="Sub Chapters")
+      if(m.key !== "cluster" && m.key !== "chapter" && m.key !== "backendUsers")
         return (
           <li key={m.key}>
             <span className="title">{title}</span>

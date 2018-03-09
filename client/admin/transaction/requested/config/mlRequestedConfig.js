@@ -15,7 +15,7 @@ function dateFormatter(data) {
 
 function updatedDateFormatter(data) {
   let createdDateTime = data && data.data && data.data.transactionUpdatedDate ? data.data.transactionUpdatedDate : null;
-  return <div>{createdDateTime && moment(createdDateTime).format('D MMM YYYY HH:mm:ss')}</div>;
+  return <div>{createdDateTime && moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
 }
 
 export function registrationRowClassNameFormat(row, rowIdx) {
@@ -40,7 +40,7 @@ export function registrationRowClassNameFormat(row, rowIdx) {
 
 
 const mlUserTypeTableConfig = new MlViewer.View({
-  name: "registrationInfoTable",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+  name: "registrationInfoTable",
   module: "registrationInfo",//Module name for filter.
   viewType: MlViewerTypes.TABLE,
   extraFields: [],

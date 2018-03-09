@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from "moment";
 export default class MlShareCalendarPresentation extends React.Component {
 
   componentDidMount() {
@@ -46,7 +47,7 @@ export default class MlShareCalendarPresentation extends React.Component {
                   <input type="text" disabled placeholder="Transaction Id" value={userDetails.transactionId} className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" disabled placeholder="Date & Time" value={propsData.createdAt} className="form-control float-label" id="" />
+                  <input type="text" disabled placeholder="Date & Time" value={propsData.createdAt ? moment(propsData.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" disabled placeholder="Name" value={userDetails.name} className="form-control float-label" id="" />

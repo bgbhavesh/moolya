@@ -137,7 +137,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     let currentUser = this.state.data.owner;
     let appointmentWith = this.state.data.client;
     var yesterday = Datetime.moment().subtract(1, 'day');
-    let validTill = this.state.validTill ? `${new moment(this.state.validTill).format('DD-MMM-YYYY HH:mm')} GMT`: "";
+    let validTill = this.state.validTill ? `${new moment(this.state.validTill).format(Meteor.settings.public.dateFormat)} GMT`: "";
     var validDate = function (current) {
       if(validTill) return current.isAfter(yesterday) && current.isBefore(validTill);
       else return current.isAfter(yesterday);
@@ -177,7 +177,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Date & Time"
-                             value={`${new moment(this.state.data.createdAt).format('DD-MMM-YYYY HH:mm')} GMT`} defaultValue="" className="form-control float-label" id="" />
+                             value={`${new moment(this.state.data.createdAt).format(Meteor.settings.public.dateFormat)} GMT`} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Name" value={currentUser.name} defaultValue="" className="form-control float-label" id="" />
@@ -268,7 +268,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Appointment date & Time"
-                             value={`${new moment(this.state.data.createdAt).format('DD-MMM-YYYY HH:mm')} GMT`} defaultValue="" className="form-control float-label" id="" />
+                             value={`${new moment(this.state.data.createdAt).format(Meteor.settings.public.dateFormat)} GMT`} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />

@@ -178,13 +178,13 @@ export default class MlAppMyAppointmentItems extends Component{
                       <br />
                       <div className="clearfix"></div>
                       {status === 'Completed' &&
-                      <span className="date">{`Completed on ${new Moment(appointment.endDate).format('DD-MMM-YYYY')}`}</span>
+                      <span className="date">{`Completed on ${new Moment(appointment.endDate).format(Meteor.settings.public.dateFormat)}`}</span>
                       }
                       {(status === 'Accepted' || status === 'Pending') &&
-                      <span className="date">{new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT </span>
+                      <span className="date">{new Moment(appointment.startDate).format(Meteor.settings.public.dateFormat)} GMT </span>
                       }
                       {status === 'Rejected' &&
-                      <span className="date">{`${new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT (${appointment.isCancelled?'Cancelled':'Rejected'})`}</span>
+                      <span className="date">{`${new Moment(appointment.startDate).format(Meteor.settings.public.dateFormat)} GMT (${appointment.isCancelled?'Cancelled':'Rejected'})`}</span>
                       }
                       {(status !== 'Rejected' && status !== 'Completed') &&
                       <span className="date">{startMsg}</span>

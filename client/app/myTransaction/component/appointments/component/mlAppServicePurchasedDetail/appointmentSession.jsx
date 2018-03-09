@@ -135,7 +135,7 @@ export default class Appointments extends React.Component {
         dateTime: `${session.duration.hours}:${session.duration.minutes} Hours`,
         userId: nextProps.appointment.client.userId,
         status: session.status,
-        tarId: `${new moment(session.startDate).format('DD-MMM-YYYY HH:mm')} GMT`,
+        tarId: `${new moment(session.startDate).format(Meteor.settings.public.dateFormat)} GMT`,
         cluster: 'Rescheduled'
       })
     });

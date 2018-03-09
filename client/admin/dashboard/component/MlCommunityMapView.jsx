@@ -3,7 +3,8 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
 import MapCommunity from '../../../commons/components/map/MapCommunity';
 import MlLoader from '../../../commons/components/loader/loader'
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import {getAdminUserContext} from '../../../commons/getAdminUserContext';
+import NoMarkerDataMessage from '../../../commons/components/map/NoMarkerDataMessage';
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -77,7 +78,7 @@ export default class MlCommunityMapView extends Component {
   onStatusChange(userType,e) {
     // const data = this.state.data;
     if (userType) {
-      //this.setState({userType: userType});
+      this.setState({userType});
       // console.log(this.props);
       let variables={};
       let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
@@ -139,9 +140,12 @@ export default class MlCommunityMapView extends Component {
         </a>
       </div>
 
+    let userType = this.state.userType || 'All';
+
     return (
       <span>
         {communityIconList}
+        {this.props.data&& this.props.data.length === 0 && userType &&   <NoMarkerDataMessage userType={userType}/>}
         <MapCommunity lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
       </span>
     );

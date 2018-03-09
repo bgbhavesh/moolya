@@ -55,6 +55,7 @@ class MlAnchorTabsContainer extends React.Component {
     this.updateAnchorDetails = this.updateAnchorDetails.bind(this);
     this.onContactChange = this.onContactChange.bind(this);
     this.getUserDetails = this.getUserDetails.bind(this);
+    this.setModule = this.setModule.bind(this);
     return this;
   }
 
@@ -75,11 +76,12 @@ class MlAnchorTabsContainer extends React.Component {
 
   async updateAnchorDetails() {
     let response;
+
+    const { clusterId, chapterId, subChapterId } = this.props;
+
     switch (this.state.module) {
       case 'subchapter':
         let stateContactDetails = Object.assign(this.state.subChapter.contactDetails);
-
-        let objective = this.state.objective || [];
 
         stateContactDetails[0] = this.state.contactDetailsFormData.formData;
 
@@ -124,25 +126,25 @@ class MlAnchorTabsContainer extends React.Component {
           toastr.error("Pincode is required in contact form");
           return
         }
+
+
         const contactDetails = (stateContactDetails && stateContactDetails.length) ? [stateContactDetails[0]] : [];
-
-        const { clusterId, chapterId, subChapterId } = this.props;
-
-        objective = objective.filter((ob) => {
-          if (ob.description) {
-            return ob;
-          }
-        });
 
         response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
           subChapterId,
-          objective,
+          // objective,
           contactDetails,
         });
 
-        let {contactDetailsFormData} =  this.state;
-        contactDetailsFormData.formData = JSON.parse(response.result);
-        this.setState({contactDetailsFormData});
+        let {contactDetailsFormData,subChapter} =  this.state;
+        let obj_res = JSON.parse(response.result);
+        if(obj_res && obj_res.contactDetails && obj_res.contactDetails.length){
+          contactDetailsFormData.formData = obj_res.contactDetails[0];
+
+          subChapter.contactDetails[0] =  obj_res.contactDetails[0];
+          this.setState({contactDetailsFormData,subChapter});
+        }
+
 
         // const resp = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
         // this.setState({
@@ -172,6 +174,22 @@ class MlAnchorTabsContainer extends React.Component {
         //   },
         // });
         return response;
+      case 'objective':
+        let objective = this.state.objective || [];
+
+        objective = objective.filter((ob) => {
+          if (ob.description) {
+            return ob;
+          }
+        });
+
+        response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
+          subChapterId,
+          objective,
+          // contactDetails,
+        });
+
+        return response;
       case 'users':
         const { profile } = this.state.contact;
         // profile.dateOfBirth = profile.dateOfBirth ? new Date(profile.dateOfBirth) : null;
@@ -198,20 +216,18 @@ class MlAnchorTabsContainer extends React.Component {
       details.profile.InternalUprofile.moolyaProfile.socialLinksInfo = details.socialLinksInfo;
       // details.socialLinksInfo = undefined;
     }
-    this.setState({ contact: details, module: "users", isUserUpdated: false })
+    this.setState({ contact: details,  isUserUpdated: false })
   }
   getObjectiveDetails(details) {
     //get tab details
     this.setState({
       objective: details,
-      module: "subchapter"
     });
   }
 
   getContactDetails(details) {
     this.setState({
       contactDetailsFormData: details,
-      module: "subchapter"
     });
   }
 
@@ -219,6 +235,10 @@ class MlAnchorTabsContainer extends React.Component {
     var state = JSON.parse(JSON.stringify(this.state));
     state.contactDetailsFormData.formData[field] = value;
     this.setState(state);
+  }
+
+  setModule(module){
+    this.setState({module});
   }
 
   render() {
@@ -239,12 +259,12 @@ class MlAnchorTabsContainer extends React.Component {
       [
         {
           name: 'Anchors',
-          component: <MlAnchorList data={this.props} getUserDetails={this.getUserDetails} isUserUpdated={this.state.isUserUpdated}/>,
+          component: <MlAnchorList data={this.props} getUserDetails={this.getUserDetails} isUserUpdated={this.state.isUserUpdated} setModule={this.setModule}/>,
           icon: <span className="ml ml-basic-Information"></span>
         },
         {
           name: 'Objectives',
-          component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails} />,
+          component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails} setModule={this.setModule}/>,
           icon: <span className="ml ml-additional-Information"></span>
         },
         {
@@ -255,7 +275,7 @@ class MlAnchorTabsContainer extends React.Component {
             formData={this.state.contactDetailsFormData.formData}
             onContactChange={this.onContactChange}
             {...this.props}
-            getContactDetails={this.getContactDetails} />,
+            getContactDetails={this.getContactDetails} setModule={this.setModule} />,
           icon: <span className="ml flaticon-ml-agenda"></span>
         }
       ]

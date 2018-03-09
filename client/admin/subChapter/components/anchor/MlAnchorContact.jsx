@@ -41,18 +41,19 @@ export default class MlAnchorContact extends React.Component {
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
   }
-  // componentWillMount()
-  // {
-  //   let that = this;
-  //   if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition((position)=>{
-  //   let lat = position.coords.latitude;
-  //   let lng = position.coords.longitude;
-  //   that.setState({lat,lng});
-  //   });
-  //   }
+  componentWillMount()
+  {
+    this.props.setModule('subchapter');
+    // let that = this;
+    // if (navigator.geolocation) {
+    // navigator.geolocation.getCurrentPosition((position)=>{
+    // let lat = position.coords.latitude;
+    // let lng = position.coords.longitude;
+    // that.setState({lat,lng});
+    // });
+    // }
 
-  // }
+  }
   sendDataToParent(data) {
     this.props.getContactDetails(data);
   }
@@ -152,7 +153,6 @@ export default class MlAnchorContact extends React.Component {
     let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
     let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
     // let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
-    console.log(this.props.formData.addressTypeId);
     return (
       <div className="main_wrap_scroll">
         <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>

@@ -390,52 +390,55 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
  let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
  var newContact =Object.assign({},subChapter);
-  if (subChapter) {
+  if (newContact) {
     for (key in args.subChapterDetails) {
-      subChapter[key] = args.subChapterDetails[key]
+      newContact[key] = args.subChapterDetails[key]
     }
-    let cityName = mlDBController.findOne('MlCities', {_id: subChapter.contactDetails[0].cityId},context);
-    cityName = cityName.name;
-    let geoCIty =subChapter.contactDetails[0].buildingNumber + ", "+ (subChapter.contactDetails[0].street?(subChapter.contactDetails[0].street+", "):("")) + (subChapter.contactDetails[0].landmark?(subChapter.contactDetails[0].landmark+", "):(""))  +subChapter.contactDetails[0].area  + ', '+cityName ;
+    if(args.subChapterDetails.contactDetails){
+      let cityName = mlDBController.findOne('MlCities', {_id: newContact.contactDetails[0].cityId},context);
+      cityName = cityName.name;
+      let geoCIty =newContact.contactDetails[0].buildingNumber + ", "+ (newContact.contactDetails[0].street?(newContact.contactDetails[0].street+", "):("")) + (newContact.contactDetails[0].landmark?(newContact.contactDetails[0].landmark+", "):(""))  +newContact.contactDetails[0].area  + ', '+cityName ;
 
-    geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
         try{
-        if(data && data.results && data.results[0] && data.results[0].geometry){
-          var latitude = data.results[0].geometry.location.lat;
-          var longitude = data.results[0].geometry.location.lng;
-          newContact.contactDetails[0].latitude = "" +latitude;
-          newContact.contactDetails[0].longitude ="" + longitude;
-          newContact.latitude = "" + latitude ;
-          newContact.longitude ="" + longitude;
+          if(data && data.results && data.results[0] && data.results[0].geometry){
+            var latitude = data.results[0].geometry.location.lat;
+            var longitude = data.results[0].geometry.location.lng;
+            newContact.contactDetails[0].latitude = "" +latitude;
+            newContact.contactDetails[0].longitude ="" + longitude;
+            newContact.latitude = "" + latitude ;
+            newContact.longitude ="" + longitude;
 
-          let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
+            let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
+          }
         }
-      }
-      catch(err){
-        console.log(err);
-      }
-      // }
-    }));
+        catch(err){
+          console.log(err);
+        }
+        // }
+      }));
+    }
+
 
     //pre-condition for related sub chapter updation :(Jira-3035)
     var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
-    if(!hasPerm){subChapter=_.omit(subChapter,'moolyaSubChapterAccess')};
+    if(!hasPerm){newContact=_.omit(newContact,'moolyaSubChapterAccess')};
 
-    let resp = mlDBController.update('MlSubChapters', args.subChapterId, subChapter, {$set: true}, context)
+    let resp = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context)
     if (resp) {
-      if (subChapter && args.subChapterId && subChapter.isEmailNotified) {
+      if (newContact && args.subChapterId && newContact.isEmailNotified) {
         MlEmailNotification.chapterVerficationEmail(args.subChapterId, context);
       }
-      if (!subChapter.isDefaultSubChapter) {
+      if (!newContact.isDefaultSubChapter) {
         MlResolver.MlMutationResolver['updateRelatedSubChapters'](obj, {associatedObj: args.subChapterDetails.associatedObj}, context, info)
       }
     }
 
     if (resp) {
-      if (subChapter && subChapter.chapterId && subChapter.isDefaultSubChapter === true) {   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+      if (newContact && newContact.chapterId && newContact.isDefaultSubChapter === true) {   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
         MlResolver.MlMutationResolver['updateChapter'](obj, {
-          chapterId: subChapter.chapterId,
-          chapter: {isActive: subChapter.isActive, showOnMap: subChapter.showOnMap}
+          chapterId: newContact.chapterId,
+          chapter: {isActive: newContact.isActive, showOnMap: newContact.showOnMap}
         }, context, info)
         // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
       }

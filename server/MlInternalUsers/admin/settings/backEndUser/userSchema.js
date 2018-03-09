@@ -308,10 +308,8 @@ let BackEndUser = `
     type dep{
         department:String,
         departmentName:String,
-        departmentDisplayName:String,
         subDepartment:String,
         subDepartmentName:String,
-        subDepartmentDisplayName:String,
         isAvailiable:Boolean
     }
     

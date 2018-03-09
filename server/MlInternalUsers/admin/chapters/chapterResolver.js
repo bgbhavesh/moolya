@@ -397,20 +397,9 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
     let cityName = mlDBController.findOne('MlCities', {_id: subChapter.contactDetails[0].cityId},context);
     cityName = cityName.name;
     let geoCIty =subChapter.contactDetails[0].buildingNumber + ", "+ (subChapter.contactDetails[0].street?(subChapter.contactDetails[0].street+", "):("")) + (subChapter.contactDetails[0].landmark?(subChapter.contactDetails[0].landmark+", "):(""))  +subChapter.contactDetails[0].area  + ', '+cityName ;
-    // console.log("geocity=",geoCIty);
-    // console.log("subChapter",subChapter);
-    geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
-      // if (err && !data) {
-      //   console.log('Error while creating sub-chapter')
-      //   return "Invalid Country Name";
-      // }
-      // let subChapter = MlSubChapters.findOne({"_id": subChapter._id})
-      // if (subChapter) {
 
-      // console.log('error=',err);
-      // console.log('data=',data);
+    geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
         try{
-          // console.log('The data is:: ', JSON.stringify(data));
         if(data && data.results && data.results[0] && data.results[0].geometry){
           var latitude = data.results[0].geometry.location.lat;
           var longitude = data.results[0].geometry.location.lng;
@@ -418,12 +407,9 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
           newContact.contactDetails[0].longitude ="" + longitude;
           newContact.latitude = "" + latitude ;
           newContact.longitude ="" + longitude;
+
           let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
-          // console.log('updateRes=',updateRes);
         }
-        // else{
-        //   console.log('423432425423423423423423432423432');
-        // }
       }
       catch(err){
         console.log(err);

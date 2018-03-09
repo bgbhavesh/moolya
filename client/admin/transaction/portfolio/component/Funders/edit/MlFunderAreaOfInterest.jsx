@@ -382,11 +382,11 @@ export default class MlFunderAreaOfInterest extends Component {
   render() {
     let that = this;
     let industriesquery = gql` query{
-    data:fetchIndustries{label:industryName,value:_id}
+    data:fetchIndustries{label:industryDisplayName,value:_id}
     }
   `;
     let subDomainQuery = gql` query($industryId:String){
-    data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    data:fetchIndustryDomain(industryId:$industryId){label:displayName,value:_id}
     }
   `;
     let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};

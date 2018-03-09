@@ -540,10 +540,19 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
       })
     }
     depts.map(function (dept) {
-      let departmentName = mlDBController.findOne('MlDepartments', {_id: dept.department}, context).departmentName;
-      let subDepartmentName = mlDBController.findOne('MlSubDepartments', {_id: dept.subDepartment}, context).subDepartmentName;
+      
+      let dept_res = mlDBController.findOne('MlDepartments', {_id: dept.department}, context);
+      let departmentName = dept_res.departmentName;
+      let departmentDisplayName = dept_res.displayName;
+
+      let subDept_res = mlDBController.findOne('MlSubDepartments', {_id: dept.subDepartment}, context);
+      let subDepartmentName = subDept_res.subDepartmentName;
+      let subDepartmentDisplayName = subDept_res.displayName;
+
       dept.departmentName = departmentName;
       dept.subDepartmentName = subDepartmentName;
+      dept.departmentDisplayName = departmentDisplayName;
+      dept.subDepartmentDisplayName = subDepartmentDisplayName;
     })
   }
   return depts

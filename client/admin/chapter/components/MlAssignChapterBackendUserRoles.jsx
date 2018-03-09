@@ -238,6 +238,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       let json = {};
       json.departmentName = item.departmentName;
       json.subDepartmentName = item.subDepartmentName;
+      json.departmentDisplayName = item.departmentDisplayName;
+      json.subDepartmentDisplayName = item.subDepartmentDisplayName;
       json.departmentId = item.department;
       json.subDepartmentId = item.subDepartment;
       json.isAvailiable = item.isAvailiable;
@@ -348,11 +350,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                     <div className="panel-body">
                       <div className="form-group">
                         <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
-                               value={department.departmentName} disabled/>
+                               value={department.departmentDisplayName} disabled/>
                       </div>
                       <div className="form-group">
                         <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                               value={department.subDepartmentName} disabled/>
+                               value={department.subDepartmentDisplayName} disabled/>
                       </div>
                       {/*{(that.state.showIsChapterAdmin) ?*/}
                         {/*<div className="input_types"><input id="chapter_admin_check" type="checkbox"*/}

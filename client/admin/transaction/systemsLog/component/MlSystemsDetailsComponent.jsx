@@ -5,6 +5,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
+import moment from "moment";
 
 
 export default class MlSystemDetailsComponent extends React.Component {
@@ -43,7 +44,7 @@ export default class MlSystemDetailsComponent extends React.Component {
                   <input type="text" placeholder="Transaction Id" defaultValue = {this.props.data.transactionTypeId}  disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time"  defaultValue = {this.props.data.createdAt} disabled={true} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time"  defaultValue = {this.props.data.createdAt ? moment(this.props.data.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name"  defaultValue = {this.props.data.userName} disabled={true} className="form-control float-label" id=""/>
@@ -81,7 +82,7 @@ export default class MlSystemDetailsComponent extends React.Component {
                   <input type="text" placeholder="Activity Name"  defaultValue = {this.props.data.activity} disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Activity Time"  defaultValue = {this.props.data.createdAt} disabled={true} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Activity Time"  defaultValue = {this.props.data.createdAt ? moment(this.props.data.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Current Status" disabled={true} className="form-control float-label" id=""/>

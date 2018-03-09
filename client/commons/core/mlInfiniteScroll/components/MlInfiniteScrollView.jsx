@@ -38,7 +38,7 @@ export default class MlInfiniteScrollView extends Component {
       PageTitle = "Ideators";
     }else if(comType == "startup"){
       PageTitle = "Startups";
-    }else if(comType == "investor"){
+    }else if(comType == "funder"){
       PageTitle = "Investors";
     }else if(comType == "serviceProvider"){
       PageTitle = "Service Providers";

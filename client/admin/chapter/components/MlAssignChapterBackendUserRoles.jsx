@@ -215,6 +215,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     }
   }
 
+  /**
+   * @param {*} departmentDetails 
+   * @param {*} assignedRoles
+   * @ using {departmentName} as {departmentDisplayName} from server 
+   */
   rolesArrayCreate(departmentDetails, assignedRoles) {
     let mainAry = [];
     let self = this;
@@ -238,6 +243,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       let json = {};
       json.departmentName = item.departmentName;
       json.subDepartmentName = item.subDepartmentName;
+      //json.departmentDisplayName = item.departmentDisplayName;
+      //json.subDepartmentDisplayName = item.subDepartmentDisplayName;
       json.departmentId = item.department;
       json.subDepartmentId = item.subDepartment;
       json.isAvailiable = item.isAvailiable;

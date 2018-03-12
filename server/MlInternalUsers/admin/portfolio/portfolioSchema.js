@@ -55,6 +55,7 @@ let portfolioSchema = `
         subDomainId : [String],
         businessType    : String,
         stageOfCompany    : String
+        lastLiveDate : String
     }
     
     input privateKeys{

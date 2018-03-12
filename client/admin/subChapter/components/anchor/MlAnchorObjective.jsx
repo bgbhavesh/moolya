@@ -33,6 +33,7 @@ export default class MlAnchorObjective extends React.PureComponent {
     if (!objective || !objective.length) {
       objective = [{ description: '', status: false }]
     }
+    this.props.setModule('objective');
     this.updateObjectiveFormArray(objective);
 
   }

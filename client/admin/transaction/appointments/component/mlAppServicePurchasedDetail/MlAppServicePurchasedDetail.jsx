@@ -6,6 +6,7 @@ import React from 'react';
 import AppointmentSes from './appointmentSession';
 import { fetchAdminServiceAppointment } from "../../action/fetchAdminServiceAppointment";
 import MlServiceCardsDetailsComponent from '../mlAppServiceDetails/MlserviceCardsDetailsComponent';
+import moment from "moment";
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
@@ -89,7 +90,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                   <input type="text" placeholder="User Id" value={data.client.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Date & Time" value={data.createdAt ? moment(data.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name" value={data.client.name} defaultValue="" className="form-control float-label" id="" />
@@ -127,7 +128,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                   <input type="text" placeholder="Appointment Id" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment Date & Time" value={data.createdAt ? moment(data.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Transaction ID" value={data.orderId} defaultValue="" className="form-control float-label" id="" />

@@ -65,6 +65,7 @@ export default class MlAnchorList extends React.Component {
 
   componentWillMount() {
     const resp = this.getAnchorUsers()
+    this.props.setModule('users');
     return resp
   }
 
@@ -76,7 +77,6 @@ export default class MlAnchorList extends React.Component {
   }
 
   handleUserClick(id, event) {
-    console.log('on user Click', id);
     const resp = this.getAnchorUserDetails(id);
     this.setState({
       socialLinkForm: {

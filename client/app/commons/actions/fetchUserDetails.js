@@ -50,6 +50,7 @@ export async function fetchPortfolioDetails() {
           portfolioImage
           transactionCreatedDate
           transactionUpdatedDate
+          lastLiveDate
         }
       }
         `,

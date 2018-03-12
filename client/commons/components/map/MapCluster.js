@@ -12,7 +12,7 @@ import supercluster from 'points-cluster';
 import { fitBounds } from 'google-map-react/utils';
 
 let MarkerComponent = ({ text, lat, lng }) =>
-  (lat&&lng?<a data-toggle="tooltip" title='Me' data-placement="bottom"><span className="ml my-ml-pin1"></span></a>
+  (lat&&lng?<a data-toggle="tooltip" title='Your location is approximate' data-placement="bottom"><span className="ml my-ml-pin1"></span></a>
     :
     <div></div>);
 
@@ -45,7 +45,7 @@ export const gMap = ({
           )):[]
       }
 
-      {lat!=undefined && lng!=undefined && <MarkerComponent lat={lat} lng={lng} text={'My Location'}/>}
+      {lat!=undefined && lng!=undefined && <MarkerComponent lat={lat} lng={lng}/>}
     </GoogleMap>
   );
 }

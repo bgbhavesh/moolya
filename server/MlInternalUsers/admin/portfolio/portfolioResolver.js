@@ -312,7 +312,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let updatedResponse;
-    let updateRecord = {}
+    let updateRecord = {lastLiveDate : new Date()}
     let regRecord = mlDBController.findOne('MlPortfolioDetails', {
         _id: args.portfoliodetailsId,
         status: 'PORT_GO_LIVE_PEND',

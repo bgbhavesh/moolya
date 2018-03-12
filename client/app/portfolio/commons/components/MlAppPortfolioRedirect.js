@@ -99,7 +99,7 @@ export default class MlAppPortfolioRedirect extends React.Component {
                           <hr/>
                           <div className="col-md-6"><b>Community Type&nbsp; : &nbsp;</b> {pf.communityType}</div>
                           <div className="col-md-6"><b>Live
-                            Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate ? moment(pf.transactionUpdatedDate).format(Meteor.settings.public.dateFormat) : ' '}
+                            Date&nbsp; : &nbsp;</b> {pf.lastLiveDate ? moment(pf.lastLiveDate).format(Meteor.settings.public.dateFormat) : ' '}
                           </div>
                         </div>
                       </div>

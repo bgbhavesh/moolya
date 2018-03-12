@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 import { fetchAdminSessionAppointment } from '../../action/fetchAdminSessionAppointment';
+import moment from "moment";
 
 export default class MlAppServiceSessionAppointment extends Component {
   constructor(props) {
@@ -73,7 +74,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                   <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={this.state.data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Date & Time" value={this.state.data.createdAt ? moment(this.state.data.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name" value={this.state.data.client.name} defaultValue="" className="form-control float-label" id="" />
@@ -156,7 +157,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                   <input type="text" placeholder="Appointment Id" value={this.state.orderId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment date & Time" value={this.state.data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment date & Time" value={this.state.data.createdAt ? moment(this.state.data.createdAt).format(Meteor.settings.public.dateFormat) : ' ' } defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />

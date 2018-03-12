@@ -17,6 +17,7 @@ import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 
+
 const fetchUserCategory = gql`query($id:String,$displayAllOption:Boolean){
   data:FetchUserType(communityCode:$id,displayAllOption:$displayAllOption){
   label:userTypeName

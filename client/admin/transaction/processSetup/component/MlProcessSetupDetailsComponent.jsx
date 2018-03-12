@@ -9,6 +9,7 @@ import gql from "graphql-tag";
 import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
+import moment from "moment";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlProcessSetupDetailsComponent extends React.Component {
@@ -256,7 +257,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                   <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={that.state.data.dateTime} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={that.state.data.dateTime ? moment(that.state.data.dateTime).format(Meteor.settings.public.dateFormat) : ' ' } className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">

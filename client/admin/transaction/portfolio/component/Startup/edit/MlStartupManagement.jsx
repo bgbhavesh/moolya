@@ -335,21 +335,19 @@ export default class MlStartupManagement extends Component{
         }
       });
 
-      var temp = $.parseJSON(resp).result;
+    
+      this.curSelectLogo = {
+        fileName: file && file.name ? file.name : "",
+        fileUrl: result.result
+      }
+      
+      let temp = result.result;
       details=_.omit(details,[name]);
       details=_.extend(details,{[name]:{fileName: file.fileName,fileUrl: temp}});
       that.setState({data: details,responseImage: temp}, function () {
         that.sendDataToParent()
         // that.imagesDisplay()
       })
-      if (result && result.success) {
-        this.curSelectLogo = {
-          fileName: file && file.name ? file.name : "",
-          fileUrl: result.result
-        }
-        //   that.setState({loading:true})
-        //   that.fetchOnlyImages();
-      }
     }
   }
 
@@ -366,25 +364,25 @@ export default class MlStartupManagement extends Component{
   }
 
 
-  async fetchOnlyImages(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response) {
-      this.setState({loading:false})
-      let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.startupManagement
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if(specificData){
-        let curUpload=response[thisState]
-        specificData['logo']= curUpload['logo']?curUpload['logo']: " "
-        this.setState({loading: false, startupManagement:cloneBackUp, data: specificData}, function () {
-          $('#management-form').slideDown();
-        });
-      }else {
-        this.setState({loading: false})
-      }
-    }
-  }
+  // async fetchOnlyImages(){
+  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response) {
+  //     this.setState({loading:false})
+  //     let thisState=this.state.selectedIndex;
+  //     let dataDetails =this.state.startupManagement
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[thisState];
+  //     if(specificData){
+  //       let curUpload=response[thisState]
+  //       specificData['logo']= curUpload['logo']?curUpload['logo']: " "
+  //       this.setState({loading: false, startupManagement:cloneBackUp, data: specificData}, function () {
+  //         $('#management-form').slideDown();
+  //       });
+  //     }else {
+  //       this.setState({loading: false})
+  //     }
+  //   }
+  // }
 
   // async imagesDisplay(){
   //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
@@ -556,7 +554,7 @@ export default class MlStartupManagement extends Component{
                           {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/!*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                         </div>
                         <div className="previewImg ProfileImg">
-                          <img src={this.state.data && this.state.data.logo?generateAbsolutePath(this.state.data.logo.fileUrl):this.state.responseImage?generateAbsolutePath(this.state.responseImage):" "}/>
+                          <img src={this.state.data && this.state.data.logo ? generateAbsolutePath(this.state.data.logo.fileUrl) : this.state.responseImage ? generateAbsolutePath(this.state.responseImage) : ""} />
                         </div>
                       </div>
                       <br className="brclear"/>

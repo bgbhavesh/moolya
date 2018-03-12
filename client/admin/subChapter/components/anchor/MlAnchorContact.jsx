@@ -41,25 +41,26 @@ export default class MlAnchorContact extends React.Component {
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
   }
-  // componentWillMount()
-  // {
-  //   let that = this;
-  //   if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition((position)=>{
-  //   let lat = position.coords.latitude;
-  //   let lng = position.coords.longitude;
-  //   that.setState({lat,lng});
-  //   });
-  //   }
-    
-  // }
+  componentWillMount()
+  {
+    this.props.setModule('subchapter');
+    // let that = this;
+    // if (navigator.geolocation) {
+    // navigator.geolocation.getCurrentPosition((position)=>{
+    // let lat = position.coords.latitude;
+    // let lng = position.coords.longitude;
+    // that.setState({lat,lng});
+    // });
+    // }
+
+  }
   sendDataToParent(data) {
     this.props.getContactDetails(data);
   }
 
   selectContact(index) {
     // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
-    this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });
+    this.sendDataToParent({ formData: this.props.contactDetails[index] });
   }
 
   onOptionSelectedCountry(val) {
@@ -85,7 +86,7 @@ export default class MlAnchorContact extends React.Component {
 
   resetFormData() {
     const data = {
-      selectedIndex: -1,
+      // selectedIndex: -1,
       formData: {
         name :'',
         addressTypeName:'Subchapter',
@@ -152,7 +153,6 @@ export default class MlAnchorContact extends React.Component {
     let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
     let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
     // let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
-    console.log(this.props.formData.addressTypeId);
     return (
       <div className="main_wrap_scroll">
         <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
@@ -161,26 +161,26 @@ export default class MlAnchorContact extends React.Component {
               { /* <h3>Users List</h3> */}
               <div className="left_user_blocks">
 
-                <div className="col-md-4 col-sm-6" onClick={this.resetFormData}>
-                  <div className="list_block provider_block">
-                    <div className="provider_mask"><img src="/images/funder_bg.png" />
-                      <span className="ml ml-plus "></span>
-                    </div>
-                    <h3>Add New</h3>
-                  </div>
-                </div>
+                {/*<div className="col-md-4 col-sm-6" onClick={this.resetFormData}>*/}
+                  {/*<div className="list_block provider_block">*/}
+                    {/*<div className="provider_mask"><img src="/images/funder_bg.png" />*/}
+                      {/*<span className="ml ml-plus "></span>*/}
+                    {/*</div>*/}
+                    {/*<h3>Add New</h3>*/}
+                  {/*</div>*/}
+                {/*</div>*/}
                 {
-                  this.props.contactDetails && this.props.contactDetails.map((user, index) => (
-                    <div key={index} onClick={this.selectContact.bind(this, index)} className="col-md-4 col-sm-6">
-                      <div className="list_block provider_block">
-                        <div className="cluster_status active_cl"></div>
-                        <div className="provider_mask"><img src="/images/funder_bg.png" />
-                          <img className="user_pic" src={user.picURL ? generateAbsolutePath(user.picURL) : "/images/def_profile.png"}/>
-                        </div>
-                        <h3>{user.addressTypeName || 'No address name'}</h3>
-                      </div>
-                    </div>
-                  ))
+                  // this.props.contactDetails && this.props.contactDetails.map((user, index) => (
+                  //   <div key={index} onClick={this.selectContact.bind(this, index)} className="col-md-4 col-sm-6">
+                  //     <div className="list_block provider_block">
+                  //       <div className="cluster_status active_cl"></div>
+                  //       <div className="provider_mask"><img src="/images/funder_bg.png" />
+                  //         <img className="user_pic" src={user.picURL ? generateAbsolutePath(user.picURL) : "/images/def_profile.png"}/>
+                  //       </div>
+                  //       <h3>{user.addressTypeName || 'No address name'}</h3>
+                  //     </div>
+                  //   </div>
+                  // ))
                 }
               </div>
             </div>
@@ -193,13 +193,13 @@ export default class MlAnchorContact extends React.Component {
                 <input type="text" placeholder="Address Type"
                     value="Subchapter" option={type}
                     className="form-control float-label" disabled={true}
-                    onChange={event => this.onChange('addressTypeName', event.target.value)} /> 
+                    onChange={event => this.onChange('addressTypeName', event.target.value)} />
                 </div>
                 <div className="form-group mandatory">
                 <input type="text" placeholder="Name"
                     value={this.props.formData.name}
                     className="form-control float-label"
-                    onChange={event => this.onChange('name', event.target.value)} /> 
+                    onChange={event => this.onChange('name', event.target.value)} />
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" placeholder="Flat/House/floor/Building No"

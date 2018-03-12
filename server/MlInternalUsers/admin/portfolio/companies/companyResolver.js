@@ -158,7 +158,7 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
     companyAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
     companyAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
     companyAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
-    companyAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+    companyAboutUsArray["rating"] = portfolio && portfolio.rating ? portfolio.rating : {};
 
     //private keys for service products
     var object = companyAboutUsArray["serviceProducts"];

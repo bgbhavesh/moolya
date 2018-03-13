@@ -86,9 +86,9 @@ export default class MlAppOngoingMyAppointmentServiceBasicInfo extends Component
                             {/*timeFormat={false}*/}
                             {/*inputProps={{placeholder: "Valid Till",readOnly:true}}*/}
                             {/*closeOnSelect={true}*/}
-                            {/*value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null}*/}
+                            {/*value={service.validTill? new Moment(service.validTill).format(Meteor.settings.public.dateOnlyFormat) : null}*/}
                             {/*disabled />*/}
-                  <input type="text" placeholder="Valid Till" defaultValue={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null} value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null} className="form-control float-label" id="" disabled/>
+                  <input type="text" placeholder="Valid Till" defaultValue={service.validTill? new Moment(service.validTill).format(Meteor.settings.public.dateOnlyFormat) : null} value={service.validTill? new Moment(service.validTill).format(Meteor.settings.public.dateOnlyFormat) : null} className="form-control float-label" id="" disabled/>
                   <FontAwesome name="calendar"
                                className="password_icon"
                                disabled />

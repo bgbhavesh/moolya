@@ -186,7 +186,7 @@ class MlAppServiceBasicInfo extends Component {
                             inputProps={{placeholder: "Valid Till", disabled: this.props.viewMode,readOnly:true}}
                             closeOnSelect={true}
                             isValidDate={(current) => this.validDate(current)}
-                            value={data.validTill? new Moment(data.validTill).format('DD-MM-YY') : null}
+                            value={data.validTill? new Moment(data.validTill).format(Meteor.settings.public.dateOnlyFormat) : null}
                             onChange={(event) => validTill(event)}
                             disabled={this.props.viewMode}/>
                   <FontAwesome name="calendar"

@@ -52,7 +52,7 @@ export default class MlComapanyLookingFor extends Component {
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.lookingFor)
     const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if (empty) {
-      if (response && response.length) {
+      if (response && response.lookingFor && response.lookingFor.length) {
         this.setState({
           loading: false,
           companyLookingFor: response.lookingFor,

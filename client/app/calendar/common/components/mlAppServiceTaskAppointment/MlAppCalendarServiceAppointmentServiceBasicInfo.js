@@ -81,7 +81,7 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
                             timeFormat={false}
                             inputProps={{placeholder: "Valid Till",readOnly:true}}
                             closeOnSelect={true}
-                            value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null}
+                            value={service.validTill? new Moment(service.validTill).format(Meteor.settings.public.dateOnlyFormat) : null}
                             disabled />
                   <FontAwesome name="calendar"
                                className="password_icon"

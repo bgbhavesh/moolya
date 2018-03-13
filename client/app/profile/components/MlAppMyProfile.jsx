@@ -201,7 +201,7 @@ class MlAppMyProfile extends Component {
     var ageDifMs = Date.now() - event._d.getTime();
     var ageDate = new Date(ageDifMs);
     if (event._d) {
-      let value = moment(event._d).format("DD-MM-YYYY");
+      let value = moment(event._d).format(Meteor.settings.public.dateOnlyFormat);
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
@@ -560,7 +560,7 @@ class MlAppMyProfile extends Component {
                     {/*</div>*/}
 
                     <div className="form-group mandatory" id="date-of-birth">
-                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, "DD-MMM-YYYY").format("DD-MM-YYYY"): ""} className="form-control float-label" readOnly="true" disabled="disabled" />
+                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, "DD-MMM-YYYY").format(Meteor.settings.public.dateOnlyFormat): ""} className="form-control float-label" readOnly="true" disabled="disabled" />
                       <FontAwesome name="calendar" placeholder="Date of Birth" className="password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

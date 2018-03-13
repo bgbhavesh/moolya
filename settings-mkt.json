@@ -4,6 +4,7 @@
       "conversationsBaseURL":"https://qarkc.moolya.global",
       "isLeadSquaredTrackingEnabled":true,
       "dateFormat":"D MMM YYYY HH:mm:ss",
+      "dateOnlyFormat":"D MMM YYYY",
       "createNewUser":{
         "code"    : 209,
         "message" : "New User Created"

@@ -126,6 +126,7 @@ appSection.route('/', {
 appSection.route('/dashboard/:isFirst', {
   name: 'dashboard',
   action(params){
+    localStorage.removeItem('userType');
     mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlAppClusterDashboardMapConfig} listConfig={mlAppClusterDashboardListConfig}/>, isFirst:(params.isFirst=='true'?true:false)})
     // mount(AppLayout,{appContent:<MlAppDashboard/>, isFirst:(params.isFirst=='true'?true:false) })
   }

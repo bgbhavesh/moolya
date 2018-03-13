@@ -156,10 +156,10 @@ export default class MlAnchorContact extends React.Component {
     return (
       <div className="main_wrap_scroll">
         <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
-          <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
-            <div className="row">
+          {/* <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
+            <div className="row"> */}
               { /* <h3>Users List</h3> */}
-              <div className="left_user_blocks">
+              {/* <div className="left_user_blocks"> */}
 
                 {/*<div className="col-md-4 col-sm-6" onClick={this.resetFormData}>*/}
                   {/*<div className="list_block provider_block">*/}
@@ -182,14 +182,12 @@ export default class MlAnchorContact extends React.Component {
                   //   </div>
                   // ))
                 }
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lx-6 col-sm-6 col-md-6 nopadding-right">
-            <div>
-              <form>
-                <div className="form-group">
+              {/* </div> */}
+            {/* </div>
+          </div> */}
+          <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
+          <form>
+          <div className="form-group">
                 <input type="text" placeholder="Address Type"
                     value="Subchapter" option={type}
                     className="form-control float-label" disabled={true}
@@ -229,6 +227,11 @@ export default class MlAnchorContact extends React.Component {
                     mandatory={true}selectedValue={this.props.formData.countryId} queryType={"graphql"} query={countryQuery}
                     isDynamic={true} onSelect={this.onOptionSelectedCountry.bind(this)} />
                 </div>
+            </form>
+          </div>
+          <div className="col-lx-6 col-sm-6 col-md-6 nopadding-right">
+            <div>
+              <form>                
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref="state" className="form-control float-label"
                     valueKey={'value'} labelKey={'label'} placeholder="State" queryOptions={statesOption}

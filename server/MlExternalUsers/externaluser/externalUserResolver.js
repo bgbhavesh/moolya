@@ -758,17 +758,36 @@ const getCategoryData = (type, id, query) => {
   // console.log("................", query.subChapterId);
   // typeQuery = { clusterId: id, isActive: true }
   // typeQuery = { chapterId: id, isActive: true }
+  // switch (type) {
+  //   case "cluster":
+  //   case "chapter":
+  //     typeQuery = { _id: query.subChapterId, isActive: true }
+  //     break;
+  //     // typeQuery = { _id: query.subChapterId, isActive: true }
+  //     // break;
+  //   default:
+  //     return [];
+  // }
+  
   let typeQuery = {};
+
   switch (type) {
     case "cluster":
+      typeQuery = { _id: query.subChapterId, isActive: true, clusterId: query.clusterId }
+      break;
     case "chapter":
-      typeQuery = { _id: query.subChapterId, isActive: true }
+      if (query.$or && query.$or.length>0){
+        typeQuery._id = query.$or[0].subChapterId;
+      }
+      typeQuery.isActive = true;
+      typeQuery.chapterId = query.chapterId;
       break;
       // typeQuery = { _id: query.subChapterId, isActive: true }
       // break;
     default:
       return [];
   }
+
 
   const pipeline = [
     { $match: typeQuery },

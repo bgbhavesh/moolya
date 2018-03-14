@@ -57,7 +57,7 @@ export default class NoMarkerDataMessage extends Component{
     let component = <div></div>;
 
     if(!this.props.userType){
-      if(!path.includes('admin')){
+      if(!path.includes('admin') && path.includes('chapters')){
         message = `No active Chapters in ${name} as of now.`;
         component = unmount ?<div></div>:<div ref="noMessageComponent" className="alert alert-info col-md-8 col-md-offset-2 text-center map_alert">
           {message}

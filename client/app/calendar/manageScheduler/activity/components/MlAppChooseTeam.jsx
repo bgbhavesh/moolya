@@ -80,7 +80,7 @@ export default class MlAppChooseTeam extends React.Component{
           let userInfo = {
             name: user.name,
             profileId: user.profileId,
-            profileImage: generateAbsolutePath(user.profileImage),
+            profileImage:user.profileImage,
             userId: user.userId
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
@@ -97,7 +97,7 @@ export default class MlAppChooseTeam extends React.Component{
           let userInfo = {
             name: user.name,
             profileId: user.profileId,
-            profileImage: generateAbsolutePath(user.profileImage),
+            profileImage: user.profileImage,
             userId: user.userId
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
@@ -113,7 +113,7 @@ export default class MlAppChooseTeam extends React.Component{
         let users = resp.map(function (user) {
           let userInfo = {
             name: user.displayName,
-            profileImage: user.profileImage?generateAbsolutePath(user.profileImage):'/images/def_profile.png',
+            profileImage: user.profileImage,
             userId: user._id
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.userId == user._id });
@@ -242,7 +242,7 @@ export default class MlAppChooseTeam extends React.Component{
         teamData[index].users = resp.map(function (user) {
           return {
             name: user.displayName,
-            profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+            profileImage: user.profileImage,
             userId: user._id
           }
         });

@@ -2791,9 +2791,22 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           subChapters = _.concat(subChapters, relatedSC);
         }
       } else {
-        pipeLine = [
-                { $match: { _id: userSubChapterId, isActive: true, chapterId } },
-        ];
+
+        // pipeLine = [
+        //   { $match: { _id: userSubChapterId, isActive: true, chapterId } }
+        // ];
+
+        if(userSubChapter.moolyaSubChapterAccess.externalUser.canSearch) {
+          pipeLine = [
+            { $match: { isActive: true, chapterId } },
+            { $match: { $or: [{ isDefaultSubChapter: true }, { $and: [{ isDefaultSubChapter: false }, { 'moolyaSubChapterAccess.externalUser.canSearch': true }] }] } }
+          ];
+        } else {
+          pipeLine = [
+            { $match: { _id: userSubChapterId, isActive: true, chapterId } }
+          ];
+        }
+        
         subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
 
         pipeLine = [

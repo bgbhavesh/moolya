@@ -1111,7 +1111,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             $filter: {
               input: "$transactionLogs",
               as: "transaction",
-              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] } 
+              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] }
             }
           }
         }
@@ -1149,10 +1149,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         'connectionRequest',
         'interaction',
         'investments',
-        'appointment'
+        'appointment',
+        'manageSchedule'
       ];
       if( transactionsTypeCheck.indexOf(transactionType) >= 0 ) {
-        if(doc.fromUserType === 'user') { 
+        if(doc.fromUserType === 'user') {
           let fromUserProfile;
           if(doc.fromProfileId) {
             fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
@@ -1178,8 +1179,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
               if(isExpired) doc.status = "Expired";
               else if (ifEqual && data.status !== "Completed") doc.status = "Today";
               else doc.status = data.status;
-            } 
-          } 
+            }
+          }
+        }
+        else if(transactionType === 'manageSchedule' && doc.activity == 'BeSpokeService-Created' ){
+          doc.status = 'Requested';
         }
         let activity = doc.activity;
         let activityDocId = doc.activityDocId;

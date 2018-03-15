@@ -114,7 +114,31 @@ MlResolver.MlMutationResolver['updateUserGeneralInfo'] = (obj, args, context, in
     if (args.type == "CONTACTTYPE") {
       id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.contactInfo': args.registration.contactInfo},{$set: true}, context)
     } else if (args.type == "ADDRESSTYPE") {
-      id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.addressInfo': args.registration.addressInfo},{$set: true}, context)
+
+      if(args.registration.addressInfo && args.registration.addressInfo.length){
+
+        args.registration.addressInfo.map((address,index)=>{
+          let city = address.addressCity;
+          let area = address.addressArea;
+          let locality = address.addressLocality;
+          let pin = address.addressPinCode;
+
+          geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+            if(err){
+              throw new Error("Invalid Locality selection "+e);
+            }
+            address.latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+            address.longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
+
+            if(index+1 === args.registration.addressInfo.length){
+              id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.addressInfo': args.registration.addressInfo},{$set: true}, context)
+
+            }
+          }),{key:Meteor.settings.private.googleApiKey});
+        });
+      }
+      // id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.addressInfo': args.registration.addressInfo},{$set: true}, context)
+
     } else if (args.type == "SOCIALLINKS") {
       //id = mlDBController.update('MlRegistration', args.registrationId, {'socialLinksInfo': args.registration.socialLinksInfo}, {$set: true}, context)
       id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.socialLinksInfo': args.registration.socialLinksInfo},{$set: true}, context)
@@ -758,17 +782,36 @@ const getCategoryData = (type, id, query) => {
   // console.log("................", query.subChapterId);
   // typeQuery = { clusterId: id, isActive: true }
   // typeQuery = { chapterId: id, isActive: true }
+  // switch (type) {
+  //   case "cluster":
+  //   case "chapter":
+  //     typeQuery = { _id: query.subChapterId, isActive: true }
+  //     break;
+  //     // typeQuery = { _id: query.subChapterId, isActive: true }
+  //     // break;
+  //   default:
+  //     return [];
+  // }
+
   let typeQuery = {};
+
   switch (type) {
     case "cluster":
+      typeQuery = { _id: query.subChapterId, isActive: true, clusterId: query.clusterId }
+      break;
     case "chapter":
-      typeQuery = { _id: query.subChapterId, isActive: true }
+      if (query.$or && query.$or.length>0){
+        typeQuery._id = query.$or[0].subChapterId;
+      }
+      typeQuery.isActive = true;
+      typeQuery.chapterId = query.chapterId;
       break;
       // typeQuery = { _id: query.subChapterId, isActive: true }
       // break;
     default:
       return [];
   }
+
 
   const pipeline = [
     { $match: typeQuery },

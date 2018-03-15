@@ -200,7 +200,7 @@ export default class MlIdeatorIdeas extends Component{
     let that = this;
     const showLoader = this.state.loading;
     let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
-    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
+    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?generateAbsolutePath(that.state.data.ideaImage.fileUrl):'/images/no_image.png';
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
@@ -210,7 +210,7 @@ export default class MlIdeatorIdeas extends Component{
           {/*<a href="" >*/}
             <div className="upload_hex">
               {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
-              <img src={generateAbsolutePath(image)} id="blah" width="105" height="auto"/>
+              <img src={image} id="blah" width="105" height="auto"/>
               {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>*/}
             </div>
           {/*</a>*/}

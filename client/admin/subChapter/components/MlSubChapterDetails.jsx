@@ -293,7 +293,7 @@ class MlSubChapterDetails extends Component {
 
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
-                  <img src="/images/anchor.png" className="hanging_img"  onClick={this.anchorRedirect} />
+                  <img src="/images/anchor.png" title="Add SC contact dtls/View Anchor dtls" className="hanging_img"  onClick={this.anchorRedirect} />
             <div className="col-md-6 nopadding-left">
               <div className="form_bg left_wrap">
                 <ScrollArea

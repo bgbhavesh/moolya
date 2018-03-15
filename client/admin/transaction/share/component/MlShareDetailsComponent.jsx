@@ -98,7 +98,7 @@ export default class MlShareDetailsComponent extends React.Component {
                   <input type="text" placeholder="Transaction Id" value={transId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={ that.state.data&& that.state.data.createdAt ?createdAt : ''} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">

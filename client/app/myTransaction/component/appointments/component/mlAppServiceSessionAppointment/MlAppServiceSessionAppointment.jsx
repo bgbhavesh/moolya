@@ -355,7 +355,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                 timeFormat={false}
                 inputProps={{ placeholder: "Selected date", readOnly: true }}
                 value={this.state.selectedDate
-                  ? moment(this.state.selectedDate).format('DD-MM-YY')
+                  ? moment(this.state.selectedDate).format(Meteor.settings.public.dateOnlyFormat)
                   : ''}
                   isValidDate={validDate}
                 onChange={(event) => this.changeDate(event)}

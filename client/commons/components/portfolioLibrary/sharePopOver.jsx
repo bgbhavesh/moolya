@@ -312,7 +312,7 @@ render(){
           <br className="brclear" />
           <div className="col-md-6 nopadding-left">
             <div className="form-group" id="start-time">
-              <Datetime dateFormat={"DD-MM-YYYY"}
+              <Datetime dateFormat={Meteor.settings.public.dateOnlyFormat}
                         timeFormat={false}
                         inputProps={{placeholder: "Shared Start Date",readOnly:true}}
                         closeOnSelect={true}
@@ -327,7 +327,7 @@ render(){
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form-group" id="end-time">
-              <Datetime dateFormat={"DD-MM-YYYY"}
+              <Datetime dateFormat={Meteor.settings.public.dateOnlyFormat}
                         timeFormat={false}
                         inputProps={{placeholder: "Shared End Date",readOnly:true}}
                         closeOnSelect={true}

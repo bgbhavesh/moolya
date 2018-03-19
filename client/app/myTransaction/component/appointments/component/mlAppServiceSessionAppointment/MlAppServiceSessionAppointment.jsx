@@ -268,7 +268,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Appointment date & Time"
-                             value={`${new moment(this.state.data.createdAt).format(Meteor.settings.public.dateFormat)} GMT`} defaultValue="" className="form-control float-label" id="" />
+                             value={`${new moment(this.state.data.startDate).format(Meteor.settings.public.dateFormat)} GMT`} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />

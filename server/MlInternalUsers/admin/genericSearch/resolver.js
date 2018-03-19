@@ -1111,9 +1111,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             $filter: {
               input: "$transactionLogs",
               as: "transaction",
-              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] }
+              cond: {$or:[
+                {$eq: [ "$$transaction.activity", 'Session-Appointment' ]},
+                { $eq: [ "$$transaction.activity", 'BeSpokeService-Created' ] },
+                { $eq: [ "$$transaction.activity", 'Service-Purchased' ] }
+              ] }
             }
-          }
+          },
         }
       },
       {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$transactionLogs" ] } }},

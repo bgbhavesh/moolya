@@ -89,7 +89,6 @@ export default class MlInfiniteScrollContainer extends Component {
     let viewComponent = this.props.viewComponent;
     let data = this.props.data && this.props.data.data ? this.props.data.data : [];
     let count = this.props.data && this.props.data.count ? this.props.data.count : 0;
-    console.log('count', count);
     let hasMore = data.length == count ? false : true;
 
     return (
@@ -103,7 +102,7 @@ export default class MlInfiniteScrollContainer extends Component {
                               onAlphaSearchChange={that.onAlphaSearchChange}
             /> : '' }
           <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
-          <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />
+          {count>data.length?<MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />:<div></div>}
         </div>
       </div>
       )

@@ -1,9 +1,14 @@
+/**
+ * @author updated 'vishwadeep' 19/2/18
+ */
 import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {findDocumentMappingActionHandler} from '../actions/findDocumentMappingAction'
 import DocumentActiveComponent from "./DocumentActiveComponent";
-import MandatoryProcessDocFormatter from "./MandatoryProcessDocFormatter"
+import MandatoryProcessDocFormatter from "./MandatoryProcessDocFormatter";
+import { findProcessDocActionHandler } from '../actions/findProcessDocAction';
+
 import _ from 'underscore'
 import moment from 'moment'
 export default class MlProcessDocMapping extends Component {
@@ -12,9 +17,11 @@ export default class MlProcessDocMapping extends Component {
 
       this.state={
         documentInfo:[],
-        processDocumentsList:[]
+        processDocumentsList:[],
+        response: {}
       }
       this.findDocument=this.findDocument.bind(this);
+      this.getUpdatedData = this.getUpdatedData.bind(this);
       return this;
     }
 
@@ -23,9 +30,8 @@ export default class MlProcessDocMapping extends Component {
   }
   componentWillMount(){
   //  console.log(this.props.config);
+    // this.findProcessDocument();
     const processResp=this.findDocument();
-
-
     return processResp;
   }
 
@@ -36,7 +42,6 @@ export default class MlProcessDocMapping extends Component {
     let docTypeId =this.props.docConfig
     let processId=this.props.processConfig
     const response = await findDocumentMappingActionHandler(kycId,processId);
-    console.log(response);
     if(response){
       let documentDetails=[]
       //let processDocumentsList=this.state.processDocumentsList
@@ -56,13 +61,31 @@ export default class MlProcessDocMapping extends Component {
     }
   }
 
+  /**
+   * @func called after the child mounting
+   */
+  async findProcessDocument() {
+    const { processConfig } = this.props;
+    const response = await findProcessDocActionHandler(processConfig);
+    this.setState({ response })
+  }
+
+  /**
+   * @func calling from the child component
+   */
+  getUpdatedData() {
+    this.findProcessDocument();
+  }
 
   SwitchBtn(cell, row){
-    return <DocumentActiveComponent data={row} processConfig={this.props.processConfig} kycConfig={this.props.kycConfig} docTypeConfig={this.props.docConfig}/>;
+    const { processConfig, kycConfig, docConfig } = this.props;
+    return <DocumentActiveComponent response={this.state.response} getUpdatedData={this.getUpdatedData} data={row} processConfig={processConfig} kycConfig={kycConfig} docTypeConfig={docConfig} />;
+    // return <DocumentActiveComponent response={this.state.response} getUpdatedData={this.getUpdatedData} data={row} processConfig={this.props.processConfig} kycConfig={this.props.kycConfig} docTypeConfig={this.props.docConfig}/>;
   }
   SwitchMandatoryBtn(cell, row){
-
-    return <MandatoryProcessDocFormatter data={row} processConfig={this.props.processConfig} kycConfig={this.props.kycConfig} docTypeConfig={this.props.docConfig}/>;
+    const { processConfig, kycConfig, docConfig } = this.props;
+    return <MandatoryProcessDocFormatter response={this.state.response} getUpdatedData={this.getUpdatedData} data={row} processConfig={processConfig} kycConfig={kycConfig} docTypeConfig={docConfig} />;
+    // return <MandatoryProcessDocFormatter response={this.state.response} getUpdatedData={this.getUpdatedData} data={row} processConfig={this.props.processConfig} kycConfig={this.props.kycConfig} docTypeConfig={this.props.docConfig}/>;
   }
 
   render() {

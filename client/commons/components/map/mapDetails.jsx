@@ -68,7 +68,7 @@ export default class MapDetails extends Component {
       }else if (m.key == "chapter"){
         title = "Sub Chapters"
       }else if (m.key == "accelerator"){
-        title = "Accelators"
+        title = "Accelerators"
       }else if (m.key == "incubator"){
         title = "Incubators"
       }else if (m.key == "co_working"){

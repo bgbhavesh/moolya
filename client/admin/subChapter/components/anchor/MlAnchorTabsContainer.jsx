@@ -74,6 +74,10 @@ class MlAnchorTabsContainer extends React.Component {
       toastr.error(response.result);
   }
 
+  /**
+   * @todo : please use mlFieldValidations for validating fields
+   * @todo : for the first condition when {contactDetails} in db is empty then its throwing error
+   */
   async updateAnchorDetails() {
     let response;
 

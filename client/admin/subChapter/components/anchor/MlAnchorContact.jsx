@@ -20,7 +20,7 @@ export default class MlAnchorContact extends React.Component {
     // }
     this.sendDataToParent = this.sendDataToParent.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.selectUser = this.selectContact.bind(this);
+    // this.selectUser = this.selectContact.bind(this);
     this.resetFormData = this.resetFormData.bind(this);
     this.onOptionSelectedCountry = this.onOptionSelectedCountry.bind(this);
     this.onOptionSelectedStates = this.onOptionSelectedStates.bind(this);
@@ -58,10 +58,10 @@ export default class MlAnchorContact extends React.Component {
     this.props.getContactDetails(data);
   }
 
-  selectContact(index) {
-    // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
-    this.sendDataToParent({ formData: this.props.contactDetails[index] });
-  }
+  // selectContact(index) {
+  //   // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
+  //   this.sendDataToParent({ formData: this.props.contactDetails[index] });
+  // }
 
   onOptionSelectedCountry(val) {
     this.onChange("countryId", val);
@@ -191,7 +191,8 @@ export default class MlAnchorContact extends React.Component {
                 <input type="text" placeholder="Address Type"
                     value="Subchapter" option={type}
                     className="form-control float-label" disabled={true}
-                    onChange={event => this.onChange('addressTypeName', event.target.value)} />
+                    //onChange={event => this.onChange('addressTypeName', event.target.value)} 
+                    />
                 </div>
                 <div className="form-group mandatory">
                 <input type="text" placeholder="Name"

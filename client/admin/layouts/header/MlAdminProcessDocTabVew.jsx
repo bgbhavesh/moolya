@@ -127,7 +127,7 @@ export default class MlAdminProcessDocTabVew extends Component {
         }
 
         return (
-          <li key={option.name} className="swiper-slide">
+          <li key={index} className="swiper-slide">
             <div className={`moolya_btn ${activeClass} `}
                  onClick={this.subMenuClick}><a href={option.link}
                                                 className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>

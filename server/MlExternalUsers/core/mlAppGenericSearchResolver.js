@@ -114,15 +114,26 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
     searchQuery = { $or: searchQuery };
   }
 
+  // let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
+  // mlSubChapterAccessControl = mlSubChapterAccessControl || {};
+  // mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
+  // let subChapterQuery = {};
+  // if (mlSubChapterAccessControl.isInclusive) {
+  //   subChapterQuery = { $in: mlSubChapterAccessControl.subChapters };
+  // } else {
+  //   subChapterQuery = { $nin: mlSubChapterAccessControl.subChapters };
+  // }
+
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
-  mlSubChapterAccessControl = mlSubChapterAccessControl || {};
-  mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
-  let subChapterQuery = {};
-  if (mlSubChapterAccessControl.isInclusive) {
+    mlSubChapterAccessControl = mlSubChapterAccessControl || {};
+    mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
+    if (mlSubChapterAccessControl.isInclusive) {
     subChapterQuery = { $in: mlSubChapterAccessControl.subChapters };
-  } else {
+    chapterQuery = { $in: mlSubChapterAccessControl.chapters };
+    } else {
     subChapterQuery = { $nin: mlSubChapterAccessControl.subChapters };
-  }
+    chapterQuery = { $nin: mlSubChapterAccessControl.chapters };
+    }
 
   let moduleName = args ? args.module : '';
   moduleName = moduleName.toUpperCase();
@@ -1163,252 +1174,65 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
     var clusterId = query.clusterId ? query.clusterId : '';
     var chapterId = query.chapterId ? query.chapterId : '';
     const userType = query.userType;
+    const userId = context.userId;
+    const userProfile = new MlUserContext().userProfileDetails(userId);
+    var userSubChapterId = userProfile.subChapterId;
+    const userSubChapter = mlDBController.findOne('MlSubChapters', { _id: userSubChapterId });
+    var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
 
     // Generic search query object for EXTERNAL Users
     const queryObj = { isActive: true };
-
     let users = [];
-
     if (clusterId != '' && chapterId!='') {
-      const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context);
-      let chapter = '';
-      if(chapterId){
-        chapter = mlDBController.findOne('MlChapters', { _id: chapterId }, context);
+
+      let moduleContext = "";
+      var externalUserPipeline = [];
+      moduleContext=mlDBController.findOne('MlChapters', {_id:chapterId}, context).chapterName;
+      let chapter = mlDBController.findOne('MlChapters', {_id:chapterId}, context);
+      if(isDefaultSubChapter){
+          let sub = mlDBController.find('MlSubChapters', {$or:[{chapterId:chapterId, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{chapterId:chapterId, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
+          let ids = _.map(sub, "_id");
+          chapterCount = sub.length;
+          query={"chapterId":chapterId, "clusterId":chapter.clusterId, isActive:true, "$or":[{"subChapterId":subChapterQuery}, {isDefaultSubChapter:true}]};
+      }else{
+          if(userSubChapter.moolyaSubChapterAccess.externalUser.canView || userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){
+            chapterCount = mlDBController.find('MlSubChapters', {chapterId:chapterId, isActive:true, _id:subChapterQuery}, context).count()
+                          + mlDBController.find('MlSubChapters', {chapterId:chapterId, isActive:true, isDefaultSubChapter:true}, context).count();
+          }else{
+            chapterCount = mlDBController.find('MlSubChapters', {chapterId:chapterId, isActive:true, _id:subChapterQuery}, context).count();
+          }
+          query={"clusterId":chapter.clusterId, "chapterId":chapterId, isActive:true, "$or":[{"subChapterId":subChapterQuery}, {isDefaultSubChapter:true}]};
       }
 
-      if (cluster.isActive && chapter.isActive) {
-        queryObj.clusterId = clusterId;
-        queryObj.chapterId = chapterId;
-        queryObj.isApprove = true;
-        queryObj.isActive = true;
+      if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
+        query.communityDefName = userType;
+        externalUserPipeline = [
+          {
+            "$match" : 
+              {
+                "profile.externalUserProfiles.clusterId":query.clusterId, 
+                "profile.externalUserProfiles.chapterId":query.chapterId, 
+                "profile.externalUserProfiles.communityDefName":query.communityDefName, 
+                "profile.externalUserProfiles.isApprove":true, 
+                "profile.externalUserProfiles.isActive":true
+              }
+          }
+        ];
 
-          // FOR SPECIFIC COMMUNITY
-        if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
-          queryObj.communityDefName = userType;
-          var pipeline = [
-            {
-              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
-            },
-            {
-              $unwind: '$profile.externalUserProfiles',
-            },
-
-              { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
-
-              { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
-
-              { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
-
-              { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
-            {
-              $project: {
-                _id: 1,
-                name: '$profile.displayName',
-                portfolioId: '$portfolio._id',
-                profile: {
-                  profileImage: '$profile.profileImage',
-                  firstName: '$profile.firstName',
-                  lastName: '$profile.lastName',
-                },
-                communityCode: '$profile.externalUserProfiles.communityDefCode',
-                communityDefName: '$profile.externalUserProfiles.communityDefName',
-                chapterName: '$profile.externalUserProfiles.chapterName',
-                isActive: '$profile.isActive',
-                accountType: '$profile.externalUserProfiles.accountType',
-                externalUserAdditionalInfo: {
-                  $filter: {
-                    input: '$profile.externalUserAdditionalInfo',
-                    as: 'item',
-                    cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
-                  },
-                },
-              },
-            },
-            { $unwind: {
-              path: '$externalUserAdditionalInfo',
-              preserveNullAndEmptyArrays: true,
-            },
-            },
-            {
-              $group: {
-                _id: '$externalUserAdditionalInfo.profileId',
-                data: { $first: '$$ROOT' },
-              },
-            },
-              { $replaceRoot: { newRoot: '$data' } },
-            {
-              $project: {
-                _id: 1,
-                name: 1,
-                communityCode: 1,
-                communityDefName: 1,
-                chapterName: 1,
-                portfolioId: 1,
-                profile: 1,
-                isActive: 1,
-                accountType: 1,
-                address: {
-                  $filter: {
-                    input: '$externalUserAdditionalInfo.addressInfo',
-                    as: 'item',
-                    cond: { $eq: ['$$item.isDefaultAddress', true] },
-                  },
-                },
-              },
-            },
-            { $unwind: {
-              path: '$address',
-              preserveNullAndEmptyArrays: true,
-            },
-            },
-            {
-              $project: {
-                _id: 1,
-                name: 1,
-                communityCode: 1,
-                communityDefName: 1,
-                portfolioId: 1,
-                profile: 1,
-                chapterName: 1,
-                isActive: 1,
-                latitude: '$address.latitude',
-                longitude: '$address.longitude',
-                accountType: 1,
-              },
-            },
-          ];
-          users = mlDBController.aggregate('users', pipeline, context);
-        }
-
-        // FOR All
-        else {
-          var pipeline = [
-            {
-              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
-            },
-            {
-              $unwind: '$profile.externalUserProfiles',
-            },
-
-              { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
-
-              { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
-
-              { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
-
-              { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId,
-                // 'profile.externalUserProfiles.subChapterId': subChapterId,
-                'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
-
-            {
-              $project: {
-                _id: 1,
-                name: '$profile.displayName',
-                profile: {
-                  profileImage: '$profile.profileImage',
-                  firstName: '$profile.firstName',
-                  lastName: '$profile.lastName',
-                },
-                portfolioId: '$portfolio._id',
-                communityCode: '$profile.externalUserProfiles.communityDefCode',
-                communityDefName: '$profile.externalUserProfiles.communityDefName',
-                chapterName: '$profile.externalUserProfiles.chapterName',
-                accountType: '$profile.externalUserProfiles.accountType',
-                isActive: '$profile.isActive',
-                externalUserAdditionalInfo: {
-                  $filter: {
-                    input: '$profile.externalUserAdditionalInfo',
-                    as: 'item',
-                    cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
-                  },
-                },
-              },
-            },
-            { $unwind: {
-              path: '$externalUserAdditionalInfo',
-              preserveNullAndEmptyArrays: true,
-            },
-            },
-            {
-              $group: {
-                _id: '$externalUserAdditionalInfo.profileId',
-                data: { $first: '$$ROOT' },
-              },
-            },
-              { $replaceRoot: { newRoot: '$data' } },
-            {
-              $project: {
-                _id: 1,
-                name: 1,
-                communityCode: 1,
-                communityDefName: 1,
-                chapterName: 1,
-                portfolioId: 1,
-                profile: 1,
-                isActive: 1,
-                accountType: 1,
-                address: {
-                  $filter: {
-                    input: '$externalUserAdditionalInfo.addressInfo',
-                    as: 'item',
-                    cond: { $eq: ['$$item.isDefaultAddress', true] },
-                  },
-                },
-              },
-            },
-            { $unwind: {
-              path: '$address',
-              preserveNullAndEmptyArrays: true,
-            },
-            },
-            {
-              $project: {
-                _id: 1,
-                name: 1,
-                profile: 1,
-                communityCode: 1,
-                portfolioId: 1,
-                communityDefName: 1,
-                chapterName: 1,
-                isActive: 1,
-                accountType: 1,
-                latitude: '$address.latitude',
-                longitude: '$address.longitude',
-              },
-            },
-          ];
-          users = mlDBController.aggregate('users', pipeline, context);
-        }
       }
-    }
+      query.isApprove=true;
 
-    else if (clusterId != '') {
-      const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context);
-
-      if (cluster.isActive ) {
-        queryObj.clusterId = clusterId;
-        queryObj.isApprove = true;
-        queryObj.isActive = true;
-
-        // FOR SPECIFIC COMMUNITY
-        if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
-          queryObj.communityDefName = userType;
-          var pipeline = [
-            {
-              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
-            },
-            {
-              $unwind: '$profile.externalUserProfiles',
-            },
-
-            { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
-
-            { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
-
-            { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
-
-            { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
-            {
+      var queryObj = query;
+      var pipeline=[
+        { "$match": {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}} },
+        { "$unwind" :"$profile.externalUserProfiles" },
+        { "$lookup": { from: "mlPortfolioDetails", localField: "profile.externalUserProfiles.profileId", foreignField: "profileId", as: "portfolio" } },
+        { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+        { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}}
+      ];
+      pipeline = pipeline.concat(externalUserPipeline);
+      var projectionDetails = [
+        {
               $project: {
                 _id: 1,
                 name: '$profile.displayName',
@@ -1484,45 +1308,286 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 accountType: 1,
               },
             },
-          ];
-          users = mlDBController.aggregate('users', pipeline, context);
-        }
+      ];
 
-        // FOR All
-        else {
-          var pipeline = [
-            {
-              $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
-            },
-            {
-              $unwind: '$profile.externalUserProfiles',
-            },
+      pipeline = pipeline.concat(projectionDetails);
+      users=mlDBController.aggregate('users',pipeline,context);
 
-            { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+    /** Previous code comment start**/
 
-            { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+      // const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context);
+      // let chapter = '';
+      // if(chapterId){
+      //   chapter = mlDBController.findOne('MlChapters', { _id: chapterId }, context);
+      // }
 
-            { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+      // if (cluster.isActive && chapter.isActive) {
+      //   queryObj.clusterId = clusterId;
+      //   queryObj.chapterId = chapterId;
+      //   queryObj.isApprove = true;
+      //   queryObj.isActive = true;
 
-            { $match: { 'profile.externalUserProfiles.clusterId': clusterId,
-              // 'profile.externalUserProfiles.subChapterId': subChapterId,
-              'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
+      //     // FOR SPECIFIC COMMUNITY
+      //   if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
+      //     queryObj.communityDefName = userType;
+      //     var pipeline = [
+      //       {
+      //         $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+      //       },
+      //       {
+      //         $unwind: '$profile.externalUserProfiles',
+      //       },
 
-            {
+      //         { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+      //         { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+      //         { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+      //         { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: '$profile.displayName',
+      //           portfolioId: '$portfolio._id',
+      //           profile: {
+      //             profileImage: '$profile.profileImage',
+      //             firstName: '$profile.firstName',
+      //             lastName: '$profile.lastName',
+      //           },
+      //           communityCode: '$profile.externalUserProfiles.communityDefCode',
+      //           communityDefName: '$profile.externalUserProfiles.communityDefName',
+      //           chapterName: '$profile.externalUserProfiles.chapterName',
+      //           isActive: '$profile.isActive',
+      //           accountType: '$profile.externalUserProfiles.accountType',
+      //           externalUserAdditionalInfo: {
+      //             $filter: {
+      //               input: '$profile.externalUserAdditionalInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$externalUserAdditionalInfo',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $group: {
+      //           _id: '$externalUserAdditionalInfo.profileId',
+      //           data: { $first: '$$ROOT' },
+      //         },
+      //       },
+      //         { $replaceRoot: { newRoot: '$data' } },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           communityCode: 1,
+      //           communityDefName: 1,
+      //           chapterName: 1,
+      //           portfolioId: 1,
+      //           profile: 1,
+      //           isActive: 1,
+      //           accountType: 1,
+      //           address: {
+      //             $filter: {
+      //               input: '$externalUserAdditionalInfo.addressInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.isDefaultAddress', true] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$address',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           communityCode: 1,
+      //           communityDefName: 1,
+      //           portfolioId: 1,
+      //           profile: 1,
+      //           chapterName: 1,
+      //           isActive: 1,
+      //           latitude: '$address.latitude',
+      //           longitude: '$address.longitude',
+      //           accountType: 1,
+      //         },
+      //       },
+      //     ];
+      //     users = mlDBController.aggregate('users', pipeline, context);
+      //   }
+
+      //   // FOR All
+      //   else {
+      //     var pipeline = [
+      //       {
+      //         $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+      //       },
+      //       {
+      //         $unwind: '$profile.externalUserProfiles',
+      //       },
+
+      //         { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+      //         { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+      //         { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+      //         { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId,
+      //           // 'profile.externalUserProfiles.subChapterId': subChapterId,
+      //           'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
+
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: '$profile.displayName',
+      //           profile: {
+      //             profileImage: '$profile.profileImage',
+      //             firstName: '$profile.firstName',
+      //             lastName: '$profile.lastName',
+      //           },
+      //           portfolioId: '$portfolio._id',
+      //           communityCode: '$profile.externalUserProfiles.communityDefCode',
+      //           communityDefName: '$profile.externalUserProfiles.communityDefName',
+      //           chapterName: '$profile.externalUserProfiles.chapterName',
+      //           accountType: '$profile.externalUserProfiles.accountType',
+      //           isActive: '$profile.isActive',
+      //           externalUserAdditionalInfo: {
+      //             $filter: {
+      //               input: '$profile.externalUserAdditionalInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$externalUserAdditionalInfo',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $group: {
+      //           _id: '$externalUserAdditionalInfo.profileId',
+      //           data: { $first: '$$ROOT' },
+      //         },
+      //       },
+      //         { $replaceRoot: { newRoot: '$data' } },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           communityCode: 1,
+      //           communityDefName: 1,
+      //           chapterName: 1,
+      //           portfolioId: 1,
+      //           profile: 1,
+      //           isActive: 1,
+      //           accountType: 1,
+      //           address: {
+      //             $filter: {
+      //               input: '$externalUserAdditionalInfo.addressInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.isDefaultAddress', true] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$address',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           profile: 1,
+      //           communityCode: 1,
+      //           portfolioId: 1,
+      //           communityDefName: 1,
+      //           chapterName: 1,
+      //           isActive: 1,
+      //           accountType: 1,
+      //           latitude: '$address.latitude',
+      //           longitude: '$address.longitude',
+      //         },
+      //       },
+      //     ];
+      //     users = mlDBController.aggregate('users', pipeline, context);
+      //   }
+      // }
+    /** Previous code comment ends**/
+
+    }
+
+    else if (clusterId != '') {
+      let moduleContext = "";
+      var externalUserPipeline = [];
+      moduleContext=mlDBController.findOne('MlClusters', {_id:clusterId}, context).clusterName;
+      if(isDefaultSubChapter){
+          let sub = mlDBController.find('MlSubChapters', {$or:[{clusterId:clusterId, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{clusterId:clusterId, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
+          let subIds = _.map(sub, "_id");
+          let ids = _.map(sub, "chapterId");
+          ids = _.uniq(ids)
+          chapterCount = mlDBController.find('MlChapters', {_id:{$in:ids}, clusterId:clusterId, isActive:true}, context).count();
+          // query={"clusterId":args.id, chapterId:{$in:ids}, subChapterId:{$in:subIds}, isActive:true};
+          query={"clusterId":clusterId, subChapterId:subChapterQuery, isActive:true};
+      }else{
+          chapterCount = mlDBController.find('MlChapters', {clusterId:clusterId, isActive:true, _id:chapterQuery}, context).count();
+          // query={"clusterId":args.id, isActive:true, "chapterId":chapterQuery, "subChapterId":subChapterQuery};
+          query={"clusterId":clusterId, isActive:true, "subChapterId":subChapterQuery};
+      }
+
+      if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
+        query.communityDefName = userType;
+        externalUserPipeline = [
+          {
+            "$match" : 
+              {
+                "profile.externalUserProfiles.clusterId":query.clusterId, 
+                "profile.externalUserProfiles.communityDefName":query.communityDefName, 
+                "profile.externalUserProfiles.isApprove":true, 
+                "profile.externalUserProfiles.isActive":true
+              }
+          }
+        ];
+      }
+      query.isApprove=true;
+
+      var queryObj = query;
+      var pipeline=[
+        { "$match": {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}} },
+        { "$unwind" :"$profile.externalUserProfiles" },
+        { "$lookup": { from: "mlPortfolioDetails", localField: "profile.externalUserProfiles.profileId", foreignField: "profileId", as: "portfolio" } },
+        { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+        { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}}
+      ];
+      pipeline = pipeline.concat(externalUserPipeline);
+      var projectionDetails = [
+        {
               $project: {
                 _id: 1,
                 name: '$profile.displayName',
+                portfolioId: '$portfolio._id',
                 profile: {
                   profileImage: '$profile.profileImage',
                   firstName: '$profile.firstName',
                   lastName: '$profile.lastName',
                 },
-                portfolioId: '$portfolio._id',
                 communityCode: '$profile.externalUserProfiles.communityDefCode',
                 communityDefName: '$profile.externalUserProfiles.communityDefName',
                 chapterName: '$profile.externalUserProfiles.chapterName',
-                accountType: '$profile.externalUserProfiles.accountType',
                 isActive: '$profile.isActive',
+                accountType: '$profile.externalUserProfiles.accountType',
                 externalUserAdditionalInfo: {
                   $filter: {
                     input: '$profile.externalUserAdditionalInfo',
@@ -1543,7 +1608,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 data: { $first: '$$ROOT' },
               },
             },
-              { $replaceRoot: { newRoot: '$data' } },
+            { $replaceRoot: { newRoot: '$data' } },
             {
               $project: {
                 _id: 1,
@@ -1573,21 +1638,231 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
               $project: {
                 _id: 1,
                 name: 1,
-                profile: 1,
                 communityCode: 1,
-                portfolioId: 1,
                 communityDefName: 1,
+                portfolioId: 1,
+                profile: 1,
                 chapterName: 1,
                 isActive: 1,
-                accountType: 1,
                 latitude: '$address.latitude',
                 longitude: '$address.longitude',
+                accountType: 1,
               },
             },
-          ];
-          users = mlDBController.aggregate('users', pipeline, context);
-        }
-      }
+      ];
+
+      pipeline = pipeline.concat(projectionDetails);
+      users=mlDBController.aggregate('users',pipeline,context);
+
+    /** Previous code comment start**/
+      // console.log('The users finaly geting are::: ', JSON.stringify(users));
+      // const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context);
+
+      // if (cluster.isActive ) {
+      //   queryObj.clusterId = clusterId;
+      //   queryObj.isApprove = true;
+      //   queryObj.isActive = true;
+
+      //   // FOR SPECIFIC COMMUNITY
+      //   if (userType == 'Ideators' || userType == 'Investors' || userType == 'Startups' || userType == 'Service Providers' || userType == 'Companies' || userType == 'Institutions') {
+      //     queryObj.communityDefName = userType;
+      //     var pipeline = [
+      //       {
+      //         $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+      //       },
+      //       {
+      //         $unwind: '$profile.externalUserProfiles',
+      //       },
+
+      //       { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+      //       { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+      //       { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+      //       { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: '$profile.displayName',
+      //           portfolioId: '$portfolio._id',
+      //           profile: {
+      //             profileImage: '$profile.profileImage',
+      //             firstName: '$profile.firstName',
+      //             lastName: '$profile.lastName',
+      //           },
+      //           communityCode: '$profile.externalUserProfiles.communityDefCode',
+      //           communityDefName: '$profile.externalUserProfiles.communityDefName',
+      //           chapterName: '$profile.externalUserProfiles.chapterName',
+      //           isActive: '$profile.isActive',
+      //           accountType: '$profile.externalUserProfiles.accountType',
+      //           externalUserAdditionalInfo: {
+      //             $filter: {
+      //               input: '$profile.externalUserAdditionalInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$externalUserAdditionalInfo',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $group: {
+      //           _id: '$externalUserAdditionalInfo.profileId',
+      //           data: { $first: '$$ROOT' },
+      //         },
+      //       },
+      //       { $replaceRoot: { newRoot: '$data' } },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           communityCode: 1,
+      //           communityDefName: 1,
+      //           chapterName: 1,
+      //           portfolioId: 1,
+      //           profile: 1,
+      //           isActive: 1,
+      //           accountType: 1,
+      //           address: {
+      //             $filter: {
+      //               input: '$externalUserAdditionalInfo.addressInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.isDefaultAddress', true] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$address',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           communityCode: 1,
+      //           communityDefName: 1,
+      //           portfolioId: 1,
+      //           profile: 1,
+      //           chapterName: 1,
+      //           isActive: 1,
+      //           latitude: '$address.latitude',
+      //           longitude: '$address.longitude',
+      //           accountType: 1,
+      //         },
+      //       },
+      //     ];
+      //     users = mlDBController.aggregate('users', pipeline, context);
+      //     console.log('The users in the second context are:::', JSON.stringify(users));
+      //   }
+
+      //   // FOR All
+      //   else {
+      //     var pipeline = [
+      //       {
+      //         $match: { 'profile.isSystemDefined': { $exists: false }, 'profile.isExternaluser': true, 'profile.isActive': true, 'profile.externalUserProfiles': { $elemMatch: queryObj } },
+      //       },
+      //       {
+      //         $unwind: '$profile.externalUserProfiles',
+      //       },
+
+      //       { $lookup: { from: 'mlPortfolioDetails', localField: 'profile.externalUserProfiles.profileId', foreignField: 'profileId', as: 'portfolio' } },
+
+      //       { $unwind: { path: '$portfolio', preserveNullAndEmptyArrays: true } },
+
+      //       { $match: { 'portfolio.status': 'PORT_LIVE_NOW' } },
+
+      //       { $match: { 'profile.externalUserProfiles.clusterId': clusterId,
+      //         // 'profile.externalUserProfiles.subChapterId': subChapterId,
+      //         'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
+
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: '$profile.displayName',
+      //           profile: {
+      //             profileImage: '$profile.profileImage',
+      //             firstName: '$profile.firstName',
+      //             lastName: '$profile.lastName',
+      //           },
+      //           portfolioId: '$portfolio._id',
+      //           communityCode: '$profile.externalUserProfiles.communityDefCode',
+      //           communityDefName: '$profile.externalUserProfiles.communityDefName',
+      //           chapterName: '$profile.externalUserProfiles.chapterName',
+      //           accountType: '$profile.externalUserProfiles.accountType',
+      //           isActive: '$profile.isActive',
+      //           externalUserAdditionalInfo: {
+      //             $filter: {
+      //               input: '$profile.externalUserAdditionalInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.profileId', '$profile.externalUserProfiles.profileId'] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$externalUserAdditionalInfo',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $group: {
+      //           _id: '$externalUserAdditionalInfo.profileId',
+      //           data: { $first: '$$ROOT' },
+      //         },
+      //       },
+      //         { $replaceRoot: { newRoot: '$data' } },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           communityCode: 1,
+      //           communityDefName: 1,
+      //           chapterName: 1,
+      //           portfolioId: 1,
+      //           profile: 1,
+      //           isActive: 1,
+      //           accountType: 1,
+      //           address: {
+      //             $filter: {
+      //               input: '$externalUserAdditionalInfo.addressInfo',
+      //               as: 'item',
+      //               cond: { $eq: ['$$item.isDefaultAddress', true] },
+      //             },
+      //           },
+      //         },
+      //       },
+      //       { $unwind: {
+      //         path: '$address',
+      //         preserveNullAndEmptyArrays: true,
+      //       },
+      //       },
+      //       {
+      //         $project: {
+      //           _id: 1,
+      //           name: 1,
+      //           profile: 1,
+      //           communityCode: 1,
+      //           portfolioId: 1,
+      //           communityDefName: 1,
+      //           chapterName: 1,
+      //           isActive: 1,
+      //           accountType: 1,
+      //           latitude: '$address.latitude',
+      //           longitude: '$address.longitude',
+      //         },
+      //       },
+      //     ];
+      //     users = mlDBController.aggregate('users', pipeline, context);
+      //   }
+      // }
+      /** Previous code comment end**/
     }
     else {
       if (true ) {
@@ -2791,9 +3066,22 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           subChapters = _.concat(subChapters, relatedSC);
         }
       } else {
-        pipeLine = [
-                { $match: { _id: userSubChapterId, isActive: true, chapterId } },
-        ];
+
+        // pipeLine = [
+        //   { $match: { _id: userSubChapterId, isActive: true, chapterId } }
+        // ];
+
+        if(userSubChapter.moolyaSubChapterAccess.externalUser.canSearch) {
+          pipeLine = [
+            { $match: { isActive: true, chapterId } },
+            { $match: { $or: [{ isDefaultSubChapter: true }, { $and: [{ isDefaultSubChapter: false }, { 'moolyaSubChapterAccess.externalUser.canSearch': true }] }] } }
+          ];
+        } else {
+          pipeLine = [
+            { $match: { _id: userSubChapterId, isActive: true, chapterId } }
+          ];
+        }
+        
         subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
 
         pipeLine = [

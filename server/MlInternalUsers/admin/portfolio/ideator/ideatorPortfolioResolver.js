@@ -732,7 +732,7 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     if (idea) {
       idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, "ideas");
       idea.createdAt = portfolio ? portfolio.createdAt : null;
-      idea.updatedAt = portfolio ? portfolio.transactionUpdatedDate : null;
+      idea.updatedAt = portfolio ? portfolio.lastLiveDate : null;
       ideas.push(idea);
     }
   })

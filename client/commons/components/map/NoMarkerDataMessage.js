@@ -23,7 +23,7 @@ export default class NoMarkerDataMessage extends Component{
 
     getBreadCrumListBasedOnhierarchy(params, '',(list)=>{
       list.reverse();
-      name = list[0].linkName;
+      name = (list[0] && list[0].linkName)?list[0].linkName:'User';
       if(name == 'Users') name = list[1].linkName;
       that.setState({name,unmount:false},()=>{
         setTimeout(()=>{

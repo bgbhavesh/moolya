@@ -540,7 +540,7 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
       })
     }
     depts.map(function (dept) {
-      
+
       let departmentName = mlDBController.findOne('MlDepartments', {_id: dept.department}, context).displayName;
       //let departmentName = dept_res.departmentName;
       //let departmentDisplayName = dept_res.displayName;
@@ -1359,6 +1359,9 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
 
    context.module = "Users";
   //context.userModule = "Users";
+  users = _.uniq(users, function (e) {
+    return e.portfolioId;
+  });
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 
@@ -1983,7 +1986,7 @@ MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => 
   var  currencyInfo = MlCurrencyType.findOne({countryName:clusterInfo.countryName}, context);
   return currencyInfo;
   }
-  
+
 /**
  * @function <**************<start>*****************>
  */

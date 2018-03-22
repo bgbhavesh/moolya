@@ -1208,12 +1208,12 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         query.communityDefName = userType;
         externalUserPipeline = [
           {
-            "$match" : 
+            "$match" :
               {
-                "profile.externalUserProfiles.clusterId":query.clusterId, 
-                "profile.externalUserProfiles.chapterId":query.chapterId, 
-                "profile.externalUserProfiles.communityDefName":query.communityDefName, 
-                "profile.externalUserProfiles.isApprove":true, 
+                "profile.externalUserProfiles.clusterId":query.clusterId,
+                "profile.externalUserProfiles.chapterId":query.chapterId,
+                "profile.externalUserProfiles.communityDefName":query.communityDefName,
+                "profile.externalUserProfiles.isApprove":true,
                 "profile.externalUserProfiles.isActive":true
               }
           }
@@ -1551,11 +1551,11 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         query.communityDefName = userType;
         externalUserPipeline = [
           {
-            "$match" : 
+            "$match" :
               {
-                "profile.externalUserProfiles.clusterId":query.clusterId, 
-                "profile.externalUserProfiles.communityDefName":query.communityDefName, 
-                "profile.externalUserProfiles.isApprove":true, 
+                "profile.externalUserProfiles.clusterId":query.clusterId,
+                "profile.externalUserProfiles.communityDefName":query.communityDefName,
+                "profile.externalUserProfiles.isApprove":true,
                 "profile.externalUserProfiles.isActive":true
               }
           }
@@ -2798,10 +2798,10 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
     const data = activeClusters;
     let totalRecords = activeClusters.length;
 
-    const clustersData = mlDBController.find('MlClusters', { isActive: true }, context).fetch();
-    if (clustersData && clustersData.length) {
-      totalRecords = clustersData.length;
-    }
+    // const clustersData = mlDBController.find('MlClusters', { isActive: true }, context).fetch();
+    // if (clustersData && clustersData.length) {
+    //   totalRecords = clustersData.length;
+    // }
 
 
     return { count: totalRecords, data };
@@ -3081,7 +3081,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
             { $match: { _id: userSubChapterId, isActive: true, chapterId } }
           ];
         }
-        
+
         subChapters = mlDBController.aggregate('MlSubChapters', pipeLine);
 
         pipeLine = [

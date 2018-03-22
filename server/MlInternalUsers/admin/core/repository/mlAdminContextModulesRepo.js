@@ -1182,7 +1182,7 @@ let CoreModules = {
 
     let piplelineQuery = [
       {'$match': userFilterQuery},
-      {"$match": {"transactionTypeId": "appointment"}},
+      {"$match": { $or: [{"transactionTypeId": "appointment"},{activity:"BeSpokeService-Created"}] }},
       {
         "$lookup": {
           from: "mlAppointments",
@@ -1242,6 +1242,13 @@ let CoreModules = {
       piplelineQuery.push({'$limit': parseInt(fieldsProj.limit)});
     }
     let data = mlDBController.aggregate('MlTransactionsLog', piplelineQuery);
+    if(data && data.length){
+      data.map((obj)=>{
+        if(obj.transactionType == 'BeSpokeService-Created' ){
+          obj.status = 'Requested';
+        }
+      });
+    }
 
     let totalRecords = mlDBController.find('MlTransactionsLog', {"transactionTypeId": "appointment"}).count();
 

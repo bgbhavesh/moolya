@@ -38,6 +38,7 @@ const mlAppointmentsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
+  asyncExpand:true,
   filterComponent: <MlCustomFilter module="appointments" moduleName="appointments" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},

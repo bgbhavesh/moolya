@@ -273,7 +273,7 @@ export default class MlInstitutionClients extends Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, details.index ,idx)}>
-                          <img src={details.logo&&details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl):""}/></div>
+                          <img src={details.logo&&details.logo.fileUrl && generateAbsolutePath(details.logo.fileUrl)}/></div>
                         <h3>{details.companyName?details.companyName:""} </h3>
                       </div>
                     </a>
@@ -282,7 +282,7 @@ export default class MlInstitutionClients extends Component{
               </div>
             </div>
             </div>
-          
+
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject}  toggle={this.toggle}>
              <PopoverTitle>Add New Client</PopoverTitle>
             <PopoverContent>

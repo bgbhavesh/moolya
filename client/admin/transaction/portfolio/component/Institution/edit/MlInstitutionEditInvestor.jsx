@@ -317,7 +317,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
                           <div className="list_block">
                             <FontAwesome name='unlock'  id={"investor_"+idx} defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isInvestorPrivate" checked={details.makePrivate}/>
                             <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that,details.index, idx)}><img
-                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
+                              src={details.logo && generateAbsolutePath(details.logo.fileUrl) }/></div>
                             <h3>{details.investorName ? details.investorName : ''}</h3>
                           </div>
                         </a>

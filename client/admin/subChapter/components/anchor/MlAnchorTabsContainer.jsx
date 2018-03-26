@@ -85,7 +85,7 @@ class MlAnchorTabsContainer extends React.Component {
 
     switch (this.state.module) {
       case 'subchapter':
-        let stateContactDetails = Object.assign(this.state.subChapter.contactDetails);
+        let stateContactDetails = this.state.subChapter.contactDetails?Object.assign(this.state.subChapter.contactDetails):[{}];
 
         stateContactDetails[0] = this.state.contactDetailsFormData.formData;
 
@@ -145,6 +145,7 @@ class MlAnchorTabsContainer extends React.Component {
         if(obj_res && obj_res.contactDetails && obj_res.contactDetails.length){
           contactDetailsFormData.formData = obj_res.contactDetails[0];
 
+          if(!subChapter || !subChapter.contactDetails) subChapter = {contactDetails:[]};
           subChapter.contactDetails[0] =  obj_res.contactDetails[0];
           this.setState({contactDetailsFormData,subChapter});
         }

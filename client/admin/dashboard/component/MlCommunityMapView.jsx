@@ -136,9 +136,9 @@ export default class MlCommunityMapView extends Component {
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
         </a>
 
-        <a data-toggle="tooltip" title="Backend Users" data-placement="bottom" className="BackendUsers" data-filter="internalUser">
-          <p className='title'>Backend Users</p><span className="ml ml-moolya-symbol ot" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>
-        </a>
+        {/*<a data-toggle="tooltip" title="Backend Users" data-placement="bottom" className="BackendUsers" data-filter="internalUser">*/}
+          {/*<p className='title'>Backend Users</p><span className="ml ml-moolya-symbol ot" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>*/}
+        {/*</a>*/}
       </div>
 
     let userType = this.state.userType || 'All';

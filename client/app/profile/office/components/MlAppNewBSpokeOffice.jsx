@@ -366,8 +366,8 @@ export default class MlAppNewSpokePerson extends React.Component {
                            ref="landmark" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
-                  <div className="form-group mandatory">
-                    <input type="text" placeholder="Area" className="form-control float-label" ref="area" data-required={true} data-errMsg="Area is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
+                  <div className="form-group">
+                    <input type="text" placeholder="Area" className="form-control float-label" ref="area" data-required={true} disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group mandatory">

@@ -679,7 +679,8 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
               let ids = _.map(sub, "_id");
               chapterCount = sub.length;
               // query={"chapterId":args.id, "clusterId":chapter.clusterId, "subChapterId":{$in:ids}, isActive:true};
-              query={"chapterId":args.id, "clusterId":chapter.clusterId, isActive:true};
+              // query={"chapterId":args.id, "clusterId":chapter.clusterId, isActive:true};
+              query={"chapterId":args.id, "clusterId":chapter.clusterId, isActive:true, "$or":[{"subChapterId":subChapterQuery}, {isDefaultSubChapter:true}]};
 
           }else{
               if(userSubChapter.moolyaSubChapterAccess.externalUser.canView || userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){

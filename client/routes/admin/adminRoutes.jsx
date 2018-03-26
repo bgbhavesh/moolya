@@ -491,3 +491,11 @@ adminSection.route('/transactions/appointments', {
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'appointments'}} />, adminContent:<MlAppointmentsList />})
   }
 });
+
+adminSection.route('/viewPortfolio/:id/:communityType', {
+  name: 'transaction_portfolio_viewPortfolio',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader />,
+      adminContent:<MlPortfolio viewMode={true} config={params.id} isHideAction={true} communityType={params.communityType}/>})
+  }
+});

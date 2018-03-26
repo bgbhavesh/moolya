@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../../client/admin/utils/formElemUtil";
@@ -17,7 +16,7 @@ import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePat
 import Confirm from '../../../../../../commons/utils/confirm';
 const KEY = "partners"
 
-export default class MlCompanyPartners extends React.Component {
+export default class MlCompanyPartners extends Component {
   constructor(props, context) {
     super(props);
     this.state = {

@@ -51,8 +51,6 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
     }
 }
 MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {
-  // TODO : Authorization
-
   if (args.id) {
     var id= args.id;
     // let response= MlProcessMapping.findOne({"_id":id});
@@ -66,7 +64,6 @@ MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {
     });
     return response;
   }
-
 }
 
 MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
@@ -137,30 +134,16 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
   }
 }
 
+/**
+ * authrization moved to generic layer
+ * @func used for both {isMandatory and isActive}
+ */
 MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
-
   if (args.id) {
     var id = args.id;
     args = _.omit(args, '_id');
     if (args.kycCategoryId) {
-      // let result = MlProcessMapping.update({_id:id,'processDocuments' : {
-      //     $elemMatch: {
-      //       'kycCategoryId': args.kycCategoryId,'docTypeId': args.docTypeId, 'documentId':args.documentId}
-      //   }
-      // }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
       let result;
-
-     /* if(args.isMandatory && !args.isActive){ //as per issue 2648
-        let code = 401;
-        let response = new MlRespPayload().errorPayload("Can't update status as document is inactive or maditory", code);
-        return response;
-      }else{*/
          result = mlDBController.update('MlProcessMapping', {
           _id: id, 'processDocuments': {
             $elemMatch: {
@@ -171,17 +154,12 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
           "processDocuments.$.isMandatory": args.isMandatory,
           "processDocuments.$.isActive": args.isActive
         }, {$set: true}, context)
-      //}
-
 
       if(result!=1){
           console.log("insertion opertion");
           let processDocument={};
-          // let documentMappingDef=MlDocumentMapping.findOne(args.documentId);
-          let documentMappingDef = mlDBController.findOne('MlDocumentMapping', args.documentId, context)
-          // let doctypeDetails=MlDocumentTypes.findOne({_id:args.docTypeId})
-          let doctypeDetails = mlDBController.findOne('MlDocumentTypes', {_id: args.docTypeId}, context)
-          // let kycCategories=MlDocumentCategories.findOne({_id:args.kycCategoryId})
+          let documentMappingDef = mlDBController.findOne('MlDocumentMapping', args.documentId, context);
+          let doctypeDetails = mlDBController.findOne('MlDocumentTypes', {_id: args.docTypeId}, context);
           let kycCategories = mlDBController.findOne('MlDocumentCategories', {_id:args.kycCategoryId}, context)
            processDocument=_.pick(documentMappingDef, ['documentDisplayName','allowableFormat','documentName','inputLength','allowableMaxSize'])
            processDocument.kycCategoryId=args.kycCategoryId;
@@ -193,8 +171,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
            processDocument.isActive=args.isActive;
            processDocument.validity=documentMappingDef&&documentMappingDef.validity?documentMappingDef.validity:null
 
-        mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
-        // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
+          result = mlDBController.update('MlProcessMapping', id, { 'processDocuments': processDocument }, { $push: true }, context)
       }
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
@@ -418,7 +395,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         qu[key] = {$in: ['all', val[key]]};
       }
 
-      specificQuery.push(qu);//console.log(qu);
+      specificQuery.push(qu);
     }
     let query = {$and: specificQuery}
     process = fetchProcessProxy(query);
@@ -460,7 +437,6 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   }
 
   function fetchProcessProxy(query) {
-    console.log(query)
     let date = new Date();
     date.setHours(0,0,0,0)
     let document = MlProcessMapping.find({
@@ -628,7 +604,6 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           for (var i = 0; i < kycDoc.length; i++) {
             for (var j = 0; j < latestKyc.length; j++) {
               if ((kycDoc[i]&&kycDoc[i].documentId?kycDoc[i].documentId:"" == latestKyc[j]&&latestKyc[j].documentId?latestKyc[j].documentId:"") && (kycDoc[i]&&kycDoc[i].docTypeId?kycDoc[i].docTypeId:"" == latestKyc[j]&&latestKyc[j].docTypeId?latestKyc[j].docTypeId:"")) {
-                console.log(kycDoc[i])
                 MatchingDocuments.push(kycDoc[i])
               }
             }
@@ -838,7 +813,7 @@ MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => 
     let values =val[key]
     let stringValues =  values.toString();
     qu[key]={$in:['all',stringValues]};
-    specificQuery.push(qu);//console.log(qu);
+    specificQuery.push(qu);
   }
   let query={$and:specificQuery}
   process=fetchProcessDocumentProxy(query);
@@ -893,6 +868,3 @@ MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => 
 
 
 }
-
-
-

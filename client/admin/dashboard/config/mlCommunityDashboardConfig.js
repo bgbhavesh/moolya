@@ -6,7 +6,8 @@ import React from 'react';
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../actions/findMapDetailsTypeAction"
 import MlMapFooter from '../component/MlMapFooter';
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import {getAdminUserContext} from '../../../commons/getAdminUserContext';
+import MlAppMapMarker from '../../../app/dashboard/components/MlAppMapMarker';
 
 const mlCommunityDashboardListConfig=new MlViewer.View({
   name:"communityDashBoardList",
@@ -108,6 +109,7 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
     return zoom;
   },
   viewComponent:<MlCommunityMapView params={this.params}/>,
+  mapMarkerComponent:<MlAppMapMarker/>,
   mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {
@@ -156,6 +158,20 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
 
         if(data.module == 'subChapter')
           FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+
+
+        if(data.module == 'users'){
+          let communityType = '';
+          switch(data.desc){
+            case 'FUN': communityType = 'Investors'; break;
+            case 'INS': communityType = 'Institutions'; break;
+            case 'IDE': communityType = 'Ideators'; break;
+            case 'STU': communityType = 'Startups'; break;
+            case 'SPS': communityType = 'Service Providers'; break;
+            case 'CMP': communityType = 'Companies'; break;
+          }
+          if(communityType && data.isActive) FlowRouter.go(`/admin/viewPortfolio/${data.isActive}/${communityType}`);
+        }
       }
     }
   ],
@@ -166,11 +182,12 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
               data{
                   ...on BackendUsers{
                       _id,                      
-                      profile:profile{isActive}                      
+                      status:profile{isActive,profileImage, firstName, lastName}   
+                      profile:profile{isActive}                    
                       lat:latitude
                       lng:longitude
                       text:communityCode
-                      
+                      isActive:portfolioId
                   }
               }      
           }

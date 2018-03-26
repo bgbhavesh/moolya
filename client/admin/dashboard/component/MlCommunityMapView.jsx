@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
 import MapCommunity from '../../../commons/components/map/MapCommunity';
+import MapCluster from '../../../commons/components/map/MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext';
 import NoMarkerDataMessage from '../../../commons/components/map/NoMarkerDataMessage';
@@ -135,9 +136,9 @@ export default class MlCommunityMapView extends Component {
           <p className='title'>Companies</p><span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
         </a>
 
-        <a data-toggle="tooltip" title="Backend Users" data-placement="bottom" className="BackendUsers" data-filter="internalUser">
-          <p className='title'>Backend Users</p><span className="ml ml-moolya-symbol ot" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>
-        </a>
+        {/*<a data-toggle="tooltip" title="Backend Users" data-placement="bottom" className="BackendUsers" data-filter="internalUser">*/}
+          {/*<p className='title'>Backend Users</p><span className="ml ml-moolya-symbol ot" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>*/}
+        {/*</a>*/}
       </div>
 
     let userType = this.state.userType || 'All';
@@ -146,7 +147,8 @@ export default class MlCommunityMapView extends Component {
       <span>
         {communityIconList}
         {this.props.data&& this.props.data.length === 0 && userType &&   <NoMarkerDataMessage userType={userType}/>}
-        <MapCommunity lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        {/*<MapCommunity lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
+        <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={true} getBounds={this.props.config.bounds}/>
       </span>
     );
   }

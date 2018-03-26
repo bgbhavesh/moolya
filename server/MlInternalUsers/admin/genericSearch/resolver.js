@@ -1111,9 +1111,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             $filter: {
               input: "$transactionLogs",
               as: "transaction",
-              cond: { $eq: [ "$$transaction.activity", 'Session-Appointment' ] }
+              cond: {$or:[
+                {$eq: [ "$$transaction.activity", 'Session-Appointment' ]},
+                { $eq: [ "$$transaction.activity", 'BeSpokeService-Created' ] },
+                { $eq: [ "$$transaction.activity", 'Service-Purchased' ] }
+              ] }
             }
-          }
+          },
         }
       },
       {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$transactionLogs" ] } }},
@@ -1171,6 +1175,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         if(transactionType === "appointment") {
           let data = mlDBController.findOne('MlAppointments', {"appointmentId":doc.docId});
           if(data && data.status){
+            if(data.status ==='Pending'){
+              let datafromMembers = mlDBController.findOne('MlAppointmentMembers', {appointmentId:doc.docId,userId:doc.userId});
+              if(datafromMembers && datafromMembers.status){
+                data.status = datafromMembers.status;
+              }
+            }
+            if(data.status === 'Accepted') {
             if(data.endDate ||  data.startDate){
               let appDate = new Date(data.endDate)
               let isExpired = new Date() > appDate ? true : false;
@@ -1178,8 +1189,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
               //let currentStatus = data.status === "Accepted" ? true : false;
               if(isExpired) doc.status = "Expired";
               else if (ifEqual && data.status !== "Completed") doc.status = "Today";
-              else doc.status = data.status;
+             else doc.status = data.status;
             }
+            }
+          else doc.status = data.status;
           }
         }
         else if(transactionType === 'manageSchedule' && doc.activity == 'BeSpokeService-Created' ){

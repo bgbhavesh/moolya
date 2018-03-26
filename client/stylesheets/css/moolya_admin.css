@@ -293,7 +293,7 @@ table{background: #fff;}
 
 .vTimeline li a{text-decoration: none;color: #fff;}
 .vTimeline li.current{background: url(images/timeline_ac.png) left center no-repeat;color: #ef4647;}
-.vTimeline li.current a{text-decoration: none;color: #ef4647;}
+.vTimeline li.current a{text-decoration: none;background: #ffe144; padding: 0px 5px; color: #000; border-radius: 2px;}
 .vTimeline li.timelineLast{background: #000;margin-top: -6px;}
 .loading{position: absolute;    top: calc(50% - 30px);    left: calc(50% - 60px);}
 .loader_wrap{position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background-color: rgba(255,255,255,0.8);z-index: 9;background-image: url(/images/loading.gif);background-position: center center;background-repeat: no-repeat;}

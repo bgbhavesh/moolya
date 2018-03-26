@@ -94,7 +94,7 @@ export default class MlAppDocumentViewer extends Component {
             <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox"
                                                 name="checkbox" value="1"
                                                 onChange={this.onDocSelect.bind(this, doc.documentId, doc.docTypeId)}/><label
-              htmlFor="chapter_admin_check"><span></span>{doc.documentName}
+              htmlFor={`check${doc.documentId}`}><span></span>{doc.documentName}
               <text style={{'color': 'red'}}>{mandatory}</text>
             </label></div>
             <div className="pull-right block_action">

@@ -131,7 +131,7 @@ export default class MlAppDashboardListView extends Component {
   getNullDataResult() {
     const { userType } = this.props.config && this.props.config.params ? this.props.config.params : { userType: '' };
     return (
-      <p className="col-md-8 alert alert-info col-md-offset-2 map_alert">
+      <p className="col-md-8 alert alert-info col-md-offset-2 map_alert text-center">
         There are no {userType} portfolios to be shown
       </p>
     )

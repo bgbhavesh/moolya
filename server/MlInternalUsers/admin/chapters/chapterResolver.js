@@ -394,31 +394,6 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
     for (key in args.subChapterDetails) {
       newContact[key] = args.subChapterDetails[key]
     }
-    if(args.subChapterDetails.contactDetails){
-      let cityName = mlDBController.findOne('MlCities', {_id: newContact.contactDetails[0].cityId},context);
-      cityName = cityName.name;
-      let geoCIty =newContact.contactDetails[0].buildingNumber + ", "+ (newContact.contactDetails[0].street?(newContact.contactDetails[0].street+", "):("")) + (newContact.contactDetails[0].landmark?(newContact.contactDetails[0].landmark+", "):(""))  +newContact.contactDetails[0].area  + ', '+cityName ;
-
-      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
-        try{
-          if(data && data.results && data.results[0] && data.results[0].geometry){
-            var latitude = data.results[0].geometry.location.lat;
-            var longitude = data.results[0].geometry.location.lng;
-            newContact.contactDetails[0].latitude = "" +latitude;
-            newContact.contactDetails[0].longitude ="" + longitude;
-            newContact.latitude = "" + latitude ;
-            newContact.longitude ="" + longitude;
-
-            let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
-          }
-        }
-        catch(err){
-          console.log(err);
-        }
-        // }
-      }));
-    }
-
 
     //pre-condition for related sub chapter updation :(Jira-3035)
     var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
@@ -432,9 +407,6 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
       if (!newContact.isDefaultSubChapter) {
         MlResolver.MlMutationResolver['updateRelatedSubChapters'](obj, {associatedObj: args.subChapterDetails.associatedObj}, context, info)
       }
-    }
-
-    if (resp) {
       if (newContact && newContact.chapterId && newContact.isDefaultSubChapter === true) {   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
         MlResolver.MlMutationResolver['updateChapter'](obj, {
           chapterId: newContact.chapterId,
@@ -444,8 +416,48 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
       }
       let code = 200;
       // let result = {subChapter: resp}
-      let response = new MlRespPayload().successPayload(newContact, code);
-      return response
+
+      if(args.subChapterDetails.contactDetails){
+        let cityName = mlDBController.findOne('MlCities', {_id: newContact.contactDetails[0].cityId},context);
+        cityName = cityName.name;
+        let geoCIty =newContact.contactDetails[0].buildingNumber + ", "+ (newContact.contactDetails[0].street?(newContact.contactDetails[0].street+", "):("")) + (newContact.contactDetails[0].landmark?(newContact.contactDetails[0].landmark+", "):(""))  +(newContact.contactDetails[0].area?(newContact.contactDetails[0].area+", "):(""))  + ', '+cityName ;
+  
+        let getGeoLocation =async (geoCity) =>{
+          let data= await geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+            return data;
+          }));
+          return data;
+        } 
+
+        let data =  getGeoLocation(geoCIty);
+        try{
+          if(data && data.results && data.results[0] && data.results[0].geometry){
+            var latitude = data.results[0].geometry.location.lat;
+            var longitude = data.results[0].geometry.location.lng;
+            newContact.contactDetails[0].latitude = "" +latitude;
+            newContact.contactDetails[0].longitude ="" + longitude;
+            newContact.latitude = "" + latitude ;
+            newContact.longitude ="" + longitude;
+
+          }else{
+            newContact.contactDetails[0].latitude =newContact.latitude + "";
+            newContact.contactDetails[0].longitude =newContact.longitude + "";
+          }
+          let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
+          // console.log("NewContact",newContact); 
+          let response = new MlRespPayload().successPayload(newContact, code);
+          // console.log('The res:: ', response)
+          return response
+        }
+        catch(err){
+          // console.log(err);
+          let response = new MlRespPayload().successPayload(newContact, code);
+          return response
+        }
+      }else{
+        let response = new MlRespPayload().successPayload(newContact, code);
+        return response
+      }
     }
 
     // if(resp){

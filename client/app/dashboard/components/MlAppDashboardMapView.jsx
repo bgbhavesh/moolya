@@ -82,7 +82,7 @@ export default class MlDashboardMapView extends Component {
     }
     if(this.props.config.params.userType != "All"){
       $('.community_icons a').removeClass('active_community');
-      $('.'+this.props.config.params.userType).addClass('active_community');
+      $('.'+(this.props.config.params.userType).replace(/ /g,'')).addClass('active_community');
     }
   }
 
@@ -138,7 +138,7 @@ export default class MlDashboardMapView extends Component {
         </a>
 
 
-        <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
+        <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="ServiceProviders" data-filter="provider">
           <p className='title'>Service P</p><span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
         </a>
         {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">*/}

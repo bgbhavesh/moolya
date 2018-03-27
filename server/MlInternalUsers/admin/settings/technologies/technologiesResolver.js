@@ -25,7 +25,8 @@ MlResolver.MlMutationResolver['createTechnology'] = (obj, args, context, info) =
   args.technologyMasterData.createdDate = new Date();
   if(args && args.technologyMasterData){
     try{
-      let ret = MlTechnologies.insert({...args.technologyMasterData})
+      // let ret = MlTechnologies.insert({...args.technologyMasterData});
+      let ret = mlDBController.insert('MlTechnologies', args.technologyMasterData, context);
       if(ret){
         let response = new MlRespPayload().successPayload("'Technology' added successfully", 200);
         return response;
@@ -64,7 +65,11 @@ MlResolver.MlMutationResolver['updateSelectedTechnology'] = (obj, args, context,
 
   if(args && args.technologyId && args.technologyMasterData){
     try{
-      let resp = MlTechnologies.update({_id: args.technologyId}, {$set: args.technologyMasterData}, {upsert: true})
+      // let resp = MlTechnologies.update({_id: args.technologyId}, {$set: args.technologyMasterData}, {upsert: true});
+      let resp = mlDBController.update('MlTechnologies', args.technologyId, args.technologyMasterData, {
+        $set: 1,
+        upsert: true
+      }, context);
       if(resp){
         let response = new MlRespPayload().successPayload("'Technology' updated successfully", 200);
         return response;

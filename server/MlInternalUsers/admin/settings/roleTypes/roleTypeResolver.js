@@ -11,9 +11,10 @@ MlResolver.MlMutationResolver['UpdateRoleType'] = (obj, args, context, info) => 
   }
 
   if (args._id) {
-    var id= args._id;
-    args=_.omit(args,'_id');
-    let result= MlRoleTypes.update(id, {$set: args});
+    var id = args._id;
+    args = _.omit(args, '_id');
+    // let result= MlRoleTypes.update(id, {$set: args});
+    let result = mlDBController.update('MlRoleTypes', id, args, {$set: 1}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -22,8 +23,8 @@ MlResolver.MlMutationResolver['UpdateRoleType'] = (obj, args, context, info) => 
 
 MlResolver.MlQueryResolver['FindRoleType'] = (obj, args, context, info) => {
   if (args._id) {
-    var id= args._id;
-    let response= MlRoleTypes.findOne({"_id":id});
+    var id = args._id;
+    let response = MlRoleTypes.findOne({"_id": id});
     return response;
   }
 }

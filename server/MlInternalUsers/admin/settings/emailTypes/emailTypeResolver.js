@@ -6,7 +6,8 @@ MlResolver.MlMutationResolver['createEmailType'] = (obj, args, context, info) =>
     let code = 409;
     return new MlRespPayload().errorPayload("Already Exist", code);
   }
-  let id = MlGlobalSettings.insert({...args.emailType});
+  // let id = MlGlobalSettings.insert({...args.emailType});
+  let id = mlDBController.insert('MlGlobalSettings', args.emailType, context);
   if(id){
     let code = 200;
     let result = {addressTypeId: id}
@@ -20,7 +21,8 @@ MlResolver.MlMutationResolver['updateEmailType'] = (obj, args, context, info) =>
 
   if (args._id) {
     var id= args._id;
-    let updatedResponse= MlGlobalSettings.update(id, {$set: args.emailType});
+    // let updatedResponse= MlGlobalSettings.update(id, {$set: args.emailType});
+    let updatedResponse = mlDBController.update('MlGlobalSettings', id, args.emailType, {$set: 1}, context);
     return updatedResponse
   }
 

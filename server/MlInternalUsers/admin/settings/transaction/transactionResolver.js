@@ -10,12 +10,13 @@ MlResolver.MlMutationResolver['CreateTransaction'] = (obj, args, context, info) 
     return response;
   }
 
-  if(!args.transactionName){
+  if (!args.transactionName) {
     let code = 401;
     let response = new MlRespPayload().errorPayload("Transaction Name is Required", code);
     return response;
-  }else {
-    let id = MlTransactionTypes.insert({...args});
+  } else {
+    // let id = MlTransactionTypes.insert({...args});
+    let id = mlDBController.insert('MlTransactionTypes', args, context);
     if (id) {
       let code = 200;
       let result = {transactionId: id}
@@ -33,15 +34,16 @@ MlResolver.MlMutationResolver['UpdateTransaction'] = (obj, args, context, info) 
     return response;
   }
 
-  if(!args.transactionName){
+  if (!args.transactionName) {
     let code = 401;
     let response = new MlRespPayload().errorPayload("Transaction Name is Required", code);
     return response;
-  }else {
+  } else {
     if (args._id) {
-      var id= args._id;
-      args=_.omit(args,'_id');
-      let result= MlTransactionTypes.update(id, {$set: args});
+      var id = args._id;
+      args = _.omit(args, '_id');
+      // let result= MlTransactionTypes.update(id, {$set: args});
+      let result = mlDBController.update('MlTransactionTypes', id, args, {$set: 1}, context);
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
       return response
@@ -53,8 +55,8 @@ MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlTransactionTypes.findOne({"_id":id});
+    var id = args._id;
+    let response = MlTransactionTypes.findOne({"_id": id});
     return response;
   }
 
@@ -64,8 +66,8 @@ MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchTransaction'] = (obj, args, context, info) => {
   // TODO : Authorization
 
-    let response= MlTransactionTypes.find({isActive:true}).fetch();
-    return response;
+  let response = MlTransactionTypes.find({isActive: true}).fetch();
+  return response;
 
 }
 

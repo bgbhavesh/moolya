@@ -6,7 +6,8 @@ MlResolver.MlMutationResolver['createContactType'] = (obj, args, context, info) 
     let code = 409;
     return new MlRespPayload().errorPayload("Already Exist", code);
   }
-  let id = MlGlobalSettings.insert({...args.contactType});
+  // let id = MlGlobalSettings.insert({...args.contactType});
+  let id = mlDBController.insert('MlGlobalSettings', args.contactType, context);
   if(id){
     let code = 200;
     let result = {addressTypeId: id}
@@ -20,7 +21,8 @@ MlResolver.MlMutationResolver['updateContactType'] = (obj, args, context, info) 
 
   if (args._id) {
     var id= args._id;
-    let updatedResponse= MlGlobalSettings.update(id, {$set: args.contactType});
+    // let updatedResponse= MlGlobalSettings.update(id, {$set: args.contactType});
+    let updatedResponse = mlDBController.update('MlGlobalSettings', id, args.contactType, {$set: 1}, context);
     return updatedResponse
   }
 

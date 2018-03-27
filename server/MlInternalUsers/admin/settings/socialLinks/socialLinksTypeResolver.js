@@ -6,8 +6,9 @@ MlResolver.MlMutationResolver['updateSocialLinksType'] = (obj, args, context, in
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let updatedResponse= MlGlobalSettings.update({_id:id}, {$set: args.socialLinksType});
+    var id = args._id;
+    // let updatedResponse= MlGlobalSettings.update({_id:id}, {$set: args.socialLinksType});
+    let updatedResponse = mlDBController.update('MlGlobalSettings', id, args.socialLinksType, {$set: 1}, context);
     return updatedResponse
   }
 
@@ -16,19 +17,20 @@ MlResolver.MlQueryResolver['findSocialLinksType'] = (obj, args, context, info) =
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlGlobalSettings.findOne({"_id":id});
+    var id = args._id;
+    let response = MlGlobalSettings.findOne({"_id": id});
     return response;
   }
 
 }
-MlResolver.MlMutationResolver['createSocialLinksType'] = (obj, args, context, info) =>{
-  if(MlGlobalSettings.find({_id:args.socialLinksType._id}).count() > 0){
+MlResolver.MlMutationResolver['createSocialLinksType'] = (obj, args, context, info) => {
+  if (MlGlobalSettings.find({_id: args.socialLinksType._id}).count() > 0) {
     let code = 409;
     return new MlRespPayload().errorPayload("'Social link type' already exists", code);
   }
-  let id = MlGlobalSettings.insert({...args.socialLinksType});
-  if(id){
+  // let id = MlGlobalSettings.insert({...args.socialLinksType});
+  let id = mlDBController.insert('MlGlobalSettings', args.socialLinksType, context);
+  if (id) {
     let code = 200;
     let result = {socialLinksTypeId: id}
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));

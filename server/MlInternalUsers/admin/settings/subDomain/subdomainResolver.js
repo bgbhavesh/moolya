@@ -37,7 +37,8 @@ MlResolver.MlMutationResolver['createSubDomain'] = (obj, args, context, info) =>
         return new MlRespPayload().errorPayload(errorMessage, 400);
       }
       else {
-        let ret = MlSubDomain.insert({...args.SubDomainMasterData});
+        // let ret = MlSubDomain.insert({...args.SubDomainMasterData});
+        let ret = mlDBController.insert('MlSubDomain', args.SubDomainMasterData, context);
         if (ret) {
           return new MlRespPayload().successPayload("Sub Domain added successfully", 200);
         }
@@ -81,7 +82,11 @@ MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, 
       if (resultSubDomain && resultSubDomain._id !== args.SubDomainId) {
         return new MlRespPayload().errorPayload("Sub Domain name exists already!", 400);
       }
-      let resp = MlSubDomain.update({_id: args.SubDomainId}, {$set: args.SubDomainMasterData}, {upsert: true});
+      // let resp = MlSubDomain.update({_id: args.SubDomainId}, {$set: args.SubDomainMasterData}, {upsert: true});
+      let resp = mlDBController.update('MlSubDomain', args.SubDomainId, args.SubDomainMasterData, {
+        $set: 1,
+        upsert: true
+      }, context);
       if (resp) {
         return new MlRespPayload().successPayload("Sub-Domain updated successfully", 200);
       }

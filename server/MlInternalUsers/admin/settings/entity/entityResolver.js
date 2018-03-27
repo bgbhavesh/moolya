@@ -49,7 +49,8 @@ MlResolver.MlMutationResolver['CreateEntity'] = (obj, args, context, info) => {
   args.createdBy = createdBy;
   args.createdDate = new Date();
 
-  let id = MlEntity.insert({...args});
+  // let id = MlEntity.insert({...args});
+  let id = mlDBController.insert('MlEntity', args, context);
   if (id) {
     let code = 200;
     let result = {entityId: id}
@@ -112,7 +113,8 @@ MlResolver.MlMutationResolver['UpdateEntity'] = (obj, args, context, info) => {
     args.updatedBy = createdBy;
     args.updatedDate = new Date();
 
-    let result= MlEntity.update(id, {$set: args});
+    // let result= MlEntity.update(id, {$set: args});
+    let result = mlDBController.update('MlEntity', id, args, {$set: 1}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response

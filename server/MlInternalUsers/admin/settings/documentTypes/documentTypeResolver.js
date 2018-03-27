@@ -19,7 +19,8 @@ MlResolver.MlMutationResolver['updateDocumentType'] = (obj, args, context, info)
     if (args._id) {
       var id= args._id;
       args=_.omit(args,'_id');
-      let result= MlDocumentTypes.update(id, {$set: args});
+      // let result= MlDocumentTypes.update(id, {$set: args});
+      let result = mlDBController.update('MlDocumentTypes', id, args, {$set: 1}, context);
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
       return response
@@ -54,7 +55,8 @@ MlResolver.MlMutationResolver['createDocumentType'] = (obj, args, context, info)
       let response = new MlRespPayload().errorPayload("'Document type' already exists", code);
       return response;
     }
-    let id = MlDocumentTypes.insert({...args.documentType});
+    // let id = MlDocumentTypes.insert({...args.documentType});
+    let id = mlDBController.insert('MlDocumentTypes', args.documentType, context);
     if(id){
       let code = 200;
       let result = {documentTypeId: id}

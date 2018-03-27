@@ -12,21 +12,21 @@ MlResolver.MlMutationResolver['updateDocumentFormat'] = (obj, args, context, inf
   // let department = MlDepartments.findOne({_id: args.departmentId});
   let department = mlDBController.findOne('MlDepartments', {_id: args.departmentId}, context)
   // let deactivate = args.department.isActive;
-  var firstName='';var lastName='';
+  var firstName = '';
+  var lastName = '';
   // let id = MlDepartments.insert({...args.department});
-  if(Meteor.users.findOne({_id : context.userId}))
-  {
+  if (Meteor.users.findOne({_id: context.userId})) {
     let user = Meteor.users.findOne({_id: context.userId}) || {}
-    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+    if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
 
-      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-      firstName=(user.profile || {}).firstName||'';
-      lastName =(user.profile || {}).lastName||'';
+      firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+      lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+    } else if (user && user.profile && user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName = (user.profile || {}).firstName || '';
+      lastName = (user.profile || {}).lastName || '';
     }
   }
-  let createdBy = firstName +' '+lastName
+  let createdBy = firstName + ' ' + lastName
   args.updatedBy = createdBy;
   args.updatedDate = new Date();
 
@@ -38,7 +38,10 @@ MlResolver.MlMutationResolver['updateDocumentFormat'] = (obj, args, context, inf
     if (args._id) {
 
       //check for exists condition
-      var existingDocFormat = mlDBController.findOne('MlDocumentFormats', {_id:{$ne:args._id},docFormatName: args.docFormatName}, context)
+      var existingDocFormat = mlDBController.findOne('MlDocumentFormats', {
+        _id: {$ne: args._id},
+        docFormatName: args.docFormatName
+      }, context)
       if (existingDocFormat) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("'Document Format' already exists!", code);
@@ -48,7 +51,8 @@ MlResolver.MlMutationResolver['updateDocumentFormat'] = (obj, args, context, inf
 
       var id = args._id;
       args = _.omit(args, '_id');
-      let result = MlDocumentFormats.update(id, {$set: args});
+      // let result = MlDocumentFormats.update(id, {$set: args});
+      let result = mlDBController.update('MlDocumentFormats', id, args, {$set: 1}, context);
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
       return response
@@ -84,25 +88,26 @@ MlResolver.MlMutationResolver['createDocumentFormat'] = (obj, args, context, inf
       let response = new MlRespPayload().errorPayload("'Document Format' already exists!", code);
       return response;
     }
-    var firstName='';var lastName='';
+    var firstName = '';
+    var lastName = '';
     // let id = MlDepartments.insert({...args.department});
-    if(Meteor.users.findOne({_id : context.userId}))
-    {
+    if (Meteor.users.findOne({_id: context.userId})) {
       let user = Meteor.users.findOne({_id: context.userId}) || {}
-      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+      if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
 
-        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-        firstName=(user.profile || {}).firstName||'';
-        lastName =(user.profile || {}).lastName||'';
+        firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+        lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+      } else if (user && user.profile && user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName = (user.profile || {}).firstName || '';
+        lastName = (user.profile || {}).lastName || '';
       }
     }
-    let createdBy = firstName +' '+lastName
+    let createdBy = firstName + ' ' + lastName
     args.documentFormat.createdBy = createdBy;
     args.documentFormat.createdDate = new Date();
     // args.documentFormat.createdDateTime=new Date();
-    let id = MlDocumentFormats.insert({...args.documentFormat});
+    // let id = MlDocumentFormats.insert({...args.documentFormat});
+    let id = mlDBController.insert('MlDocumentFormats', args.documentFormat, context);
     if (id) {
       let code = 200;
       let result = {documentFormatId: id}

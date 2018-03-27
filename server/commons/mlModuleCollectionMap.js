@@ -46,6 +46,10 @@ MlModuleCollectionMap['MlSpecifications'] = 'SPECIFICATION';
 MlModuleCollectionMap['MlStageOfCompany'] = 'STAGEOFCOMPANY';
 MlModuleCollectionMap['MlTransactionTypes'] = 'TRANSACTIONTYPE';
 
+MlModuleCollectionMap['MlSubDomain'] = 'SUBDOMAIN';
+MlModuleCollectionMap['MlAssets'] = 'ASSETS';
+MlModuleCollectionMap['MlTechnologies'] = 'TECHNOLOGIES';
+
 //registrations
 MlModuleCollectionMap['MlTemplateAssignment'] = 'TEMPLATEASSIGMENT';
 MlModuleCollectionMap['MlIdentityTypes'] = 'IDENTITYTYPES';

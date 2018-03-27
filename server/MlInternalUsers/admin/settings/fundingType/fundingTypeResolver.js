@@ -25,7 +25,8 @@ MlResolver.MlMutationResolver['createFundingType'] = (obj, args, context, info) 
   args.fundingType.createdDate = new Date();
   if(args && args.fundingType){
     try{
-      let ret = MlFundingTypes.insert({...args.fundingType})
+      // let ret = MlFundingTypes.insert({...args.fundingType});
+      let ret = mlDBController.insert('MlFundingTypes', args.fundingType, context);
       if(ret){
         let response = new MlRespPayload().successPayload("'Funding Type' added successfully", 200);
         return response;
@@ -64,7 +65,11 @@ MlResolver.MlMutationResolver['updateFundingType'] = (obj, args, context, info) 
 
   if(args && args.fundingTypeId && args.fundingType){
     try{
-      let resp = MlFundingTypes.update({_id: args.fundingTypeId}, {$set: args.fundingType}, {upsert: true})
+      // let resp = MlFundingTypes.update({_id: args.fundingTypeId}, {$set: args.fundingType}, {upsert: true});
+      let resp = mlDBController.update('MlFundingTypes', args.fundingTypeId, args.fundingType, {
+        $set: 1,
+        upsert: true
+      }, context);
       if(resp){
         let response = new MlRespPayload().successPayload("'Funding Type' updated successfully", 200);
         return response;

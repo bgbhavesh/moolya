@@ -1296,7 +1296,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .chapter_map .hex_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .chapter_map .hex_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
 .my-ml-pin1{font-size: 32px;color: #ef4647;}
-.chapter_map .hex_btn.InvestorsHexaMarker{background: #82d51b;}
+.chapter_map .hex_btn.InvestorsHexaMarker{background: #82d51b;color: BLACK;}
 .chapter_map .hex_btn.InvestorsHexaMarker:after{border-color: transparent transparent transparent #82d51b;}
 .chapter_map .hex_btn.InvestorsHexaMarker:before{border-color: transparent #82d51b transparent transparent;}
 
@@ -1304,7 +1304,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .chapter_map .hex_btn.StartupsHexaMarker:after{border-color: transparent transparent transparent #d83952;}
 .chapter_map .hex_btn.StartupsHexaMarker:before{border-color: transparent #d83952 transparent transparent;}
 
-.chapter_map .hex_btn.IdeatorsHexaMarker{background: #f09916;}
+.chapter_map .hex_btn.IdeatorsHexaMarker{background: #f09916;color: BLACK;}
 .chapter_map .hex_btn.IdeatorsHexaMarker:after{border-color: transparent transparent transparent #f09916;}
 .chapter_map .hex_btn.IdeatorsHexaMarker:before{border-color: transparent #f09916 transparent transparent;}
 

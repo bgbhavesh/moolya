@@ -70,7 +70,6 @@ let chapterSchema = `
     }
     
     type contactDetailsOutput{
-      name : String
       addressTypeName : String
       contactNumber: String
       buildingNumber: String,
@@ -130,7 +129,6 @@ let chapterSchema = `
     }
     
     input contactDetailsInput {
-      name : String
       addressTypeName : String
       contactNumber: String
       buildingNumber: String,

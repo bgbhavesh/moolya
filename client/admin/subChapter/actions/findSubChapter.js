@@ -61,7 +61,6 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
             status
           }
           contactDetails {
-            name
             addressTypeName
             contactNumber
             buildingNumber,

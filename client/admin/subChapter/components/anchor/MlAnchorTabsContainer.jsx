@@ -30,7 +30,7 @@ class MlAnchorTabsContainer extends React.Component {
       contactDetailsFormData: {
         // selectedIndex: -1,
         formData: {
-          name : '',
+          // name : '',
           addressTypeName: 'Subchapter',
           contactNumber: '',
           buildingNumber: '',
@@ -89,10 +89,10 @@ class MlAnchorTabsContainer extends React.Component {
 
         stateContactDetails[0] = this.state.contactDetailsFormData.formData;
 
-        if( !stateContactDetails[0].name){
-          toastr.error("Name is required in contact form");
-          return
-        }
+        // if( !stateContactDetails[0].name){
+        //   toastr.error("Name is required in contact form");
+        //   return
+        // }
         if( !stateContactDetails[0].buildingNumber){
           toastr.error("Flat/House/floor/Building No is required in contact form");
           return

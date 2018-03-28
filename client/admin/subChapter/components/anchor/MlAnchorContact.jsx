@@ -88,7 +88,7 @@ export default class MlAnchorContact extends React.Component {
     const data = {
       // selectedIndex: -1,
       formData: {
-        name :'',
+        // name :'',
         addressTypeName:'Subchapter',
         contactNumber: '',
         buildingNumber: '',
@@ -194,12 +194,12 @@ export default class MlAnchorContact extends React.Component {
                     //onChange={event => this.onChange('addressTypeName', event.target.value)} 
                     />
                 </div>
-                <div className="form-group mandatory">
+                {/* <div className="form-group mandatory">
                 <input type="text" placeholder="Name"
                     value={this.props.formData.name}
                     className="form-control float-label"
                     onChange={event => this.onChange('name', event.target.value)} />
-                </div>
+                </div> */}
                 <div className="form-group mandatory">
                   <input type="text" placeholder="Flat/House/floor/Building No"
                     className="form-control float-label"

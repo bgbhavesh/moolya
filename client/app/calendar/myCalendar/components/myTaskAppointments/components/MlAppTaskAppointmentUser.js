@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import  Select from 'react-select';
 import ScrollArea from 'react-scrollbar';
 import FontAwesome from 'react-fontawesome';
-
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 export default class MlAppTaskAppointmentUser extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +16,7 @@ export default class MlAppTaskAppointmentUser extends Component {
       userList.push(
         <li key={user.userId}>
           <a href="">
-            <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+            <img src={user.profileImage ? generateAbsolutePath(user.profileImage) : "/images/def_profile.png"} /><br />
             <div className="tooltiprefer">
               <span>{user.name}</span>
             </div>

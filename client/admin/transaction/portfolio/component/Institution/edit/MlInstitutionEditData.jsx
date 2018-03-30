@@ -134,6 +134,23 @@ export default class MlInstitutionEditData extends React.Component{
       this.fetchInstitutionPortfolioData();
     }
   }
+
+  getThumbnailImage(doc) {
+    let url = generateAbsolutePath(doc.fileUrl);
+
+    if (doc.fileName && doc.fileName.split('.')[1]) {
+      let type = doc.fileName.split('.')[1];
+      if (type === 'pdf') {
+        url = `/images/${type}.png`;
+      } else if (type === 'xls' || type === 'xlsx') {
+        url = `/images/${'xls'}.png`;
+      } else if (type === 'doc' || type === 'docx') {
+        url = `/images/${'doc'}.png`;
+      }
+    }
+    return url;
+  }
+
   loopingTheUploadedData(type) {
     let data = this.state.uploadedData[`${type}`];
     let that=this;
@@ -144,7 +161,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"balanceSheet",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -158,7 +175,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"profitAndLoss",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -172,7 +189,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"quaterlyReport",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -186,7 +203,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"yearlyReport",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -200,7 +217,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"halfYearlyReport",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -214,7 +231,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"annualReport",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -228,7 +245,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"cashFlow",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -242,7 +259,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"shareHoldings",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -256,7 +273,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"capitalStructure",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -270,7 +287,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"ratio",docs.fileUrl)}/>
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -287,7 +304,7 @@ export default class MlInstitutionEditData extends React.Component{
         <div className="portfolio-main-wrap">
           <h2>Data</h2>
           <div className="main_wrap_scroll">
-            
+
             <div className="col-md-6 col-sm-6 nopadding-left library-wrap">
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
@@ -302,7 +319,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('balanceSheet')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -318,7 +335,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('quaterlyReport')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -334,7 +351,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('yearlyReport')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -350,7 +367,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('halfYearlyReport')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -366,7 +383,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('annualReport')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
             </div>
@@ -384,7 +401,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" >
                   {this.loopingTheUploadedData('profitAndLoss')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -400,7 +417,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('cashFlow')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -416,7 +433,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('shareHoldings')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -432,7 +449,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('capitalStructure')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -448,11 +465,11 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('ratio')}
-                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
             </div>
-              
+
           </div>
         </div>
       </div>

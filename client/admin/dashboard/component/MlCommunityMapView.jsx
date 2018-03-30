@@ -143,12 +143,19 @@ export default class MlCommunityMapView extends Component {
 
     let userType = this.state.userType || 'All';
 
+
+    let MapFooterComponent=null;
+    if(this.props.config.mapFooterComponent){
+      MapFooterComponent=React.cloneElement(this.props.config.mapFooterComponent,{data:data,mapContext:this.props,count:data.count});
+    }
+
     return (
       <span>
         {communityIconList}
         {this.props.data&& this.props.data.length === 0 && userType &&   <NoMarkerDataMessage userType={userType}/>}
         {/*<MapCommunity lat={this.state.lat} lng={this.state.lng} data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
         <MapCluster lat={this.state.lat} lng={this.state.lng} data={data} userType={userType.replace(/\s+/, "")+'HexaMarker'} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={true} getBounds={this.props.config.bounds}/>
+        {MapFooterComponent}
       </span>
     );
   }

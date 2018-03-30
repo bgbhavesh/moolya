@@ -123,16 +123,33 @@ export default class MlInstitutionCSRReports extends React.Component{
     }
   }
 
+  getThumbnailImage(doc) {
+    let url = generateAbsolutePath(doc.fileUrl);
+
+    if (doc.fileName && doc.fileName.split('.')[1]) {
+      let type = doc.fileName.split('.')[1];
+      if (type === 'pdf') {
+        url = `/images/${type}.png`;
+      } else if (type === 'xls' || type === 'xlsx') {
+        url = `/images/${'xls'}.png`;
+      } else if (type === 'doc' || type === 'docx') {
+        url = `/images/${'doc'}.png`;
+      }
+    }
+    return url;
+  }
+
   loopingTheUploadedData(type) {
     let data = this.state.uploadedData[`${type}`];
 
+    let that = this;
     switch(type){
       case 'balanceSheet':
         if(data) {
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -145,7 +162,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -158,7 +175,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -171,7 +188,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -184,7 +201,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -197,7 +214,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -210,7 +227,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -223,7 +240,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -236,7 +253,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -249,7 +266,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
+                <img src={that.getThumbnailImage(docs)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )

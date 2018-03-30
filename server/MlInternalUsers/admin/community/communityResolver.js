@@ -676,20 +676,23 @@ updateDB = (collectionName, query, payload, options, context) =>{
  *       need to find in the lowerCase
  */
 const getCategoryData = (type, id, query) => {
-  // console.log("................", query.subChapterId);
-  // typeQuery = { clusterId: id, isActive: true }
-  // typeQuery = { chapterId: id, isActive: true }
   let typeQuery = {};
+
   switch (type) {
     case "cluster":
-    case "chapter":
-      typeQuery = { _id: query.subChapterId, isActive: true }
+      typeQuery = {isActive: true, clusterId: query.clusterId }
       break;
-      // typeQuery = { _id: query.subChapterId, isActive: true }
-      // break;
+    case "chapter":
+      if (query.$or && query.$or.length>0){
+        typeQuery._id = query.$or[0].subChapterId;
+      }
+      typeQuery.isActive = true;
+      typeQuery.chapterId = query.chapterId;
+      break;
     default:
       return [];
   }
+
 
   const pipeline = [
     { $match: typeQuery },

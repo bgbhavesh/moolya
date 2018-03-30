@@ -53,6 +53,8 @@ export default class MlCompanyViewEvolution extends React.Component {
           $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
         })
       });
+    }else{
+      this.setState({loading:false});
     }
 
     // data = {

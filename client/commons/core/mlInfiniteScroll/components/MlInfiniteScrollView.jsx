@@ -44,6 +44,8 @@ export default class MlInfiniteScrollView extends Component {
       PageTitle = "Service Providers";
     }else if(comType == "institution"){
       PageTitle = "Institutions";
+    }else if(comType == "investor"){
+      PageTitle = "Investors";
     }
     $("#pageTitle").text(PageTitle);
   },200);

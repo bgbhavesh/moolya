@@ -211,7 +211,7 @@ export default class MlServiceManageSchedule extends Component {
    * Desc :: Save the service
    */
   async saveServicePaymentDetails(type) {
-    if(this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ){
+    if(this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved","Gone Live"].indexOf(this.state.data.service.status) >= 0 ){
       return false;
     }
     if (!this.errorMsg) {
@@ -295,7 +295,7 @@ export default class MlServiceManageSchedule extends Component {
         icon: <span className="ml ml-payments"></span>},
       {name: 'Payment',
         component: <MlServiceCardStep4 data={this.state.data}
-                                       isView={this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ? true : false }
+                                       isView={this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved","Gone Live"].indexOf(this.state.data.service.status) >= 0 ? true : false }
                                        checkChargeStatus={this.checkChargeStatus}
                                        calculateCharges={this.calculateCharges} client={client} userId={this.props.userId}
                                        saveServicePaymentDetails={this.saveServicePaymentDetails} profileId={this.props.profileId} />,

@@ -251,7 +251,10 @@ class MlAnchorTabsContainer extends React.Component {
       {
         actionName: 'save',
         showAction: true,
-        handler: async (event) => this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
+        handler: async (event) => {
+        this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
+        window.history.back()
+        }
       }, {
         showAction: true,
         actionName: 'cancel',

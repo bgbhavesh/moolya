@@ -422,38 +422,31 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         cityName = cityName.name;
         let geoCIty =newContact.contactDetails[0].buildingNumber + ", "+ (newContact.contactDetails[0].street?(newContact.contactDetails[0].street+", "):("")) + (newContact.contactDetails[0].landmark?(newContact.contactDetails[0].landmark+", "):(""))  +(newContact.contactDetails[0].area?(newContact.contactDetails[0].area+", "):(""))  + ', '+cityName ;
   
-        let getGeoLocation =async (geoCity) =>{
-          let data= await geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
-            return data;
-          }));
-          return data;
-        } 
-
-        let data =  getGeoLocation(geoCIty);
-        try{
-          if(data && data.results && data.results[0] && data.results[0].geometry){
-            var latitude = data.results[0].geometry.location.lat;
-            var longitude = data.results[0].geometry.location.lng;
-            newContact.contactDetails[0].latitude = "" +latitude;
-            newContact.contactDetails[0].longitude ="" + longitude;
-            newContact.latitude = "" + latitude ;
-            newContact.longitude ="" + longitude;
-
-          }else{
-            newContact.contactDetails[0].latitude =newContact.latitude + "";
-            newContact.contactDetails[0].longitude =newContact.longitude + "";
-          }
-          let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
-          // console.log("NewContact",newContact); 
-          let response = new MlRespPayload().successPayload(newContact, code);
-          // console.log('The res:: ', response)
-          return response
+      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+      try{
+        if(data && data.results && data.results[0] && data.results[0].geometry){
+          var latitude = data.results[0].geometry.location.lat;
+          var longitude = data.results[0].geometry.location.lng;
+          newContact.contactDetails[0].latitude = "" +latitude;
+          newContact.contactDetails[0].longitude ="" + longitude;
+          newContact.latitude = "" + latitude ;
+          newContact.longitude ="" + longitude;
         }
-        catch(err){
-          // console.log(err);
-          let response = new MlRespPayload().successPayload(newContact, code);
-          return response
+        else{
+          newContact.contactDetails[0].latitude =newContact.latitude + "";
+          newContact.contactDetails[0].longitude =newContact.longitude + "";
         }
+        let updateRes = mlDBController.update('MlSubChapters', args.subChapterId, newContact, {$set: true}, context);
+        let response = new MlRespPayload().successPayload(newContact, code);
+        return response;
+      }
+      catch(err){
+        console.log(err);
+        let response = new MlRespPayload().successPayload(newContact, code);
+        return response
+      }
+    }), {key: Meteor.settings.private.googleApiKey});
+
       }else{
         let response = new MlRespPayload().successPayload(newContact, code);
         return response

@@ -55,8 +55,7 @@ export default class MlCalendarHead extends Component {
 
   async getUserProfiles() {
     const resp = await getSharedConnectionsActionHandler();
-    console.log('calendar head', resp)
-    if( resp ) {
+    if( resp && resp.length ) {
       let name = resp[0].displayName;
       let profileImage = resp[0].profileImage;
       this.setState({profile: resp, displayName: name, profilePic: profileImage})

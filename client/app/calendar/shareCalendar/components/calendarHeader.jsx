@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
 import {getSharedConnectionsActionHandler } from '../actions/fetchConnectionsForCalendar';
-import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
+import {fetchUserDetailsHandler} from '../../../commons/actions/fetchUserDetails';
 
 
 export default class MlCalendarHead extends Component {
@@ -54,11 +55,16 @@ export default class MlCalendarHead extends Component {
 
 
   async getUserProfiles() {
+
+    const data = await fetchUserDetailsHandler();
+    if(data && data.profileImage){
+      this.setState({profilePic : data.profileImage});
+    }
+
     const resp = await getSharedConnectionsActionHandler();
     if( resp && resp.length ) {
       let name = resp[0].displayName;
-      let profileImage = resp[0].profileImage;
-      this.setState({profile: resp, displayName: name, profilePic: profileImage})
+      this.setState({profile: resp, displayName: name})
       return resp;
     }
   }

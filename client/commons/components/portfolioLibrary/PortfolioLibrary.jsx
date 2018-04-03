@@ -927,7 +927,7 @@ class Library extends React.Component {
               if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "image") {
                 return (
                     <ul className="list-group">
-                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? generateAbsolutePath(memberData.profileImage) :"/images/def_profile.png"}/></span><b>
                         {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
                     </ul>)
                   }
@@ -1073,7 +1073,7 @@ class Library extends React.Component {
                 if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "template"  ) {
                   return (
                     <ul className="list-group">
-                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? generateAbsolutePath(memberData.profileImage) :"/images/def_profile.png"}/></span><b>
                         {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
                     </ul>)
                 }
@@ -1200,7 +1200,7 @@ class Library extends React.Component {
                 if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "video") {
                   return (
                     <ul className="list-group">
-                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? generateAbsolutePath(memberData.profileImage) :"/images/def_profile.png"}/></span><b>
                         {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
                     </ul>)
                 }
@@ -1346,7 +1346,7 @@ class Library extends React.Component {
                 if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "document") {
                   return (
                     <ul className="list-group">
-                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? generateAbsolutePath(memberData.profileImage) :"/images/def_profile.png"}/></span><b>
                         {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
                     </ul>)
                 }
@@ -1603,7 +1603,7 @@ setTimeout(function(){
   }
 
   componentDidUpdate() {
-    
+
     $(".icon_count").click(function () {
       $(this).parents('.thumbnail').find(".fa-times").show();
       $(this).parents('.thumbnail').find(".show_details").show();

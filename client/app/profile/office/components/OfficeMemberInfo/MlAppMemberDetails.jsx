@@ -26,6 +26,7 @@ export default class MlAppMemberDetails extends React.Component{
       showCommunityBlock: false
     };
     this.onCommunitySelect = this.onCommunitySelect.bind(this);
+    this.makeIndependent = this.makeIndependent.bind(this);
   }
 
   componentDidMount() {
@@ -100,7 +101,7 @@ export default class MlAppMemberDetails extends React.Component{
     }
   }
 
-  async updateIsIndependent(e){
+  updateIsIndependent(e){
     let update = {
       isIndependent:e.target.checked
     };
@@ -222,7 +223,7 @@ export default class MlAppMemberDetails extends React.Component{
                     </div>
                     <div className="clearfix"></div>
                     <div className="form-group text-right padding10">
-                      <a href="" onClick={()=> that.makeIndependent() } className="mlUpload_btn">Make Independent</a>
+                      <a onClick={this.makeIndependent} className="mlUpload_btn">Make Independent</a>
                     </div>
                   </div>
                   :

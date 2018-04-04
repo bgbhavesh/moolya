@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {getSharedConnectionsActionHandler} from "../../actions/mlLibraryActionHandler";
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+import {fetchUserDetailsHandler} from '../../../app/commons/actions/fetchUserDetails';
+
 
 export default class MlConnectionHeader extends Component {
   constructor(props) {
@@ -46,6 +48,11 @@ export default class MlConnectionHeader extends Component {
 
 
   async getUserProfiles() {
+    const data = await fetchUserDetailsHandler();
+    if(data && data.profileImage){
+      this.setState({profilePic : data.profileImage});
+    }
+
     const resp = await getSharedConnectionsActionHandler();
     this.setState({profile: resp})
     return resp;
@@ -62,7 +69,7 @@ export default class MlConnectionHeader extends Component {
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
             <a href="" onClick={()=>that.resetWithAll()}>
-              <img src="/images/def_profile.png"/><br />
+              <img src={that.state.profilePic?generateAbsolutePath(that.state.profilePic):"/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 <span>Me</span>
               </div>

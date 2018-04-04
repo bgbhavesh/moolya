@@ -1035,6 +1035,14 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
 
               { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId, 'profile.externalUserProfiles.subChapterId': subChapterId, 'profile.externalUserProfiles.communityDefName': userType, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },  // Filter out specific community
             {
+              $lookup:{
+                from : 'mlAccountTypes',
+                localField: 'profile.externalUserProfiles.accountType',
+                foreignField: '_id',
+                as: 'account'
+              }
+            },
+            {
               $project: {
                 _id: 1,
                 name: '$profile.displayName',
@@ -1048,7 +1056,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 communityDefName: '$profile.externalUserProfiles.communityDefName',
                 chapterName: '$profile.externalUserProfiles.chapterName',
                 isActive: '$profile.isActive',
-                accountType: '$profile.externalUserProfiles.accountType',
+                accountType: '$account.accountDisplayName',
                 externalUserAdditionalInfo: {
                   $filter: {
                     input: '$profile.externalUserAdditionalInfo',
@@ -1133,6 +1141,14 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
               { $match: { 'profile.externalUserProfiles.clusterId': clusterId, 'profile.externalUserProfiles.chapterId': chapterId, 'profile.externalUserProfiles.subChapterId': subChapterId, 'profile.externalUserProfiles.isApprove': true, 'profile.externalUserProfiles.isActive': true } },
 
             {
+              $lookup:{
+                from : 'mlAccountTypes',
+                localField: 'profile.externalUserProfiles.accountType',
+                foreignField: '_id',
+                as: 'account'
+              }
+            },
+            {
               $project: {
                 _id: 1,
                 name: '$profile.displayName',
@@ -1145,7 +1161,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
                 communityCode: '$profile.externalUserProfiles.communityDefCode',
                 communityDefName: '$profile.externalUserProfiles.communityDefName',
                 chapterName: '$profile.externalUserProfiles.chapterName',
-                accountType: '$profile.externalUserProfiles.accountType',
+                accountType: '$account.accountDisplayName',
                 isActive: '$profile.isActive',
                 externalUserAdditionalInfo: {
                   $filter: {

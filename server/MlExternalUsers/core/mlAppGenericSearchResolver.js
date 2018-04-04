@@ -210,11 +210,19 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         }
       },
       {
+        $lookup:{
+          from : 'mlAccountTypes',
+          localField: 'port.accountType',
+          foreignField: '_id',
+          as: 'account'
+        }
+      },
+      {
         $project: {
           portfolioDetailsId: 1,
           funderAbout: 1,
           chapterName: '$port.chapterName',
-          accountType: '$port.accountType',
+          accountType: '$account.accountDisplayName',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
           lastName: '$user.profile.lastName',
@@ -287,11 +295,19 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         }
       },
       {
+        $lookup:{
+          from : 'mlAccountTypes',
+          localField: 'port.accountType',
+          foreignField: '_id',
+          as: 'account'
+        }
+      },
+      {
         $project: {
           portfolioDetailsId: 1,
           about: 1,
           chapterName: '$port.chapterName',
-          accountType: '$port.accountType',
+          accountType: '$account.accountDisplayName',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
           lastName: '$user.profile.lastName',
@@ -478,11 +494,19 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       {
+        $lookup:{
+          from : 'mlAccountTypes',
+          localField: 'port.accountType',
+          foreignField: '_id',
+          as: 'account'
+        }
+      },
+      {
         $project: {
           portfolioDetailsId: 1,
           aboutUs: 1,
           chapterName: '$port.chapterName',
-          accountType: '$port.accountType',
+          accountType: '$account.accountDisplayName',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
           lastName: '$user.profile.lastName',
@@ -595,6 +619,15 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         }
       },
       {
+        $lookup:{
+          from : 'mlAccountTypes',
+          localField: 'port.accountType',
+          foreignField: '_id',
+          as: 'account'
+        }
+      },
+
+      {
         $project: {
           userId: '$userId',
           ideas: [{
@@ -604,7 +637,7 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
           }],
           chapterName: '$port.chapterName',
           name: { $concat: ['$user.profile.firstName', ' ', '$user.profile.lastName'] },
-          accountType: '$port.accountType',
+          accountType: '$account.accountDisplayName',
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
           subChapterId: '$port.subChapterId',
@@ -753,11 +786,19 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       {
+        $lookup:{
+          from : 'mlAccountTypes',
+          localField: 'port.accountType',
+          foreignField: '_id',
+          as: 'account'
+        }
+      },
+      {
         $project: {
           portfolioDetailsId: 1,
           about: 1,
           chapterName: '$port.chapterName',
-          accountType: '$port.accountType',
+          accountType: '$account.accountDisplayName',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
           lastName: '$user.profile.lastName',
@@ -912,11 +953,19 @@ MlResolver.MlQueryResolver.AppGenericSearch = (obj, args, context, info) => {
         },
       },
       {
+        $lookup:{
+          from : 'mlAccountTypes',
+          localField: 'port.accountType',
+          foreignField: '_id',
+          as: 'account'
+        }
+      },
+      {
         $project: {
           portfolioDetailsId: 1,
           about: 1,
           chapterName: '$port.chapterName',
-          accountType: '$port.accountType',
+          accountType: '$account.accountDisplayName',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
           lastName: '$user.profile.lastName',

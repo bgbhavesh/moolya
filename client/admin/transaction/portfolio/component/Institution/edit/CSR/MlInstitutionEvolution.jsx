@@ -47,7 +47,7 @@ export default class MlInstitutionEvolution extends React.Component{
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.evolution)
     const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-    if(empty){  
+    if(empty){
       const editorValue = createValueFromString(response && response.evolution && response.evolution.institutionEvolutionDescription ? response.evolution.institutionEvolutionDescription : null);
       if (response && response.evolution) {
         var object = response.evolution;
@@ -60,8 +60,15 @@ export default class MlInstitutionEvolution extends React.Component{
         this.setState({loading:false})
       }
     }else{
-      const editorValue = createValueFromString(that.context.institutionPortfolio.evolution && that.context.institutionPortfolio.evolution.institutionEvolutionDescription ? that.context.institutionPortfolio.evolution.institutionEvolutionDescription : null);
-      this.setState({ loading: false, data: that.context.institutionPortfolio.evolution, privateValues: response.evolution.privateFields, editorValue }, () => {
+      const editorValue = createValueFromString(that.context.institutionPortfolio && that.context.institutionPortfolio.evolution && that.context.institutionPortfolio.evolution.institutionEvolutionDescription ? that.context.institutionPortfolio.evolution.institutionEvolutionDescription : null);
+      let newState = { loading: false, editorValue };
+      if(that.context.institutionPortfolio){
+        newState.data = that.context.institutionPortfolio.evolution;
+      }
+      if(response && response.evolution){
+        newState.privateValues = response.evolution.privateFields;
+      }
+      this.setState(newState, () => {
         this.lockPrivateKeys()
       });
       // this.setState({loading: false, data: that.context.institutionPortfolio.evolution,editorValue});

@@ -380,7 +380,7 @@ export default class Step4 extends React.Component{
               <form>
                 <div className="form-group steps_pic_upload">
                   <div className="previewImg ProfileImg">
-                    <img src={generateAbsolutePath(this.props.uploadedProfileImg)}/>
+                    <img src={this.props.uploadedProfileImg?generateAbsolutePath(this.props.uploadedProfileImg):'/images/def_profile.png'}/>
                   </div>
                   <div className="fileUpload mlUpload_btn">
                     <span onClick={this.toggleProfileModal}>Profile Pic</span>

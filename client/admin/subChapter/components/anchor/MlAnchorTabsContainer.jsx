@@ -271,12 +271,12 @@ class MlAnchorTabsContainer extends React.Component {
           icon: <span className="ml ml-basic-Information"></span>
         },
         {
-          name: 'Objectives',
+          name: 'SC Objectives',
           component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails} setModule={this.setModule}/>,
           icon: <span className="ml ml-additional-Information"></span>
         },
         {
-          name: 'Contact',
+          name: 'SC Contact',
           component: <MlAnchorContact
             contactDetails={this.state.subChapter.contactDetails}
             // selectedIndex={this.state.contactDetailsFormData.selectedIndex}

@@ -80,6 +80,36 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
   //   {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
   //   {'$unwind':'$office'}
   // ];
+
+  //Commented code for the the new changes
+
+  // let pipeline = [
+  //   {'$match':{_id:args.officeTransactionId}},
+  //   {'$project' : { trans: '$$ROOT'}},
+  //   {'$lookup':{ from: 'users', localField: 'trans.userId', foreignField: '_id', as: 'user'}},
+  //   {'$unwind':'$user'},
+  //   {'$project':{ trans:1, user: { createdAt : "$trans.dateTime", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber', profileId:'$user.profile.externalUserProfiles.profileId'}}},
+  //   {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
+  //   {'$unwind':'$office'},
+  //   {'$lookup':{ from: 'mlOfficeSC', localField: 'trans.officeId', foreignField: 'officeId', as: 'officeSC'}},
+  //   {'$unwind':'$officeSC'},
+  //   {'$lookup':{ from: 'mlOfficeSCDef', localField: 'officeSC.scDefId', foreignField: '_id', as: 'officeSCDef'}},
+  //   {'$unwind':'$officeSCDef'}
+  // ];
+  // let _result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
+  // let result = Object.assign({},_result);
+  // if(result && result.length>0){
+  //   result.map((obj)=>{
+  //     if(obj.office && obj.office.country){
+  //       let clusterData = mlDBController.findOne('MlClusters', {_id:obj.office.country});
+  //       obj.office.country='';
+  //       if(clusterData && clusterData.countryName){
+  //         obj.office.country = clusterData.countryName;
+  //       }
+  //     }
+  //   });
+  // }
+
   let pipeline = [
     {'$match':{_id:args.officeTransactionId}},
     {'$project' : { trans: '$$ROOT'}},
@@ -91,23 +121,21 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$lookup':{ from: 'mlOfficeSC', localField: 'trans.officeId', foreignField: 'officeId', as: 'officeSC'}},
     {'$unwind':'$officeSC'},
     {'$lookup':{ from: 'mlOfficeSCDef', localField: 'officeSC.scDefId', foreignField: '_id', as: 'officeSCDef'}},
-    {'$unwind':'$officeSCDef'}
+    {'$unwind':'$officeSCDef'},
+    {"$lookup":{from: "mlClusters", localField:"office.country", foreignField:"_id", as:"countryName"}},
+    {"$unwind":"$countryName"},
   ];
+
   let _result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
-  let result = Object.assign({},_result);
-  if(result && result.length>0){
-    result.map((obj)=>{
-      if(obj.office && obj.office.country){
-        let clusterData = mlDBController.findOne('MlClusters', {_id:obj.office.country});
-        obj.office.country='';
-        if(clusterData && clusterData.countryName){
-          obj.office.country = clusterData.countryName;
-        }
+  if(_result){
+    _result.map((obj)=>{
+      if(obj.countryName && obj.countryName.countryName){
+        obj.office.country = obj.countryName.countryName;
       }
     });
   }
   let code = 200;
-  let response = new MlRespPayload().successPayload(result, code);
+  let response = new MlRespPayload().successPayload(_result, code);
   return response;
 }
 
